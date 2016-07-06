@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_RootScene" extends="Scene">
+	<interface>
+		<field id="eventFired" type="node" onChange="eventHandler"/>
+	</interface>
+
+	<!-- general scripts -->
+    <script type="text/brightscript"  uri="pkg:/components/scripts/RootScene.brs"/>
+
+    <children>
+        <!-- an animation group to simultaneously animate two float items at once -->
+        <ParallelAnimation id="floatField">
+            <Animation id="floatFieldIn">
+                <FloatFieldInterpolator id="floatFieldInInterp" />
+            </Animation>
+            <Animation id="floatFieldOut">
+                <FloatFieldInterpolator id="floatFieldOutInterp" />
+           </Animation>
+        </ParallelAnimation>
+        
+        <ParallelAnimation id="Vector2d">
+            <Animation id="Vector2dIn">
+                <Vector2DFieldInterpolator id="Vector2dInInterp" />
+            </Animation>
+            <Animation id="Vector2dOut">
+                <Vector2DFieldInterpolator id="Vector2dOutInterp" />
+            </Animation>
+        </ParallelAnimation>
+ 	</children>
+</component>
+

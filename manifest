@@ -1,0 +1,16 @@
+title=Rok_Cavern_Warriors
+major_version=1
+minor_version=0
+build_version=3359
+mm_icon_focus_hd=pkg:/locale/default/images/tmp_rok.png
+mm_icon_side_hd=pkg:/locale/default/images/tmp_rok.png
+mm_icon_focus_sd=pkg:/locale/default/images/tmp_rok.png
+mm_icon_side_sd=pkg:/locale/default/images/tmp_rok.png
+splash_screen_sd=pkg:/locale/default/images/tmp_rok.png
+splash_screen_hd=pkg:/locale/default/images/tmp_rok.png
+splash_color=#ffffff
+splash_min_time=1000
+ui_resolutions=fhd
+uri_resolution_autosub=$$RES$$, 480p, 720p, 1080p
+is_staging_server=true
+log_level=DEBUG

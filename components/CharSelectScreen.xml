@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_CharSelect">
+    <!-- I don't think this needs to extend a base page or anything -->
+	<interface>
+		<field id="eventFired" type="node" onChange="eventHandler"/>
+	</interface>
+
+	<!-- general scripts -->
+    <script type="text/brightscript"  uri="pkg:/components/scripts/RootScene.brs"/>
+
+    <children>
+        <LayoutGroup id="mainLayout" layoutDirection="vert" horizAlignment="center" itemSpacings="[100,100]">
+        </LayoutGroup>
+
+ 	</children>
+</component>
+
+
