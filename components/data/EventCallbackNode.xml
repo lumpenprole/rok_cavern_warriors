@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="EventCallbackNode" extends="Node">
+	<interface>
+	    <field id="evType" type="string"/>
+	    <field id="data" type="assocarray"/>
+	</interface> 
+	<script type="text/brightscript">
+	<![CDATA[
+	function init()
+		m.pageName = "EventResult"
+	end function
+	]]>
+	</script>
+</component>
+
+

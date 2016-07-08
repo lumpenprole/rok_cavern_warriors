@@ -6,10 +6,12 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/scripts/RootScene.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/scripts/CharSelect.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>
-        <LayoutGroup id="mainLayout" layoutDirection="vert" horizAlignment="center" itemSpacings="[100,100]">
+        <LayoutGroup id="mainLayout" layoutDirection="vert" itemSpacings="[100,100]">
+            <Label color="0x669900FF" text="Character Select" horizAlign="center" />
         </LayoutGroup>
 
  	</children>
