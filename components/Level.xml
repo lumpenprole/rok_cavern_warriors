@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="rcw_Level">
+<component name="rcw_Level" extends="Group">
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
 		<field id="eventFired" type="node" onChange="eventHandler"/>
+		<field id="settings" type="node" onChange="setupLevel"/>
+		<field id="startPoint" type="node" onChange="setupLevel"/>
 	</interface>
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/scripts/Level.brs"/>
 
     <children>
+        <Rectangle id="background" translation="[0,0]" width="1920" height="1080" color="0x000000FF" />
+        <Group id="layout" translation="[0,0]">
+            <Label color="0x669900FF" text="LOADING..." horizAlign="center" translation="[1460,540]" id="loading_text" />
+                
+        </Group>
  	</children>
 </component>
-
-
-

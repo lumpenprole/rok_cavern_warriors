@@ -9,6 +9,10 @@
 
     <children>
         <!-- an animation group to simultaneously animate two float items at once -->
+        <Group id="player_holder" translation="[0,0]" width="1920" height="1080" />
+        <Group id="monster_holder" translation="[0,0]" width="1920" height="1080" />
+        <Group id="level_holder" translation="[0,0]" width="1920" height="1080" />
+        
         <ParallelAnimation id="floatField">
             <Animation id="floatFieldIn">
                 <FloatFieldInterpolator id="floatFieldInInterp" />

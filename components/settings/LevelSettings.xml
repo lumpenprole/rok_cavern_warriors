@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="LevelSettingsNode" extends="Node">
+	<interface>
+	    <field id="rooms" type="integer"/>
+	</interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/LevelSettings.brs"/>
+</component>
+
+

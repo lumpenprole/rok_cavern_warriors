@@ -9,6 +9,7 @@
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Player.brs"/>
 
     <children>
+        <Rectangle id="tile_holder" width="50" height="50" translation="[0,0]" color="0x276CDBFF" />
  	</children>
 </component>
 
