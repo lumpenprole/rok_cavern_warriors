@@ -3,12 +3,14 @@
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+		<field id="tileType" type="string" onChange="typeChanged"/>
 	</interface>
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Tile.brs"/>
 
     <children>
+        <Poster id="img" width="50" height="50" />
  	</children>
 </component>
 

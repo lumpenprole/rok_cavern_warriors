@@ -1,6 +1,7 @@
 sub init()
     ?"RootScene: Init()"
     m.top.id = "RootScene"
+
     setup()
 end sub
 
@@ -10,13 +11,16 @@ sub setup()
     m.global.addField("event", "node", true)
     m.global.observeField("event", "handleEvent")
 
-
     'Event node:
     'id: A unique id that's used in identifying the event. I'm not sure we need it, but we might want to cancel events
     'type: The event type. This will be the key in the dictionary used to send event results to subscribed nodes.
     'data: An object holding any data the event needs
 
     m.eventDict = {}
+
+    m.levelHolder = m.top.findNode("level_holder")
+    m.playerHolder = m.top.findNode("player_holder")
+    m.monsterHolder = m.top.findNode("monster_holder")
 
     subscribe("startGame", m.top.id)
     openCharSelect()
@@ -78,6 +82,15 @@ end sub
 
 sub startGame()
     ?"START GAME"
+    testLevel = createObject("roSGNode", "rcw_Level")
+    settings = createObject("roSGNode", "LevelSettingsNode") 'We probably need a level settings object
+    m.levelHolder.appendChild(testLevel)
+    testLevel.settings = settings
+
+    player = createObject("roSGNode", "rcw_player")
+    m.playerHolder.appendChild(player)
+
+
 end sub
 
 sub onEventCallback()
