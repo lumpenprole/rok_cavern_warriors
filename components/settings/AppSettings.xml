@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for application wide settings --> 
+<component name="AppSettingsNode" extends="Node">
+    <interface>
+        <!-- tiles are squares -->
+	    <field id="tile_size" type="integer" value="50" />
+	</interface> 
+</component>
+
+

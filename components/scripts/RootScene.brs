@@ -2,6 +2,8 @@ sub init()
     ?"RootScene: Init()"
     m.top.id = "RootScene"
 
+    m.screenSize = [1080, 1920] 'Probably needs to be figured on the fly
+
     setup()
 end sub
 
@@ -76,27 +78,42 @@ end sub
 
 sub openCharSelect()
     charSelect = createObject("roSGNode", "rcw_CharSelect")
+    charSelect.id = "charSelect"
     m.top.appendChild(charSelect)
     charSelect.setFocus(true)
 end sub
 
-sub startGame()
+sub startGame(data as dynamic)
     ?"START GAME"
     testLevel = createObject("roSGNode", "rcw_Level")
-    settings = createObject("roSGNode", "LevelSettingsNode") 'We probably need a level settings object
+    levelSettings = createObject("roSGNode", "LevelSettingsNode")
+    m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
+    m.global.settings = createObject("roSGNode", "AppSettingsNode")
+
+    charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
+    m.top.removeChild(charSelect) 
+
     m.levelHolder.appendChild(testLevel)
-    testLevel.settings = settings
+    testLevel.settings = levelSettings 
 
     player = createObject("roSGNode", "rcw_player")
-    m.playerHolder.appendChild(player)
+    player.id = "current_player"
+    player.class = data.class
+    ?"PLAYER IS CLASS: ";data.class
 
+    'm.playerHolder.appendChild(player) This probably isn't the way to go.
+    'I'm thinking I need to put the player in the level to check walls, etc. 
 
+    currentHolder = testLevel.findNode("player_holder")
+    currentHolder.appendChild(player)
+    testLevel.playerSet = true
+    testLevel.setFocus(true)
 end sub
 
 sub onEventCallback()
     ev = m.top.eventCallback
 
     if ev.evType = "startGame"
-        startGame()
+        startGame(ev.data)
     end if
 end sub

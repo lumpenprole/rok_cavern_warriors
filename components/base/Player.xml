@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="rcw_Player">
+<component name="rcw_Player" extends="Group">
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+		<field id="class" type="string" onChange="onClassSet"/>
+		<field id="race" type="string" onChange="onRaceSet"/>
 	</interface>
 
 	<!-- general scripts -->
