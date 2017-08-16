@@ -10,6 +10,7 @@
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/scripts/Level.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
 
     <children>
         <Rectangle id="background" translation="[0,0]" width="1920" height="1080" color="0x000000FF" />

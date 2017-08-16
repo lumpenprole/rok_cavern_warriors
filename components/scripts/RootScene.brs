@@ -89,6 +89,8 @@ sub startGame(data as dynamic)
     levelSettings = createObject("roSGNode", "LevelSettingsNode")
     m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
     m.global.settings = createObject("roSGNode", "AppSettingsNode")
+    m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
+    m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size)
 
     charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
     m.top.removeChild(charSelect) 

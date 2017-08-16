@@ -11,23 +11,26 @@ end sub
 
 sub setupLevel()
     settings = m.top.settings
+    appSettings = m.global.settings
+    ?"SETTINGS: ";appSettings
 
     size = [500,500]
     
-    roomStartX = cInt((1920 / 2) - (size[0] / 2))
-    roomStartY = cInt((1080 / 2) - (size[1] / 2))
+    grid = m.global.grid
 
-    currentPos = [roomStartX,roomStartY]
+    col = rnd(grid[0][0])
+    row = rnd(grid[0][1])
+    currentPos = getTileXY(grid, [col, row], appSettings.tile_size)
 
     for r = 0 to settings.rooms - 1
-        thisRoom = createRoom(size)
+        thisRoom = createRoom()
 
         if r = 0 'Currently this is arbitrary
             m.startRoom = thisRoom
         end if
 
         thisRoom.id = "room_" + r.toStr()
-        thisRoom.translation = [roomStartX,roomStartY]
+        thisRoom.translation = currentPos
         ?"Holder: ";m.roomHolder
         m.roomHolder.appendChild(thisRoom)
         'm.top.appendChild(thisRoom)
@@ -36,11 +39,16 @@ sub setupLevel()
     m.loadTxt.visible = false
 end sub
 
-function createRoom(size as Object) as Object
+function createRoom() as Object
     'TODO: I need a room object
+    appSettings = m.global.settings
     room = createObject("roSGNode", "Rectangle")
-    room.width = size[0]
-    room.height = size[1]
+    width = (rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width) * appSettings.tile_size
+    ?"WIDTH: ";width
+    room.width = width
+    height = (rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height) * appSettings.tile_size
+    ?"HEIGHT: ";height
+    room.height = height
     room.color = "0xABAD96FF"
 
     return room
@@ -89,7 +97,11 @@ sub playerMove(direction as String)
         playerx = playerLoc[0]
         playery = playerLoc[1] + tileSize
     end if
-    m.playerHolder.translation = [playerx, playery]
+
+    if collisionCheck(m.playerHolder, [playerx, playery])
+        m.playerHolder.translation = [playerx, playery]
+    end if
+
     moveMobs() 
 end sub 
 
@@ -123,8 +135,29 @@ sub moveMobs()
         else
             mobLoc[1] -= tileSize
         end if
-
-        mob.translation = mobLoc
+        
+        if collisionCheck(mob, mobLoc)
+            mob.translation = mobLoc
+        end if
     end for
 end sub
+
+function collisionCheck(mob, newPosition)
+    if mob.id <> m.playerHolder.id
+        if m.playerHolder.translation[0] = newPosition[0] and m.playerHolder.translation[1] = newPosition[1]
+            return false
+        end if
+    end if
+
+    for z = 0 to m.mobs.count() - 1
+        otherMob = m.mobs[z]
+        if mob.id <> otherMob.id
+            if newPosition[0] = otherMob.translation[0] and newPosition[1] = otherMob.translation[1]
+                return false
+            end if
+        end if
+    end for
+
+        return true
+end function
 
