@@ -2,7 +2,9 @@
 <!-- this is a data node for event results. Created to keep type safety --> 
 <component name="LevelSettingsNode" extends="Node">
 	<interface>
-	    <field id="rooms" type="integer"/>
+	    <field id="minRooms" type="integer" value="4"/>
+	    <field id="maxRooms" type="integer" value="7"/>
+	    <field id="roomMargin" type="integer" value="10"/>
 	</interface> 
     <script type="text/brightscript"  uri="pkg:/components/settings/scripts/LevelSettings.brs"/>
 </component>

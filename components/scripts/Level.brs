@@ -18,11 +18,16 @@ sub setupLevel()
     
     grid = m.global.grid
 
-    col = rnd(grid[0][0])
-    row = rnd(grid[0][1])
-    currentPos = getTileXY(grid, [col, row], appSettings.tile_size)
+    currentPos = [100,100]
 
-    for r = 0 to settings.rooms - 1
+    totalRooms = rnd(settings.maxRooms - settings.minRooms + 1) + (settings.minRooms - 1)
+    unplacedRooms = []
+    m.placedRooms = []
+    ?"**********************************************"
+    ?"TOTAL ROOMS: ";totalRooms
+    ?"**********************************************"
+
+    for r = 0 to totalRooms - 1
         thisRoom = createRoom()
 
         if r = 0 'Currently this is arbitrary
@@ -31,11 +36,14 @@ sub setupLevel()
 
         thisRoom.id = "room_" + r.toStr()
         thisRoom.translation = currentPos
-        ?"Holder: ";m.roomHolder
+        '?"Holder: ";m.roomHolder
         m.roomHolder.appendChild(thisRoom)
         'm.top.appendChild(thisRoom)
+        unplacedRooms.push(thisRoom)
     end for
 
+    placeRooms(unplacedRooms)
+    
     m.loadTxt.visible = false
 end sub
 
@@ -44,10 +52,8 @@ function createRoom() as Object
     appSettings = m.global.settings
     room = createObject("roSGNode", "Rectangle")
     width = (rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width) * appSettings.tile_size
-    ?"WIDTH: ";width
     room.width = width
     height = (rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height) * appSettings.tile_size
-    ?"HEIGHT: ";height
     room.height = height
     room.color = "0xABAD96FF"
 
@@ -57,7 +63,7 @@ end function
 sub onPlayerSet()
 
     'TODO: Set up tile system and pick a tile
-    ?"Room x: ";m.startRoom.translation[0]
+    '?"Room x: ";m.startRoom.translation[0]
     playerStartX = cInt(m.startRoom.translation[0] + (m.startRoom.width / 2))
     ?"player x: ";playerStartX 
     playerStartY = cInt(m.startRoom.translation[1] + (m.startRoom.height / 2))
@@ -160,4 +166,31 @@ function collisionCheck(mob, newPosition)
 
         return true
 end function
+
+sub placeRooms(rooms)
+    appSettings = m.global.settings
+    grid = m.global.grid
+
+    while rooms.count() > 0
+        thisRoom = rooms[0]
+        col = rnd(grid[0][0]) - 1
+        row = rnd(grid[0][1]) - 1
+        margin = m.top.settings.roomMargin
+        tileSize = appSettings.tile_size
+        currentPos = getTileXY(grid, [col, row], tileSize)
+        if currentPos[0] + thisRoom.width > (grid[0][0] * tileSize) - (margin * tileSize)
+            currentPos[0] = currentPos[0] - (tileSize * margin)
+        end if
+
+        if currentPos[1] + thisRoom.height > (grid[0][1] * tileSize) - (margin * tileSize)
+            currentPos[1] = currentPos[1] - (tileSize * margin)
+        end if
+
+        'Do collision check
+        
+        thisRoom.translation = currentPos
+        m.placedRooms.push(rooms.shift())
+    end while
+    
+end sub
 

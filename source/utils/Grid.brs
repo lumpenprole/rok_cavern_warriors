@@ -1,6 +1,6 @@
 function createGrid(screenSize, tileSize as Integer) as Dynamic
-    gridWidth = screenSize[0] / tileSize
-    gridHeight = screenSize[1] / tileSize
+    gridWidth = int(screenSize[1] / tileSize)
+    gridHeight = int(screenSize[0] / tileSize)
 
     gridX = int((screenSize[0] mod tileSize) / 2)
     gridY = int((screenSize[1] mod tileSize) / 2)
