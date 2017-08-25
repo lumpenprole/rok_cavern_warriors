@@ -186,11 +186,34 @@ sub placeRooms(rooms)
             currentPos[1] = currentPos[1] - (tileSize * margin)
         end if
 
-        'Do collision check
-        
         thisRoom.translation = currentPos
         m.placedRooms.push(rooms.shift())
     end while
     
+    'Check overlaps
+    for x = 1 to m.placedRooms.count() - 1
+        checkingRoom = m.placedRooms[x]
+        for y = 0 to x
+            placedRoom = m.placedRooms[y]
+            rightSide = placedRoom.translation[0] + placedRoom.width
+            bottom = placedRoom.translation[1] + placedRoom.height
+
+            if checkingRoom.translation[0] < rightSide and checkingRoom.translation[0] > placedRoom.translation[0]
+                if (grid[0][0] * tileSize) - rightSide < placedRoom.translation[0]
+                    checkingRoom.translation[0] = placedRoom.translation[0] - checkingRoom.width - 20
+                else
+                    checkingRoom.translation[0] = rightSide + 20
+                end if
+            end if
+
+            if checkingRoom.translation[1] < bottom and checkingRoom.translation[1] > placedRoom.translation[1]
+                if (grid[0][1] * tileSize) - bottom < placedRoom.translation[1]
+                    checkingRoom.translation[1] = placedRoom.translation[1] - checkingRoom.height - 20
+                else
+                    checkingRoom.translation[1] = bottom + 20
+                end if
+            end if
+        end for
+    end for
 end sub
 
