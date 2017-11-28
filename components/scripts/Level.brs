@@ -216,22 +216,25 @@ sub placeRooms()
         if bottomEdge > tallestRoomHeight
             tallestRoomHeight = bottomEdge
         end if
+        
+        'Push x,y of room start for later use
+        m.rooms[r].push(leftEdge)
+        m.rooms[r].push(rightEdge)
 
         for w = leftEdge to rightEdge - 1
             for h = topEdge to bottomEdge - 1
                 m.levelArr[w][h] = "floor:" + roomId
             end for
         end for
-
-        'set up stairs arbitrairily in the start room
-        if r = m.startRoom
-            upstairX = rnd(thisRoom[0]) + leftSide
-            upstairY = rnd(thisRoom[1]) + topSide
-            m.levelArr[upstairX][upstairY] = "upstairs:none"
-            m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
-        end if
-
     end for
+
+    'set up stairs arbitrairily in the start room
+    sRoom = m.rooms[m.startRoom]
+    upstairX = rnd(sRoom[0]) + sRoom[2]
+    upstairY = rnd(sRoom[1]) + sRoom[3]
+    m.levelArr[upstairX][upstairY] = "upstairs:none"
+    m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
+    ?"UPSTAIRS: ";upstairX;", ";upstairY
 end sub
 
 sub createCorridors()
