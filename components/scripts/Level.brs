@@ -7,22 +7,27 @@ sub init()
     m.mobs = []
 
     'TODO: Rewrite this so that it designs the map, then draws it. 
+
+    'TODO: Rewrite so that the entire level is just an array of arrays. Each tile will be an array
+    'that contains a type and possibly and id. Like ["door", "door50"]
 end sub
 
 sub setupLevel()
     settings = m.top.settings
     appSettings = m.global.settings
     ?"SETTINGS: ";appSettings
-
-    size = [500,500]
     
     grid = m.global.grid
+
+    Dim level[grid[0][0], grid[0][1]]
+    m.levelArr = level
 
     currentPos = [100,100]
 
     totalRooms = rnd(settings.maxRooms - settings.minRooms + 1) + (settings.minRooms - 1)
     unplacedRooms = []
     m.placedRooms = []
+
     ?"**********************************************"
     ?"TOTAL ROOMS: ";totalRooms
     ?"**********************************************"
@@ -31,46 +36,39 @@ sub setupLevel()
         thisRoom = createRoom()
 
         if r = 0 'Currently this is arbitrary
-            m.startRoom = thisRoom
+            m.startRoom = 0
         end if
 
-        thisRoom.id = "room_" + r.toStr()
-        thisRoom.translation = currentPos
+        'thisRoom.id = "room_" + r.toStr()
+        'thisRoom.translation = currentPos
         '?"Holder: ";m.roomHolder
-        m.roomHolder.appendChild(thisRoom)
+        'm.roomHolder.appendChild(thisRoom)
         'm.top.appendChild(thisRoom)
         unplacedRooms.push(thisRoom)
     end for
 
     placeRooms(unplacedRooms)
+
+    draw()
     
     m.loadTxt.visible = false
 end sub
 
 function createRoom() as Object
-    'TODO: I need a room object
     appSettings = m.global.settings
-    room = createObject("roSGNode", "Rectangle")
-    width = (rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width) * appSettings.tile_size
-    room.width = width
-    height = (rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height) * appSettings.tile_size
-    room.height = height
-    room.color = "0xABAD96FF"
+    width = rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width 
+    height = rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height
 
-    return room
+    return [width, height]
 end function 
 
 sub onPlayerSet()
+    tileSize = m.global.settings.tile_size
+    m.player = m.playerHolder.findNode("current_player")
+    m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
+    m.player.location = m.upstairs
 
-    'TODO: Set up tile system and pick a tile
-    '?"Room x: ";m.startRoom.translation[0]
-    playerStartX = cInt(m.startRoom.translation[0] + (m.startRoom.width / 2))
-    ?"player x: ";playerStartX 
-    playerStartY = cInt(m.startRoom.translation[1] + (m.startRoom.height / 2))
-
-    m.playerHolder.translation = [playerStartX, playerStartY]
-
-    addMobs()
+    'addMobs()
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
@@ -87,28 +85,29 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
 end function
 
 sub playerMove(direction as String)
-    playerLoc = m.playerHolder.translation
-    tileSize = m.global.settings.tile_size
 
+    ploc = m.player.location
+    checkLoc = []
     if direction = "left"
-        playerx = playerLoc[0] - tileSize
-        playery = playerLoc[1]
+        checkLoc = [ploc[0] - 1, ploc[1]]
     else if direction = "right"
-        playerx = playerLoc[0] + tileSize
-        playery = playerLoc[1]
-    else if direction = "up"
-        playerx = playerLoc[0]
-        playery = playerLoc[1] - tileSize
+        checkLoc = [ploc[0] + 1, ploc[1]]
     else if direction = "down"
-        playerx = playerLoc[0]
-        playery = playerLoc[1] + tileSize
+        checkLoc = [ploc[0], ploc[1] + 1]
+    else if direction = "up"
+        checkLoc = [ploc[0], ploc[1] - 1]
     end if
-
-    if collisionCheck(m.playerHolder, [playerx, playery])
-        m.playerHolder.translation = [playerx, playery]
+    
+    if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
+        tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
+        if tileType = "floor"
+            m.player.location = checkLoc
+        end if
     end if
+    
+    setTile(m.player, m.playerHolder)
 
-    moveMobs() 
+    'moveMobs() 
 end sub 
 
 sub addMobs()
@@ -126,22 +125,41 @@ end sub
 
 sub moveMobs()
     playerLoc = m.playerHolder.translation 'Temp to place monster
-    tileSize = m.global.settings.tile_size
+    horizDirection = "" 
+    horizTotal = 0
+    vertDirection = ""
+    vertTotal = 0
+
     for y = 0 to m.mobs.count() - 1
         mob = m.mobs[y]
         mobLoc = mob.translation
+        ?"MOBLOC: ";mobLoc
+        ?"MOB: ";mob
         if mobLoc[0] < playerLoc[0]
-            mobLoc[0] += tileSize
+            horizDirection = "right"
+            horizTotal = playerLoc[0] - mobLoc[0]
         else
-            mobLoc[0] -= tileSize
+            horizDirection = "left"
+            horizTotal = mobLoc[0] - playerLoc[0]
         end if
         
         if mobLoc[1] < playerLoc[1]
-            mobLoc[1] += tileSize
+            vertDirection = "down"
+            vertTotal = playerLoc[1] - mobLoc[1]
         else
-            mobLoc[1] -= tileSize
+            vertDirection = "up"
+            vertTotal = mobLoc[1] - playerLoc[1]
+        end if
+
+        if vertTotal > horizTotal
+            mobLoc = getNextTile(vertDirection, mobLoc)
+        else
+            mobLoc = getNextTile(horizDirection, mobLoc)
         end if
         
+        ?"MOBLOC: ";mobLoc
+        ?"MOB: ";mob
+
         if collisionCheck(mob, mobLoc)
             mob.translation = mobLoc
         end if
@@ -158,7 +176,7 @@ function collisionCheck(mob, newPosition)
     for z = 0 to m.mobs.count() - 1
         otherMob = m.mobs[z]
         if mob.id <> otherMob.id
-            if newPosition[0] = otherMob.translation[0] and newPosition[1] = otherMob.translation[1]
+            if Int(newPosition[0]) = otherMob.translation[0] and Int(newPosition[1]) = otherMob.translation[1]
                 return false
             end if
         end if
@@ -170,50 +188,95 @@ end function
 sub placeRooms(rooms)
     appSettings = m.global.settings
     grid = m.global.grid
+    tileSize = appSettings.tile_size
 
-    while rooms.count() > 0
-        thisRoom = rooms[0]
-        col = rnd(grid[0][0]) - 1
-        row = rnd(grid[0][1]) - 1
-        margin = m.top.settings.roomMargin
-        tileSize = appSettings.tile_size
-        currentPos = getTileXY(grid, [col, row], tileSize)
-        if currentPos[0] + thisRoom.width > (grid[0][0] * tileSize) - (margin * tileSize)
-            currentPos[0] = currentPos[0] - (tileSize * margin)
+    horizMargin = 5
+    vertMargin = 10
+
+    leftSide = 0
+    topSide = 0
+    tallestRoomHeight = 0
+
+    'Right now the room placing algo starts at top left and places them left to right, top to bottom. 
+    'I might look into something better later. 
+
+    for r = 0 to rooms.count() - 1
+        thisRoom = rooms[r]
+        rWidth = thisRoom[0]
+        rHeight = thisRoom[1]
+
+        leftEdge = rnd(horizMargin) + leftSide
+        'Check if room runs off screen and move down if so       
+        if leftEdge + rWidth > m.levelArr.count()
+            leftEdge = rnd(horizMargin)
+            topSide = tallestRoomHeight + 5
         end if
 
-        if currentPos[1] + thisRoom.height > (grid[0][1] * tileSize) - (margin * tileSize)
-            currentPos[1] = currentPos[1] - (tileSize * margin)
+        topEdge = rnd(vertMargin) + topSide
+
+        leftSide = leftEdge + rWidth + rnd(horizMargin) + 5
+
+        rightEdge = leftEdge + rWidth
+        bottomEdge = topEdge + rHeight
+
+        if bottomEdge > tallestRoomHeight
+            tallestRoomHeight = bottomEdge
         end if
 
-        thisRoom.translation = currentPos
-        m.placedRooms.push(rooms.shift())
-    end while
-    
-    'Check overlaps
-    for x = 1 to m.placedRooms.count() - 1
-        checkingRoom = m.placedRooms[x]
-        for y = 0 to x
-            placedRoom = m.placedRooms[y]
-            rightSide = placedRoom.translation[0] + placedRoom.width
-            bottom = placedRoom.translation[1] + placedRoom.height
+        for w = leftEdge to rightEdge - 1
+            for h = topEdge to bottomEdge - 1
+                m.levelArr[w][h] = "floor:none"
+            end for
+        end for
 
-            if checkingRoom.translation[0] < rightSide and checkingRoom.translation[0] > placedRoom.translation[0]
-                if (grid[0][0] * tileSize) - rightSide < placedRoom.translation[0]
-                    checkingRoom.translation[0] = placedRoom.translation[0] - checkingRoom.width - 20
-                else
-                    checkingRoom.translation[0] = rightSide + 20
-                end if
-            end if
+        'set up stairs arbitrairily in the start room
+        if r = m.startRoom
+            upstairX = rnd(thisRoom[0]) + leftSide
+            upstairY = rnd(thisRoom[1]) + topSide
+            m.levelArr[upstairX][upstairY] = "upstairs:none"
+            m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
+        end if
 
-            if checkingRoom.translation[1] < bottom and checkingRoom.translation[1] > placedRoom.translation[1]
-                if (grid[0][1] * tileSize) - bottom < placedRoom.translation[1]
-                    checkingRoom.translation[1] = placedRoom.translation[1] - checkingRoom.height - 20
-                else
-                    checkingRoom.translation[1] = bottom + 20
+    end for
+end sub
+
+sub draw()
+    tileSize = m.global.settings.tile_size
+    for x = 0 to m.levelArr.count() - 1
+        for y = 0 to m.levelArr[x].count() - 1
+            gridSquare = m.levelArr[x][y]
+            'TODO MAKE THIS ROOM AWARE
+            if(gridSquare <> invalid)
+                gType = gridSquare.split(":")[0]
+
+                if gType = "floor"
+                    name = "tile_" + x.toStr() + "_" + y.toStr()
+                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile.width = tileSize
+                    tile.height = tileSize
+                    tile.color = "0xEFEEBFFF"
+'                    if x MOD 2 = 0
+'                        if y MOD 2 = 0
+'                            tile.color = "0xFF0000FF"
+'                        else
+'                            tile.color = "0x00FF00FF"
+'                        end if
+'                    else
+'                        if y MOD 2 = 0
+'                            tile.color = "0x00FF00FF"
+'                        else
+'                            tile.color = "0xFF0000FF"
+'                        end if
+'                    end if
+                    tile.translation = [tileSize * x, tileSize * y]
+                    m.roomHolder.appendChild(tile)
                 end if
             end if
         end for
     end for
 end sub
 
+sub setTile(tile, holder)
+    tileSize = m.global.settings.tile_size
+    holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
+end sub

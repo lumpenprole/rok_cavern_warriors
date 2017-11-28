@@ -16,3 +16,22 @@ function getTileXY(grid as Object, tile as Object, tileSize as Integer) as Dynam
 end function
 
 
+function getNextTile(direction as String, currentLocation as Object)
+    tileSize = [10, 10]
+    newLocation = currentLocation
+    if m.global.settings.tile_size <> invalid
+        tileSize = m.global.settings.tile_size
+    end if
+
+    if direction = "left"
+        newLocation[0] = Int(newLocation[0]) - tileSize
+    else if direction = "right"
+        newLocation[0] = Int(newLocation[0]) + tileSize
+    else if direction = "up"
+        newLocation[1] = Int(newLocation[1]) - tileSize
+    else if direction = "down"
+        newLocation[1] = Int(newLocation[1]) + tileSize
+    end if
+
+    return newLocation
+end function

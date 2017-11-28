@@ -1,6 +1,13 @@
 sub init()
     ?"PLAYER INIT()"
+    m.tileSize = m.global.settings.tile_size
+    m.bgHolder = m.top.findNode("bg_holder")
     m.tileHolder = m.top.findNode("tile_holder")
+    rect = CreateObject("roSGNode", "Rectangle")
+    rect.width = m.tileSize
+    rect.height = m.tileSize
+    rect.color = "0x276CDBFF"
+    m.bgHolder.appendChild(rect)
 end sub
 
 sub onClassSet()
@@ -8,9 +15,10 @@ sub onClassSet()
     class = m.top.class
 
     tile = createObject("roSGNode", "Poster")
-    'TODO: Set tile size via settings for different tiles
-
-    tile.uri = "pkg://locale/default/images/tmp_player.jpg"
+    tile.loadDisplayMode = "scaleToFill"
+    tile.loadWidth = m.tileSize
+    tile.loadHeight = m.tileSize
+    tile.uri = "pkg://locale/default/images/tmp_player.png"
     m.tileHolder.appendChild(tile)
 end sub
 
