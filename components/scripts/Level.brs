@@ -5,17 +5,11 @@ sub init()
     m.playerHolder = m.top.findNode("player_holder")
     m.mobHolder = m.top.findNode("mob_holder")
     m.mobs = []
-
-    'TODO: Rewrite this so that it designs the map, then draws it. 
-
-    'TODO: Rewrite so that the entire level is just an array of arrays. Each tile will be an array
-    'that contains a type and possibly and id. Like ["door", "door50"]
 end sub
 
 sub setupLevel()
     settings = m.top.settings
     appSettings = m.global.settings
-    ?"SETTINGS: ";appSettings
     
     grid = m.global.grid
 
@@ -25,29 +19,28 @@ sub setupLevel()
     currentPos = [100,100]
 
     totalRooms = rnd(settings.maxRooms - settings.minRooms + 1) + (settings.minRooms - 1)
-    unplacedRooms = []
-    m.placedRooms = []
+    m.rooms = []
 
     ?"**********************************************"
     ?"TOTAL ROOMS: ";totalRooms
     ?"**********************************************"
 
+    'Currently this is arbitrary
+    m.startRoom = 0
+
     for r = 0 to totalRooms - 1
         thisRoom = createRoom()
-
-        if r = 0 'Currently this is arbitrary
-            m.startRoom = 0
-        end if
 
         'thisRoom.id = "room_" + r.toStr()
         'thisRoom.translation = currentPos
         '?"Holder: ";m.roomHolder
         'm.roomHolder.appendChild(thisRoom)
         'm.top.appendChild(thisRoom)
-        unplacedRooms.push(thisRoom)
+        m.rooms.push(thisRoom)
     end for
 
-    placeRooms(unplacedRooms)
+    placeRooms()
+    createCorridors()
 
     draw()
     
@@ -185,7 +178,7 @@ function collisionCheck(mob, newPosition)
         return true
 end function
 
-sub placeRooms(rooms)
+sub placeRooms()
     appSettings = m.global.settings
     grid = m.global.grid
     tileSize = appSettings.tile_size
@@ -200,10 +193,11 @@ sub placeRooms(rooms)
     'Right now the room placing algo starts at top left and places them left to right, top to bottom. 
     'I might look into something better later. 
 
-    for r = 0 to rooms.count() - 1
-        thisRoom = rooms[r]
+    for r = 0 to m.rooms.count() - 1
+        thisRoom = m.rooms[r]
         rWidth = thisRoom[0]
         rHeight = thisRoom[1]
+        roomId = "room_" + r.toStr()
 
         leftEdge = rnd(horizMargin) + leftSide
         'Check if room runs off screen and move down if so       
@@ -225,7 +219,7 @@ sub placeRooms(rooms)
 
         for w = leftEdge to rightEdge - 1
             for h = topEdge to bottomEdge - 1
-                m.levelArr[w][h] = "floor:none"
+                m.levelArr[w][h] = "floor:" + roomId
             end for
         end for
 
@@ -240,12 +234,16 @@ sub placeRooms(rooms)
     end for
 end sub
 
+sub createCorridors()
+    'Make paths between rooms
+end sub
+
 sub draw()
     tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
-            'TODO MAKE THIS ROOM AWARE
+            'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
             if(gridSquare <> invalid)
                 gType = gridSquare.split(":")[0]
 
@@ -255,19 +253,6 @@ sub draw()
                     tile.width = tileSize
                     tile.height = tileSize
                     tile.color = "0xEFEEBFFF"
-'                    if x MOD 2 = 0
-'                        if y MOD 2 = 0
-'                            tile.color = "0xFF0000FF"
-'                        else
-'                            tile.color = "0x00FF00FF"
-'                        end if
-'                    else
-'                        if y MOD 2 = 0
-'                            tile.color = "0x00FF00FF"
-'                        else
-'                            tile.color = "0xFF0000FF"
-'                        end if
-'                    end if
                     tile.translation = [tileSize * x, tileSize * y]
                     m.roomHolder.appendChild(tile)
                 end if
