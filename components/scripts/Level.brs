@@ -13,8 +13,13 @@ sub setupLevel()
     
     grid = m.global.grid
 
-    Dim level[grid[0][0], grid[0][1]]
-    m.levelArr = level
+    m.levelArr = []
+    for x = 0 to grid[0][0] - 1
+        m.levelArr[x] = []
+        for y = 0 to grid[0][1] - 1
+            m.levelArr[x][y] = "none:none"
+        end for
+    end for
 
     currentPos = [100,100]
 
@@ -186,47 +191,40 @@ sub placeRooms()
     horizMargin = 5
     vertMargin = 10
 
-    leftSide = 0
-    topSide = 0
-    tallestRoomHeight = 0
-
-    'Right now the room placing algo starts at top left and places them left to right, top to bottom. 
-    'I might look into something better later. 
-
     for r = 0 to m.rooms.count() - 1
-        thisRoom = m.rooms[r]
-        rWidth = thisRoom[0]
-        rHeight = thisRoom[1]
-        roomId = "room_" + r.toStr()
+        roomUnplaced = true
+        checkedRooms = 0
+        rWidth = m.rooms[r][0]
+        rHeight = m.rooms[r][1]
 
-        leftEdge = rnd(horizMargin) + leftSide
-        'Check if room runs off screen and move down if so       
-        if leftEdge + rWidth > m.levelArr.count()
-            leftEdge = rnd(horizMargin)
-            topSide = tallestRoomHeight + 5
-        end if
+        while roomUnplaced
+            'place room
+            startX = rnd(m.levelArr.count() - rWidth)
+            startY = rnd(m.levelArr[0].count() - rHeight)
 
-        topEdge = rnd(vertMargin) + topSide
-
-        leftSide = leftEdge + rWidth + rnd(horizMargin) + 5
-
-        rightEdge = leftEdge + rWidth
-        bottomEdge = topEdge + rHeight
-
-        if bottomEdge > tallestRoomHeight
-            tallestRoomHeight = bottomEdge
-        end if
-        
-        'Push x,y of room start for later use
-        m.rooms[r].push(leftEdge)
-        m.rooms[r].push(rightEdge)
-
-        for w = leftEdge to rightEdge - 1
-            for h = topEdge to bottomEdge - 1
-                m.levelArr[w][h] = "floor:" + roomId
+            for c = r - 1 to 0 step -1
+                    checkRoom = m.rooms[c]
+                    if (startX > checkRoom[2] and startX < checkRoom[2] + checkRoom[0]) and (startY > checkRoom[3] and startY < checkRoom[3] + checkRoom[1])
+                        ?"))))))))))))))))))))))))))))))))))))))))))))))))"
+                        ?"))))))))))))))))))))))))))))))))))))))))))))))))"
+                        ?"COLLIDED"
+                        ?"))))))))))))))))))))))))))))))))))))))))))))))))"
+                        ?"))))))))))))))))))))))))))))))))))))))))))))))))"
+                        exit for
+                    end if
+                    checkedRooms++
+                    ?"CHECKED ROOMS: " + checkedRooms.toStr()
             end for
-        end for
+
+            if checkedRooms = r
+                roomUnplaced = false
+                m.rooms[r].push(startX)
+                m.rooms[r].push(startY)
+                putRoomInGrid(m.rooms[r], r)
+            end if
+        end while
     end for
+
 
     'set up stairs arbitrairily in the start room
     sRoom = m.rooms[m.startRoom]
@@ -234,7 +232,7 @@ sub placeRooms()
     upstairY = rnd(sRoom[1]) + sRoom[3]
     m.levelArr[upstairX][upstairY] = "upstairs:none"
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
-    ?"UPSTAIRS: ";upstairX;", ";upstairY
+
 end sub
 
 sub createCorridors()
@@ -267,4 +265,12 @@ end sub
 sub setTile(tile, holder)
     tileSize = m.global.settings.tile_size
     holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
+end sub
+
+sub putRoomInGrid(room, id)
+    for x = room[2] to room[2] + room[0]
+        for y = room[3] to room[3] + room[1]
+            m.levelArr[x][y] = "floor:room_" + id.toStr()
+        end for
+    end for
 end sub
