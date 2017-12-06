@@ -50,6 +50,7 @@ sub setupLevel()
 end sub
 
 function createRoom() as Object
+    'TODO: Move the room settings into level settings
     appSettings = m.global.settings
     width = rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width 
     height = rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height
@@ -277,8 +278,8 @@ sub placeRooms()
     roomNum = rnd(m.rooms.count() - 1)
     sRoom = m.rooms[roomNum]
     ?"START ROOM ";roomNum;": ";sRoom
-    upstairX = rnd(sRoom[0]) + sRoom[2]
-    upstairY = rnd(sRoom[1]) + sRoom[3]
+    upstairX = rnd(sRoom[0] + 1) + (sRoom[2] - 1)
+    upstairY = rnd(sRoom[1] + 1) + (sRoom[3] - 1)
     ?"UPSTAIRS: ";upstairX.toStr();", ";upstairY.toStr()
     m.levelArr[upstairX][upstairY] = "upstairs:none"
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
@@ -287,6 +288,8 @@ end sub
 sub createCorridors()
     'Make paths between rooms
     for x = 0 to m.rooms.count() - 1
+        'TODO: Set door max/min in level settings. 1-3 at the moment
+        numOfDoors = rnd(3)
     end for
 end sub
 
