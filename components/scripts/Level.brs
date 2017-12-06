@@ -13,8 +13,16 @@ sub setupLevel()
     
     grid = m.global.grid
 
-    Dim level[grid[0][0], grid[0][1]]
-    m.levelArr = level
+    'Dim level[grid[0][0], grid[0][1]]
+    'm.levelArr = level
+
+    m.levelArr = []
+    for x = 0 to grid[0][0] - 1
+        m.levelArr[x] = []
+        for y = 0 to grid[0][1] - 1
+            m.levelArr[x][y] = "none:none"
+        end for
+    end for
 
     currentPos = [100,100]
 
@@ -30,12 +38,6 @@ sub setupLevel()
 
     for r = 0 to totalRooms - 1
         thisRoom = createRoom()
-
-        'thisRoom.id = "room_" + r.toStr()
-        'thisRoom.translation = currentPos
-        '?"Holder: ";m.roomHolder
-        'm.roomHolder.appendChild(thisRoom)
-        'm.top.appendChild(thisRoom)
         m.rooms.push(thisRoom)
     end for
 
@@ -192,6 +194,9 @@ sub placeRooms()
 
     'Right now the room placing algo starts at top left and places them left to right, top to bottom. 
     'I might look into something better later. 
+    
+    row = 1
+    newRooms = []
 
     for r = 0 to m.rooms.count() - 1
         thisRoom = m.rooms[r]
@@ -202,11 +207,21 @@ sub placeRooms()
         leftEdge = rnd(horizMargin) + leftSide
         'Check if room runs off screen and move down if so       
         if leftEdge + rWidth > m.levelArr.count()
-            leftEdge = rnd(horizMargin)
-            topSide = tallestRoomHeight + 5
+            row++
+            if row < 3
+                leftEdge = rnd(horizMargin)
+                topSide = tallestRoomHeight + 5
+            else
+                'room is not processed or added to new rooms
+                exit for
+            end if
         end if
 
         topEdge = rnd(vertMargin) + topSide
+
+        while topEdge + rHeight >= m.levelArr[0].count()
+            topEdge -= 5
+        end while
 
         leftSide = leftEdge + rWidth + rnd(horizMargin) + 5
 
@@ -217,33 +232,69 @@ sub placeRooms()
             tallestRoomHeight = bottomEdge
         end if
         
+        'leftEdge is the left of the room, leftSide is the leftmost placement of the next room
+        'Same with topEdge and topSide
+        'TODO: Rewrite all these variables so this is clearer and maybe change room to be
+        '[x,y,w,h]
+        'instead of how it is now, which is:
+        '[w,h,x,y]
+        
         'Push x,y of room start for later use
         m.rooms[r].push(leftEdge)
-        m.rooms[r].push(rightEdge)
-
+        m.rooms[r].push(topEdge)
+        newRooms.push(m.rooms[r])
+        
+        'process room into level array
         for w = leftEdge to rightEdge - 1
             for h = topEdge to bottomEdge - 1
                 m.levelArr[w][h] = "floor:" + roomId
+                'Add walls 
+                if w = leftEdge
+                    m.levelArr[w - 1][h] = "wall:none"
+                else if w = rightEdge - 1
+                    m.levelArr[w + 1][h] = "wall:none"
+                end if
+
+                if h = topEdge
+                    m.levelArr[w][h - 1] = "wall:none"
+                else if h = bottomEdge - 1
+                    m.levelArr[w][h + 1] = "wall:none"
+                end if
             end for
+
+            'do corners
+            m.levelArr[leftEdge - 1][topEdge - 1] = "wall:none"
+            m.levelArr[leftEdge - 1][bottomEdge] = "wall:none"
+            m.levelArr[rightEdge][topEdge - 1] = "wall:none"
+            m.levelArr[rightEdge][bottomEdge] = "wall:none"
         end for
     end for
+    
+    'rooms array should only contain rooms that were processed
+    m.rooms = newRooms
 
     'set up stairs arbitrairily in the start room
-    sRoom = m.rooms[m.startRoom]
+    roomNum = rnd(m.rooms.count() - 1)
+    sRoom = m.rooms[roomNum]
+    ?"START ROOM ";roomNum;": ";sRoom
     upstairX = rnd(sRoom[0]) + sRoom[2]
     upstairY = rnd(sRoom[1]) + sRoom[3]
+    ?"UPSTAIRS: ";upstairX.toStr();", ";upstairY.toStr()
     m.levelArr[upstairX][upstairY] = "upstairs:none"
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
-    ?"UPSTAIRS: ";upstairX;", ";upstairY
 end sub
 
 sub createCorridors()
     'Make paths between rooms
+    for x = 0 to m.rooms.count() - 1
+    end for
 end sub
 
 sub draw()
     tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
+    ?"WIDTH: ";m.levelArr.count()
+    ?"HEIGHT: ";m.levelArr[x].count()
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
@@ -252,10 +303,28 @@ sub draw()
 
                 if gType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
+                    '?"floor: ";name
                     tile = CreateObject("roSGNode", "Rectangle")
                     tile.width = tileSize
                     tile.height = tileSize
                     tile.color = "0xEFEEBFFF"
+                    tile.translation = [tileSize * x, tileSize * y]
+                    m.roomHolder.appendChild(tile)
+                else if gType = "wall"
+                    name = "tile_" + x.toStr() + "_" + y.toStr()
+                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile.width = tileSize
+                    tile.height = tileSize
+                    tile.color = "0x767B84FF"
+                    tile.translation = [tileSize * x, tileSize * y]
+                    m.roomHolder.appendChild(tile)
+                else if gType = "upstairs"
+                    name = "tile_" + x.toStr() + "_" + y.toStr()
+                    '?"STAIRS ARE HERE: ";name
+                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile.width = tileSize
+                    tile.height = tileSize
+                    tile.color = "0xFaFF05FF"
                     tile.translation = [tileSize * x, tileSize * y]
                     m.roomHolder.appendChild(tile)
                 end if
