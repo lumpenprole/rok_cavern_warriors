@@ -42,7 +42,8 @@ sub setupLevel()
     end for
 
     placeRooms()
-    createCorridors()
+    createDoors()
+    createCorridoors()
 
     draw()
     
@@ -95,8 +96,9 @@ sub playerMove(direction as String)
     end if
     
     if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
-        tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
-        if tileType = "floor"
+        'tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
+        'if tileType = "floor"
+        if canOccupy(m.levelArr[checkLoc[0], checkLoc[1]])
             m.player.location = checkLoc
         end if
     end if
@@ -277,7 +279,6 @@ sub placeRooms()
     'set up stairs arbitrairily in the start room
     roomNum = rnd(m.rooms.count() - 1)
     sRoom = m.rooms[roomNum]
-    ?"START ROOM ";roomNum;": ";sRoom
     upstairX = rnd(sRoom[0] + 1) + (sRoom[2] - 1)
     upstairY = rnd(sRoom[1] + 1) + (sRoom[3] - 1)
     ?"UPSTAIRS: ";upstairX.toStr();", ";upstairY.toStr()
@@ -285,19 +286,100 @@ sub placeRooms()
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
 end sub
 
-sub createCorridors()
+sub createDoors()
     'Make paths between rooms
+    m.doors = []
     for x = 0 to m.rooms.count() - 1
+        m.doors[x] = []
         'TODO: Set door max/min in level settings. 1-3 at the moment
         numOfDoors = rnd(3)
+        thisRoom = m.rooms[x]
+        side = rnd(4) 'rnd starts at one, and its left,top,right,bottom
+        roomX = thisRoom[2]
+        roomY = thisRoom[3]
+        roomW = thisRoom[0]
+        roomH = thisRoom[1]
+        for y = 0 to numOfDoors - 1
+            doorX = 0
+            doorY = 0
+            'TODO: Check if side is touching edge of map and abandon if so
+            if side = 2 or side = 4 'top or bottom
+                doorX = rnd(roomW) + roomX - 1
+                if side = 2 'top
+                    doorY = roomY - 1
+                else 'bottom
+                    doorY = roomY + roomH 
+                end if
+            else 'left or right
+                doorY = rnd(roomH) + roomY - 1
+                if side = 1 'left
+                    doorX = roomX - 1
+                else 'right
+                    doorX = roomX + roomW
+                end if
+            end if
+
+            'TODO: Check if doors are touching and move them. 
+            m.doors[x][y] = [doorX, doorY]
+            m.levelArr[doorX][doorY] = "door:open"
+        end for
     end for
+end sub
+
+sub createCorridoors()
+    m.connections = [] 'this is going to be so I can test that you can get out
+    connectedDoors = []
+    for x = 0 to m.doors.count() - 1
+        for y = 0 to m.doors[x].count() - 1
+            thisDoor = m.doors[x][y]
+            if not contains(thisDoor, connectedDoors)
+                connected = false
+                while not connected
+                    connectRoom = rnd(m.doors.count()) - 1
+                    if connectRoom <> x
+                        connectDoor = m.doors[connectRoom][rnd(m.doors[connectRoom].count()) - 1]
+                        pathFind(thisDoor, connectDoor)
+                        connected = true
+                    end if
+                end while
+            end if
+        end for
+    end for
+
+end sub
+
+sub pathFind(startLoc, endLoc)
+    ?"DRAW PATH FROM ";thisDoor;" TO ";endLoc
+    currentDraw = [0,0]
+    direction = [0,0]
+    'We're assuming that there's only one place to go because right now this only comes from doors
+    startX = startLoc[0]
+    startY = startLoc[1]
+    if m.levelArr[startX][startY - 1] = "none:none"
+        currentDraw = [startX, startY - 1]
+        direction = [0, -1]
+    else if m.levelArr[startX][startY + 1] = "none:none"
+        currentDraw = [startX, startY + 1]
+        direction = [0, 1]
+    else if m.levelArr[startX - 1][startY] = "none:none"
+        currentDraw = [startX - 1, startY]
+        direction = [-1, 0]
+    else if m.levelArr[startX + 1][startY] = "none:none"
+        currentDraw = [startX + 1, startY]
+        direction = [1, 0]
+    end if
+    m.levelArr[currentDraw[0]][currentDraw[1]] = "floor:none"
+    
+    'THIS WILL CURRENTLY CRASH THE PROGRAM
+    'while currentDraw <> endLoc
+        'nextDraw = [currentDraw[0] + direction[0], currentDraw[1] + direction[1]]
+    'end while
+
 end sub
 
 sub draw()
     tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
-    ?"WIDTH: ";m.levelArr.count()
-    ?"HEIGHT: ";m.levelArr[x].count()
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
@@ -323,11 +405,18 @@ sub draw()
                     m.roomHolder.appendChild(tile)
                 else if gType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    '?"STAIRS ARE HERE: ";name
                     tile = CreateObject("roSGNode", "Rectangle")
                     tile.width = tileSize
                     tile.height = tileSize
                     tile.color = "0xFaFF05FF"
+                    tile.translation = [tileSize * x, tileSize * y]
+                    m.roomHolder.appendChild(tile)
+                else if gType = "door"
+                    name = "tile_" + x.toStr() + "_" + y.toStr()
+                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile.width = tileSize
+                    tile.height = tileSize
+                    tile.color = "0x28E014FF"
                     tile.translation = [tileSize * x, tileSize * y]
                     m.roomHolder.appendChild(tile)
                 end if
@@ -340,3 +429,32 @@ sub setTile(tile, holder)
     tileSize = m.global.settings.tile_size
     holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
 end sub
+
+function canOccupy(tile)
+    arr = tile.split(":")
+    tileType = arr[0]
+    tileData = arr[1]
+
+    if tileType = "floor" or tileType = "upstairs"
+        return true
+    else if tileType = "door"
+        if tileData = "open"
+            return true
+        else
+            return false
+        end if
+    else
+        return false
+    end if
+end function 
+
+function contains(item, arr)
+    for x = 0 to arr.count() - 1
+        if arr[x] = item
+            return true
+        end if
+    end for
+    return false
+end function
+
+
