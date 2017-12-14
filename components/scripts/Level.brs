@@ -350,31 +350,39 @@ end sub
 
 sub pathFind(startLoc, endLoc)
     ?"DRAW PATH FROM ";thisDoor;" TO ";endLoc
-    currentDraw = [0,0]
     direction = [0,0]
     'We're assuming that there's only one place to go because right now this only comes from doors
     startX = startLoc[0]
     startY = startLoc[1]
-    if m.levelArr[startX][startY - 1] = "none:none"
-        currentDraw = [startX, startY - 1]
-        direction = [0, -1]
-    else if m.levelArr[startX][startY + 1] = "none:none"
-        currentDraw = [startX, startY + 1]
-        direction = [0, 1]
-    else if m.levelArr[startX - 1][startY] = "none:none"
-        currentDraw = [startX - 1, startY]
-        direction = [-1, 0]
-    else if m.levelArr[startX + 1][startY] = "none:none"
-        currentDraw = [startX + 1, startY]
-        direction = [1, 0]
-    end if
+    currentDraw = [startX,startY]
+
+
     m.levelArr[currentDraw[0]][currentDraw[1]] = "floor:none"
     
-    'THIS WILL CURRENTLY CRASH THE PROGRAM
-    'while currentDraw <> endLoc
-        'nextDraw = [currentDraw[0] + direction[0], currentDraw[1] + direction[1]]
-    'end while
-
+    if currentDraw[0] < endLoc[0]
+        while currentDraw[0] < endLoc[0]
+            currentDraw[0] = currentDraw[0] + 1
+            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+        end while
+    else 
+        while currentDraw[0] > endLoc[0]
+            currentDraw[0] = currentDraw[0] - 1
+            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+        end while
+    end if
+    
+    if currentDraw[1] < endLoc[1]
+        while currentDraw[1] < endLoc[1]
+            currentDraw[1] = currentDraw[1] + 1
+            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+        end while
+    else 
+        while currentDraw[1] > endLoc[1]
+            currentDraw[1] = currentDraw[1] - 1
+            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+        end while
+    end if
+    
 end sub
 
 sub draw()
