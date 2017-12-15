@@ -98,8 +98,10 @@ sub playerMove(direction as String)
     if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
         'tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
         'if tileType = "floor"
-        if canOccupy(m.levelArr[checkLoc[0], checkLoc[1]])
-            m.player.location = checkLoc
+        if collisionCheck(m.player, checkLoc) <> true
+            if canOccupy(m.levelArr[checkLoc[0], checkLoc[1]])
+                m.player.location = checkLoc
+            end if
         end if
     end if
     
@@ -161,6 +163,14 @@ function collisionCheck(mob, newPosition)
         else
             return false
         end if
+    else 'mob is player
+        for x = 0 to m.mobs.count() - 1
+            thisMob = m.mobs[x]
+            if newPosition[0] = thisMob.location[0] and newPosition[1] = thisMob.location[1]
+                return true
+            end if
+        end for
+        return false
     end if
     return true
 
