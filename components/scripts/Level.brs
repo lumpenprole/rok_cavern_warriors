@@ -26,7 +26,7 @@ sub setupLevel()
 
     currentPos = [100,100]
 
-    totalRooms = rnd(settings.maxRooms - settings.minRooms + 1) + (settings.minRooms - 1)
+    totalRooms = getRandomRange(settings.minRooms, settings.maxRooms)
     m.rooms = []
 
     ?"**********************************************"
@@ -42,7 +42,6 @@ sub setupLevel()
     end for
 
     placeRooms()
-    createDoors()
     createCorridoors()
 
     draw()
@@ -50,11 +49,12 @@ sub setupLevel()
     m.loadTxt.visible = false
 end sub
 
+'Rooms end up being [width, height, x, y]
 function createRoom() as Object
     'TODO: Move the room settings into level settings
     appSettings = m.global.settings
-    width = rnd(appSettings.room_max_width - appSettings.room_min_width) + appSettings.room_min_width 
-    height = rnd(appSettings.room_max_height - appSettings.room_min_height) + appSettings.room_min_height
+    width = getRandomRange(appSettings.room_min_width, appSettings.room_max_width)
+    height = getRandomRange(appSettings.room_min_height, appSettings.room_max_height)
 
     return [width, height]
 end function 
@@ -65,7 +65,7 @@ sub onPlayerSet()
     m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
     m.player.location = m.upstairs
 
-    'addMobs()
+    addMobs()
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
@@ -105,7 +105,7 @@ sub playerMove(direction as String)
     
     setTile(m.player, m.playerHolder)
 
-    'moveMobs() 
+    moveMobs() 
 end sub 
 
 sub addMobs()
@@ -114,74 +114,61 @@ sub addMobs()
         ?"Creating Monster #";x.toStr()
         mob = CreateObject("roSGNode", "rcw_Mob")
         mob.id = "monster_ " + x.toStr()
+        mob.race = "orc"
+        mob.class = "warrior"
         m.mobs.push(mob)
-        playerLoc = m.playerHolder.translation 'Temp to place monster
-        mob.translation = [playerLoc[0] + 70, playerLoc[1] + 70]
+        mRoom = m.sRoom 'Right now it's start room. Change it later
+        mobX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
+        mobY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
+        mob.location = [mobX, mobY]
         m.mobHolder.appendChild(mob)
+        setTile(mob, m.mobHolder)
     end for
 end sub
 
 sub moveMobs()
-    playerLoc = m.playerHolder.translation 'Temp to place monster
-    horizDirection = "" 
-    horizTotal = 0
-    vertDirection = ""
-    vertTotal = 0
-
+    playerLoc = m.player.location
+    
     for y = 0 to m.mobs.count() - 1
         mob = m.mobs[y]
-        mobLoc = mob.translation
+        mobLoc = mob.location
+        ?"PLAYERLOC: ";playerLoc
         ?"MOBLOC: ";mobLoc
-        ?"MOB: ";mob
+
         if mobLoc[0] < playerLoc[0]
-            horizDirection = "right"
-            horizTotal = playerLoc[0] - mobLoc[0]
-        else
-            horizDirection = "left"
-            horizTotal = mobLoc[0] - playerLoc[0]
+            mobLoc[0] = mobLoc[0] + 1
+        else if mobLoc[0] > playerLoc[0]
+            mobLoc[0] = mobLoc[0] - 1
         end if
-        
+
         if mobLoc[1] < playerLoc[1]
-            vertDirection = "down"
-            vertTotal = playerLoc[1] - mobLoc[1]
-        else
-            vertDirection = "up"
-            vertTotal = mobLoc[1] - playerLoc[1]
+            mobLoc[1] = mobLoc[1] + 1
+        else if mobLoc[1] > playerLoc[1]
+            mobLoc[1] = mobLoc[1] - 1
         end if
 
-        if vertTotal > horizTotal
-            mobLoc = getNextTile(vertDirection, mobLoc)
-        else
-            mobLoc = getNextTile(horizDirection, mobLoc)
-        end if
-        
-        ?"MOBLOC: ";mobLoc
-        ?"MOB: ";mob
-
-        if collisionCheck(mob, mobLoc)
-            mob.translation = mobLoc
+        if collisionCheck(mob, mobLoc) <> true
+            mob.location = mobLoc
+            setTile(mob, m.mobHolder)
         end if
     end for
 end sub
 
 function collisionCheck(mob, newPosition)
-    if mob.id <> m.playerHolder.id
-        if m.playerHolder.translation[0] = newPosition[0] and m.playerHolder.translation[1] = newPosition[1]
+    if mob.id <> m.player.id 'mob is monster
+        if newPosition[0] = m.player.location[0] and newPosition[1] = m.player.location[1]
+            fight(mob)
+        else
             return false
         end if
     end if
+    return true
 
-    for z = 0 to m.mobs.count() - 1
-        otherMob = m.mobs[z]
-        if mob.id <> otherMob.id
-            if Int(newPosition[0]) = otherMob.translation[0] and Int(newPosition[1]) = otherMob.translation[1]
-                return false
-            end if
-        end if
-    end for
-
-        return true
 end function
+
+sub fight(monster)
+    ?m.player.class;" FIGHTS ";monster.race;" ";monster.class
+end sub
 
 sub placeRooms()
     appSettings = m.global.settings
@@ -278,111 +265,79 @@ sub placeRooms()
 
     'set up stairs arbitrairily in the start room
     roomNum = rnd(m.rooms.count() - 1)
-    sRoom = m.rooms[roomNum]
-    upstairX = rnd(sRoom[0] + 1) + (sRoom[2] - 1)
-    upstairY = rnd(sRoom[1] + 1) + (sRoom[3] - 1)
+    m.sRoom = m.rooms[roomNum]
+    upstairX = getRandomRange(m.sRoom[2], m.sRoom[2] + m.sRoom[0])
+    upstairY = getRandomRange(m.sRoom[3], m.sRoom[3] + m.sRoom[1])
     ?"UPSTAIRS: ";upstairX.toStr();", ";upstairY.toStr()
     m.levelArr[upstairX][upstairY] = "upstairs:none"
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
 end sub
 
-sub createDoors()
-    'Make paths between rooms
-    m.doors = []
-    for x = 0 to m.rooms.count() - 1
-        m.doors[x] = []
-        'TODO: Set door max/min in level settings. 1-3 at the moment
-        numOfDoors = rnd(3)
-        thisRoom = m.rooms[x]
-        side = rnd(4) 'rnd starts at one, and its left,top,right,bottom
-        roomX = thisRoom[2]
-        roomY = thisRoom[3]
-        roomW = thisRoom[0]
-        roomH = thisRoom[1]
-        for y = 0 to numOfDoors - 1
-            doorX = 0
-            doorY = 0
-            'TODO: Check if side is touching edge of map and abandon if so
-            if side = 2 or side = 4 'top or bottom
-                doorX = rnd(roomW) + roomX - 1
-                if side = 2 'top
-                    doorY = roomY - 1
-                else 'bottom
-                    doorY = roomY + roomH 
-                end if
-            else 'left or right
-                doorY = rnd(roomH) + roomY - 1
-                if side = 1 'left
-                    doorX = roomX - 1
-                else 'right
-                    doorX = roomX + roomW
-                end if
-            end if
-
-            'TODO: Check if doors are touching and move them. 
-            m.doors[x][y] = [doorX, doorY]
-            m.levelArr[doorX][doorY] = "door:open"
-        end for
-    end for
-end sub
-
 sub createCorridoors()
     m.connections = [] 'this is going to be so I can test that you can get out
     connectedDoors = []
-    for x = 0 to m.doors.count() - 1
-        for y = 0 to m.doors[x].count() - 1
-            thisDoor = m.doors[x][y]
-            if not contains(thisDoor, connectedDoors)
-                connected = false
-                while not connected
-                    connectRoom = rnd(m.doors.count()) - 1
-                    if connectRoom <> x
-                        connectDoor = m.doors[connectRoom][rnd(m.doors[connectRoom].count()) - 1]
-                        pathFind(thisDoor, connectDoor)
-                        connected = true
-                    end if
-                end while
+    
+    for x = 0 to m.rooms.count() - 1
+        connectArray = []
+        for y = 0 to m.rooms.count() - 1
+            if y <> x
+                connectArray.push(m.rooms[y])
             end if
         end for
+        connections = rnd(2)
+        startRoom = m.rooms[x]
+        startCenter = getRoomCenter(startRoom)
+
+        for z = 0 to connections
+            if connectArray.count() > 0
+                endRoom = connectArray[rnd(connectArray.count() - 1)]
+                endCenter = getRoomCenter(endRoom)
+                pathFind(startCenter, endCenter)
+                connectArray.delete(z)
+            end if
+        end for
+
     end for
 
 end sub
 
 sub pathFind(startLoc, endLoc)
-    ?"DRAW PATH FROM ";thisDoor;" TO ";endLoc
-    direction = [0,0]
-    'We're assuming that there's only one place to go because right now this only comes from doors
     startX = startLoc[0]
     startY = startLoc[1]
     currentDraw = [startX,startY]
-
 
     m.levelArr[currentDraw[0]][currentDraw[1]] = "floor:none"
     
     if currentDraw[0] < endLoc[0]
         while currentDraw[0] < endLoc[0]
             currentDraw[0] = currentDraw[0] + 1
-            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+            addCorridorFloor(currentDraw[0], currentDraw[1])
         end while
     else 
         while currentDraw[0] > endLoc[0]
             currentDraw[0] = currentDraw[0] - 1
-            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+            addCorridorFloor(currentDraw[0], currentDraw[1])
         end while
     end if
     
     if currentDraw[1] < endLoc[1]
         while currentDraw[1] < endLoc[1]
             currentDraw[1] = currentDraw[1] + 1
-            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+            addCorridorFloor(currentDraw[0], currentDraw[1])
         end while
     else 
         while currentDraw[1] > endLoc[1]
             currentDraw[1] = currentDraw[1] - 1
-            m.levelArr[currentDraw[0], currentDraw[1]] = "floor:none"
+            addCorridorFloor(currentDraw[0], currentDraw[1])
         end while
     end if
-    
+end sub
+
+sub addCorridorFloor(x, y)
+    tileType = m.levelArr[x, y].split(":")[0]
+    if tileType <> "upstairs"
+        m.levelArr[x, y] = "floor:none"
+    end if
 end sub
 
 sub draw()
@@ -465,4 +420,8 @@ function contains(item, arr)
     return false
 end function
 
-
+function getRoomCenter(room)
+    centerX = cInt(room[0] / 2) + room[2]
+    centerY = cInt(room[1] / 2) + room[3]
+    return [centerX, centerY]
+end function

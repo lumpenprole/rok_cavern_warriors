@@ -2,14 +2,18 @@
 <component name="rcw_Mob">
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
-		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+        <field id="eventCallback" type="node" onChange="onEventCallback"/>
+		<field id="class" type="string" onChange="onClassSet"/>
+        <field id="race" type="string" onChange="onRaceSet"/>
+        <field id="location" type="intArray" value="[0,0]"/>
 	</interface>
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Mob.brs"/>
 
     <children>
-        <Rectangle id="tile_holder" width="50" height="50" translation="[0,0]" color="0x000000FF" />
+        <Group id="bg_holder" />
+        <Group id="tile_holder" />
  	</children>
 
 </component>
