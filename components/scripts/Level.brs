@@ -99,19 +99,21 @@ sub playerMove(direction as String)
         'tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
         'if tileType = "floor"
         if collisionCheck(m.player, checkLoc) <> true
-            if canOccupy(m.levelArr[checkLoc[0], checkLoc[1]])
+            if canOccupy(checkLoc)
                 m.player.location = checkLoc
             end if
         end if
     end if
-    
+     
     setTile(m.player, m.playerHolder)
 
     moveMobs() 
 end sub 
 
 sub addMobs()
-    totalMobs = 1
+    totalMobs = rnd(7)
+    'totalMobs = 1
+    ?"TOTAL MOBS: ";totalMobs
     for x = 0 to totalMobs - 1
         ?"Creating Monster #";x.toStr()
         mob = CreateObject("roSGNode", "rcw_Mob")
@@ -119,12 +121,16 @@ sub addMobs()
         mob.race = "orc"
         mob.class = "warrior"
         m.mobs.push(mob)
-        mRoom = m.sRoom 'Right now it's start room. Change it later
+        mRoom = m.rooms[rnd(m.rooms.count()) - 1] 
         mobX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
         mobY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
         mob.location = [mobX, mobY]
-        m.mobHolder.appendChild(mob)
-        setTile(mob, m.mobHolder)
+        'TODO: Change player move to this model. I don't think we need the holders. 
+        'm.mobHolder.appendChild(mob)
+        m.top.appendChild(mob)
+        tileSize = m.global.settings.tile_size
+        mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
+        'setTile(mob, m.mobHolder)
     end for
 end sub
 
@@ -134,23 +140,32 @@ sub moveMobs()
     for y = 0 to m.mobs.count() - 1
         mob = m.mobs[y]
         mobLoc = mob.location
-        ?"PLAYERLOC: ";playerLoc
-        ?"MOBLOC: ";mobLoc
+        newLoc = [playerLoc[0], playerLoc[1]]
 
         if mobLoc[0] < playerLoc[0]
-            mobLoc[0] = mobLoc[0] + 1
+            newLoc[0] = mobLoc[0] + 1
         else if mobLoc[0] > playerLoc[0]
-            mobLoc[0] = mobLoc[0] - 1
+            newLoc[0] = mobLoc[0] - 1
         end if
 
         if mobLoc[1] < playerLoc[1]
-            mobLoc[1] = mobLoc[1] + 1
+            newLoc[1] = mobLoc[1] + 1
         else if mobLoc[1] > playerLoc[1]
-            mobLoc[1] = mobLoc[1] - 1
+            newLoc[1] = mobLoc[1] - 1
         end if
 
-        if collisionCheck(mob, mobLoc) <> true
-            mob.location = mobLoc
+        if canOccupy(newLoc)
+            if collisionCheck(mob, mobLoc) <> true
+                mob.location = newLoc
+                'setTile(mob, m.mobHolder)
+                tileSize = m.global.settings.tile_size
+                mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
+            end if
+        else if canOccupy([mobLoc[0], newLoc[1]])
+            mob.location = [mobLoc[0], newLoc[1]]
+            setTile(mob, m.mobHolder)
+        else if canOccupy([newLoc[0], mobLoc[1]])
+            mob.location = [newLoc[0], mobLoc[1]]
             setTile(mob, m.mobHolder)
         end if
     end for
@@ -403,7 +418,8 @@ sub setTile(tile, holder)
     holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
 end sub
 
-function canOccupy(tile)
+function canOccupy(tileLoc)
+    tile = m.levelArr[tileLoc[0], tileLoc[1]]
     arr = tile.split(":")
     tileType = arr[0]
     tileData = arr[1]

@@ -18,7 +18,7 @@ sub onClassSet()
     tile.loadDisplayMode = "scaleToFill"
     tile.loadWidth = m.tileSize
     tile.loadHeight = m.tileSize
-    tile.uri = "pkg://locale/default/images/tmp_monster.png"
+    tile.uri = "pkg://locale/default/images/giant_amoeba.png"
     m.tileHolder.appendChild(tile)
 end sub
 
