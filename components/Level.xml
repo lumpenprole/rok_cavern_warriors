@@ -6,10 +6,12 @@
 		<field id="settings" type="node" onChange="setupLevel"/>
 		<field id="startPoint" type="intarray" />
 		<field id="playerSet" type="bool" value="false" onChange="onPlayerSet" />
+		<field id="playerStairs" type="string" onChange="onPlayerStairs" />
 	</interface>
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/scripts/Level.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Math.brs"/>
 

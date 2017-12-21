@@ -1,5 +1,4 @@
 sub init()
-    ?"Level: Init()"
     m.loadTxt = m.top.findNode("loading_text")
     m.roomHolder = m.top.findNode("room_holder")
     m.playerHolder = m.top.findNode("player_holder")
@@ -28,10 +27,6 @@ sub setupLevel()
 
     totalRooms = getRandomRange(settings.minRooms, settings.maxRooms)
     m.rooms = []
-
-    ?"**********************************************"
-    ?"TOTAL ROOMS: ";totalRooms
-    ?"**********************************************"
 
     'Currently this is arbitrary
     m.startRoom = 0
@@ -68,11 +63,23 @@ sub onPlayerSet()
     addMobs()
 end sub
 
+sub onPlayerStairs()
+    tileSize = m.global.settings.tile_size
+    m.player = m.playerHolder.findNode("current_player")
+    if m.top.playerStairs = "down"
+        m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
+        m.player.location = m.upstairs
+    else if m.top.playerStairs = "up"
+        m.playerHolder.translation = [m.downstairs[0] * tileSize, m.downstairs[1] * tileSize]
+        m.player.location = m.downstairs
+    end if
+end sub
+
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
-    '?"CHAR SELECT KEY: ";key;" PRESS: ";press
     if press then
         if key = "OK"
+            checkActOnTile()
             handled = true
         else if key = "left" or key = "right" or key = "up" or key = "down"
             playerMove(key)
@@ -96,15 +103,12 @@ sub playerMove(direction as String)
     end if
     
     if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
-        'tileType = m.levelArr[checkLoc[0], checkLoc[1]].split(":")[0]
-        'if tileType = "floor"
         if collisionCheck(m.player, checkLoc) <> true
             if canOccupy(checkLoc)
                 m.player.location = checkLoc
             end if
         end if
     end if
-     
     setTile(m.player, m.playerHolder)
 
     moveMobs() 
@@ -113,9 +117,7 @@ end sub
 sub addMobs()
     totalMobs = rnd(7)
     'totalMobs = 1
-    ?"TOTAL MOBS: ";totalMobs
     for x = 0 to totalMobs - 1
-        ?"Creating Monster #";x.toStr()
         mob = CreateObject("roSGNode", "rcw_Mob")
         mob.id = "monster_ " + x.toStr()
         mob.race = "orc"
@@ -157,7 +159,6 @@ sub moveMobs()
         if canOccupy(newLoc)
             if collisionCheck(mob, mobLoc) <> true
                 mob.location = newLoc
-                'setTile(mob, m.mobHolder)
                 tileSize = m.global.settings.tile_size
                 mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
             end if
@@ -289,13 +290,24 @@ sub placeRooms()
     m.rooms = newRooms
 
     'set up stairs arbitrairily in the start room
-    roomNum = rnd(m.rooms.count() - 1)
-    m.sRoom = m.rooms[roomNum]
-    upstairX = getRandomRange(m.sRoom[2], m.sRoom[2] + m.sRoom[0])
-    upstairY = getRandomRange(m.sRoom[3], m.sRoom[3] + m.sRoom[1])
-    ?"UPSTAIRS: ";upstairX.toStr();", ";upstairY.toStr()
+    upRoomNum = rnd(m.rooms.count() - 1)
+    uRoom = m.rooms[upRoomNum]
+    upstairX = getRandomRange(uRoom[2], uRoom[2] + uRoom[0])
+    upstairY = getRandomRange(uRoom[3], uRoom[3] + uRoom[1])
     m.levelArr[upstairX][upstairY] = "upstairs:none"
     m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
+    downRoomNum = upRoomNum
+
+    while downRoomNum = upRoomNum
+        downRoomNum = rnd(m.rooms.count() - 1)
+    end while
+
+    dRoom = m.rooms[downRoomNum]
+    downstairX = getRandomRange(dRoom[2], dRoom[2] + dRoom[0])
+    downstairY = getRandomRange(dRoom[3], dRoom[3] + dRoom[1])
+    m.levelArr[downstairX][downstairY] = "downstairs:none"
+    m.downstairs = [downstairX, downstairY] 'This is so the player can grab the start location easily
+
 end sub
 
 sub createCorridoors()
@@ -399,6 +411,14 @@ sub draw()
                     tile.color = "0xFaFF05FF"
                     tile.translation = [tileSize * x, tileSize * y]
                     m.roomHolder.appendChild(tile)
+                else if gType = "downstairs"
+                    name = "tile_" + x.toStr() + "_" + y.toStr()
+                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile.width = tileSize
+                    tile.height = tileSize
+                    tile.color = "0x009900FF"
+                    tile.translation = [tileSize * x, tileSize * y]
+                    m.roomHolder.appendChild(tile)
                 else if gType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Rectangle")
@@ -424,7 +444,7 @@ function canOccupy(tileLoc)
     tileType = arr[0]
     tileData = arr[1]
 
-    if tileType = "floor" or tileType = "upstairs"
+    if tileType = "floor" or tileType = "upstairs" or tileType = "downstairs"
         return true
     else if tileType = "door"
         if tileData = "open"
@@ -451,3 +471,17 @@ function getRoomCenter(room)
     centerY = cInt(room[1] / 2) + room[3]
     return [centerX, centerY]
 end function
+
+sub checkActOnTile()
+    ploc = m.player.location
+    tile = m.levelArr[pLoc[0], pLoc[1]]
+    arr = tile.split(":")
+    tileType = arr[0]
+    tileData = arr[1]
+    if tileType = "downstairs"
+        fireEvent("goDownstairs", {}) 
+    else if tileType = "upstairs"
+        fireEvent("goUpstairs", {}) 
+    end if
+end sub
+

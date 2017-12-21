@@ -25,6 +25,8 @@ sub setup()
     m.monsterHolder = m.top.findNode("monster_holder")
 
     subscribe("startGame", m.top.id)
+    subscribe("goDownstairs", m.top.id)
+    subscribe("goUpstairs", m.top.id)
     openCharSelect()
 end sub
 
@@ -85,8 +87,10 @@ end sub
 
 sub startGame(data as dynamic)
     ?"START GAME"
-    testLevel = createObject("roSGNode", "rcw_Level")
-    levelSettings = createObject("roSGNode", "LevelSettingsNode")
+    m.currentLevel = 0
+    level0 = createObject("roSGNode", "rcw_Level")
+    level0.id = "level0"
+    m.levelSettings = createObject("roSGNode", "LevelSettingsNode")
     m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
     m.global.settings = createObject("roSGNode", "AppSettingsNode")
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
@@ -96,8 +100,8 @@ sub startGame(data as dynamic)
     charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
     m.top.removeChild(charSelect) 
 
-    m.levelHolder.appendChild(testLevel)
-    testLevel.settings = levelSettings 
+    m.levelHolder.appendChild(level0)
+    level0.settings = m.levelSettings 
 
     player = createObject("roSGNode", "rcw_Player")
     player.id = "current_player"
@@ -107,10 +111,60 @@ sub startGame(data as dynamic)
     'm.playerHolder.appendChild(player) This probably isn't the way to go.
     'I'm thinking I need to put the player in the level to check walls, etc. 
 
-    currentHolder = testLevel.findNode("player_holder")
+    currentHolder = level0.findNode("player_holder")
     currentHolder.appendChild(player)
-    testLevel.playerSet = true
-    testLevel.setFocus(true)
+    level0.playerSet = true
+    level0.setFocus(true)
+end sub
+
+sub goDownstairs()
+    nextLevelNum = m.currentLevel + 1
+    ?"NEXT LEVEL: ";nextLevelNum
+    ?"LEVEL COUNT: ";m.levelHolder.getChildCount() - 1
+    currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
+    player = currentPlayerHolder.findNode("current_player")
+    currentPlayerHolder.removeChildren(player)
+
+    if nextLevelNum > m.levelHolder.getChildCount() - 1
+        currentLevel = m.levelHolder.getChild(m.currentLevel)
+        'CREATE NEW LEVEL
+        nextLevel = createObject("roSGNode", "rcw_Level")
+        nextLevel.settings = m.levelSettings
+        m.levelHolder.appendChild(nextLevel)
+        currentHolder = nextLevel.findNode("player_holder")
+        currentHolder.appendChild(player)
+        nextLevel.playerSet = true
+        nextLevel.setFocus(true)
+        m.currentLevel = nextLevelNum 
+    else
+        'SHOW LEVEL
+        currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
+        player = currentPlayerHolder.findNode("current_player")
+        currentPlayerHolder.removeChildren(player)
+        nextLevel = m.levelHolder.getChild(nextLevelNum)
+        nextHolder = nextLevel.findNode("player_holder")
+        nextHolder.appendChild(player)
+        m.levelHolder.getChild(m.currentLevel).visible = false
+        nextLevel.visible = true
+        nextLevel.setFocus(true)
+        nextLevel.playerStairs = "down" 
+        m.currentLevel = nextLevelNum
+    end if
+end sub
+
+sub goUpstairs()
+    nextLevelNum = m.currentLevel - 1
+    currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
+    player = currentPlayerHolder.findNode("current_player")
+    currentPlayerHolder.removeChildren(player)
+    nextLevel = m.levelHolder.getChild(nextLevelNum)
+    nextHolder = nextLevel.findNode("player_holder")
+    nextHolder.appendChild(player)
+    m.levelHolder.getChild(m.currentLevel).visible = false
+    nextLevel.visible = true
+    nextLevel.setFocus(true)
+    nextLevel.playerStairs = "up" 
+    m.currentLevel = nextLevelNum
 end sub
 
 sub onEventCallback()
@@ -118,5 +172,9 @@ sub onEventCallback()
 
     if ev.evType = "startGame"
         startGame(ev.data)
+    else if ev.evType = "goDownstairs"
+        goDownstairs()
+    else if ev.evType = "goUpstairs"
+        goUpstairs()
     end if
 end sub
