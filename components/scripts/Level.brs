@@ -140,6 +140,7 @@ sub moveMobs()
     playerLoc = m.player.location
     
     for y = 0 to m.mobs.count() - 1
+        if m.mobs[y] = invalid exit for
         mob = m.mobs[y]
         mobLoc = mob.location
         newLoc = [playerLoc[0], playerLoc[1]]
@@ -157,7 +158,7 @@ sub moveMobs()
         end if
 
         if canOccupy(newLoc)
-            if collisionCheck(mob, mobLoc) <> true
+            if collisionCheck(mob, newLoc) <> true
                 mob.location = newLoc
                 tileSize = m.global.settings.tile_size
                 mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
@@ -194,6 +195,20 @@ end function
 
 sub fight(monster)
     ?m.player.class;" FIGHTS ";monster.race;" ";monster.class
+    outcome = true 'setting to win every time. 
+
+    if outcome
+        m.top.removeChild(monster)
+        for x = 0 to m.mobs.count() - 1
+            if m.mobs[x].id = monster.id
+                m.mobs.delete(x)
+                exit for
+            end if
+        end for
+    else
+        ?"YOU DIE"
+    end if
+
 end sub
 
 sub placeRooms()

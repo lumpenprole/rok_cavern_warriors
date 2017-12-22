@@ -153,18 +153,22 @@ sub goDownstairs()
 end sub
 
 sub goUpstairs()
-    nextLevelNum = m.currentLevel - 1
-    currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
-    player = currentPlayerHolder.findNode("current_player")
-    currentPlayerHolder.removeChildren(player)
-    nextLevel = m.levelHolder.getChild(nextLevelNum)
-    nextHolder = nextLevel.findNode("player_holder")
-    nextHolder.appendChild(player)
-    m.levelHolder.getChild(m.currentLevel).visible = false
-    nextLevel.visible = true
-    nextLevel.setFocus(true)
-    nextLevel.playerStairs = "up" 
-    m.currentLevel = nextLevelNum
+    if m.currentLevel = 0
+        ?"FIRE QUIT MODAL HERE"
+    else
+        nextLevelNum = m.currentLevel - 1
+        currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
+        player = currentPlayerHolder.findNode("current_player")
+        currentPlayerHolder.removeChildren(player)
+        nextLevel = m.levelHolder.getChild(nextLevelNum)
+        nextHolder = nextLevel.findNode("player_holder")
+        nextHolder.appendChild(player)
+        m.levelHolder.getChild(m.currentLevel).visible = false
+        nextLevel.visible = true
+        nextLevel.setFocus(true)
+        nextLevel.playerStairs = "up" 
+        m.currentLevel = nextLevelNum
+    end if
 end sub
 
 sub onEventCallback()
