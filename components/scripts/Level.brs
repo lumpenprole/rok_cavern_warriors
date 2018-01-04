@@ -142,33 +142,35 @@ sub moveMobs()
     for y = 0 to m.mobs.count() - 1
         if m.mobs[y] = invalid exit for
         mob = m.mobs[y]
-        mobLoc = mob.location
-        newLoc = [playerLoc[0], playerLoc[1]]
+        if checkMonsterSeesPlayer(mob, playerLoc)
+            mobLoc = mob.location
+            newLoc = [playerLoc[0], playerLoc[1]]
 
-        if mobLoc[0] < playerLoc[0]
-            newLoc[0] = mobLoc[0] + 1
-        else if mobLoc[0] > playerLoc[0]
-            newLoc[0] = mobLoc[0] - 1
-        end if
-
-        if mobLoc[1] < playerLoc[1]
-            newLoc[1] = mobLoc[1] + 1
-        else if mobLoc[1] > playerLoc[1]
-            newLoc[1] = mobLoc[1] - 1
-        end if
-
-        if canOccupy(newLoc)
-            if collisionCheck(mob, newLoc) <> true
-                mob.location = newLoc
-                tileSize = m.global.settings.tile_size
-                mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
+            if mobLoc[0] < playerLoc[0]
+                newLoc[0] = mobLoc[0] + 1
+            else if mobLoc[0] > playerLoc[0]
+                newLoc[0] = mobLoc[0] - 1
             end if
-        else if canOccupy([mobLoc[0], newLoc[1]])
-            mob.location = [mobLoc[0], newLoc[1]]
-            setTile(mob, m.mobHolder)
-        else if canOccupy([newLoc[0], mobLoc[1]])
-            mob.location = [newLoc[0], mobLoc[1]]
-            setTile(mob, m.mobHolder)
+
+            if mobLoc[1] < playerLoc[1]
+                newLoc[1] = mobLoc[1] + 1
+            else if mobLoc[1] > playerLoc[1]
+                newLoc[1] = mobLoc[1] - 1
+            end if
+
+            if canOccupy(newLoc)
+                if collisionCheck(mob, newLoc) <> true
+                    mob.location = newLoc
+                    tileSize = m.global.settings.tile_size
+                    mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
+                end if
+            else if canOccupy([mobLoc[0], newLoc[1]])
+                mob.location = [mobLoc[0], newLoc[1]]
+                setTile(mob, m.mobHolder)
+            else if canOccupy([newLoc[0], mobLoc[1]])
+                mob.location = [newLoc[0], mobLoc[1]]
+                setTile(mob, m.mobHolder)
+            end if
         end if
     end for
 end sub
@@ -208,8 +210,21 @@ sub fight(monster)
     else
         ?"YOU DIE"
     end if
-
 end sub
+
+function checkMonsterSeesPlayer(mob, playerLoc) as Boolean
+    if mob.seenPlayer 
+        return true 
+    else
+        mobLoc = mob.location
+        if abs(mobLoc[0] - playerLoc[0]) <= mob.sightLine and abs(mobLoc[1] - playerLoc[1]) <= mob.sightLine
+            mob.seenPlayer = true
+            return true
+        else
+            return false
+        end if
+    end if
+end function
 
 sub placeRooms()
     appSettings = m.global.settings

@@ -6,6 +6,8 @@
 		<field id="class" type="string" onChange="onClassSet"/>
         <field id="race" type="string" onChange="onRaceSet"/>
         <field id="location" type="intArray" value="[0,0]"/>
+        <field id="seenPlayer" type="bool" value="false"/>
+        <field id="sightLine" type="int" value="5"/>
 	</interface>
 
 	<!-- general scripts -->
