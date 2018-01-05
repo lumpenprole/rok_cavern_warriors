@@ -14,9 +14,9 @@
             <Label color="0x669900FF" text="Character Select" horizAlign="center" translation="[0,0]" />
             <LabelList id="charSelector" translation="[300,300]" >
                 <ContentNode id="charSelectorContent" role="content" >
-                    <ContentNode title="Warrior" description="warrior1" />
-                    <ContentNode title="Wizard" description="wizard1" />
-                    <ContentNode title="Thief" description="rogue1" />
+                    <ContentNode title="Warrior" description="fighter" />
+                    <ContentNode title="Wizard" description="wizard" />
+                    <ContentNode title="Thief" description="rogue" />
                 </ContentNode>
             </LabelList>
 

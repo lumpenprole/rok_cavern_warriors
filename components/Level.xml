@@ -23,6 +23,6 @@
         </Group>
         <Group id="room_holder" translation="[0,0]" />
         <Group id="player_holder" translation="[0,0]" />
-        <Group id="mob_holder" translation="[0,0]" />
+        <Group id="monster_holder" translation="[0,0]" />
  	</children>
 </component>

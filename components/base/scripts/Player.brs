@@ -1,27 +1,9 @@
 sub init()
     ?"PLAYER INIT()"
-    m.tileSize = m.global.settings.tile_size
-    m.bgHolder = m.top.findNode("bg_holder")
-    m.tileHolder = m.top.findNode("tile_holder")
-    rect = CreateObject("roSGNode", "Rectangle")
-    rect.width = m.tileSize
-    rect.height = m.tileSize
-    rect.color = "0x276CDBFF"
-    m.bgHolder.appendChild(rect)
+    m.tilePath = m.raceSettings.human_tile
 end sub
 
-sub onClassSet()
-    'TODO: set class/race tile lookup in it's own place
-    class = m.top.class
-
-    tile = createObject("roSGNode", "Poster")
-    tile.loadDisplayMode = "scaleToFill"
-    tile.loadWidth = m.tileSize
-    tile.loadHeight = m.tileSize
-    tile.uri = "pkg://locale/default/images/human_m.png"
-    m.tileHolder.appendChild(tile)
-end sub
-
-sub onRaceSet()
-    ?"onRaceSet()"
+sub postSetup()
+    m.hitPoints = m.hitPoints + 5
+    ?"FINAL HIT POINTS: ";m.hitPoints
 end sub

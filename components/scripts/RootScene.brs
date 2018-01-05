@@ -103,7 +103,7 @@ sub startGame(data as dynamic)
     m.levelHolder.appendChild(level0)
     level0.settings = m.levelSettings 
 
-    player = createObject("roSGNode", "rcw_Player")
+    player = CreateObject("roSGNode", "rcw_Player")
     player.id = "current_player"
     player.class = data.class
     ?"PLAYER IS CLASS: ";data.class

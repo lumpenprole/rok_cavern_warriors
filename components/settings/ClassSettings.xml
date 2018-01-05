@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="ClassSettingsNode" extends="Node">
+	<interface>
+        <!-- player settings -->
+	    <field id="barbarian_hit_dice" type="integer" value="12"/>
+	    <field id="bard_hit_dice" type="integer" value="6"/>
+	    <field id="cleric_hit_dice" type="integer" value="8"/>
+	    <field id="druid_hit_dice" type="integer" value="8"/>
+	    <field id="fighter_hit_dice" type="integer" value="10"/>
+	    <field id="monk_hit_dice" type="integer" value="8"/>
+	    <field id="paladin_hit_dice" type="integer" value="10"/>
+	    <field id="ranger_hit_dice" type="integer" value="8"/>
+	    <field id="rogue_hit_dice" type="integer" value="6"/>
+	    <field id="sorcerer_hit_dice" type="integer" value="4"/>
+        <field id="wizard_hit_dice" type="integer" value="4"/>
+
+        <!-- monster settings -->
+	    <field id="warrior_hit_dice" type="integer" value="10"/>
+	</interface> 
+</component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="RaceSettingsNode" extends="Node">
+	<interface>
+	    <field id="human_tile" type="string" value="pkg://locale/default/images/human_m.png"/>
+	    <field id="slime_tile" type="string" value="pkg://locale/default/images/giant_amoeba.png"/>
+	</interface> 
+</component>

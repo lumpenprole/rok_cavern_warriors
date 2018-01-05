@@ -2,8 +2,8 @@ sub init()
     m.loadTxt = m.top.findNode("loading_text")
     m.roomHolder = m.top.findNode("room_holder")
     m.playerHolder = m.top.findNode("player_holder")
-    m.mobHolder = m.top.findNode("mob_holder")
-    m.mobs = []
+    m.monsterHolder = m.top.findNode("monster_holder")
+    m.monsters = []
 end sub
 
 sub setupLevel()
@@ -60,7 +60,7 @@ sub onPlayerSet()
     m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
     m.player.location = m.upstairs
 
-    addMobs()
+    addMonsters()
 end sub
 
 sub onPlayerStairs()
@@ -111,81 +111,81 @@ sub playerMove(direction as String)
     end if
     setTile(m.player, m.playerHolder)
 
-    moveMobs() 
+    moveMonsters() 
 end sub 
 
-sub addMobs()
-    totalMobs = rnd(7)
-    'totalMobs = 1
-    for x = 0 to totalMobs - 1
-        mob = CreateObject("roSGNode", "rcw_Mob")
-        mob.id = "monster_ " + x.toStr()
-        mob.race = "orc"
-        mob.class = "warrior"
-        m.mobs.push(mob)
+sub addMonsters()
+    totalMonsters = rnd(7)
+    'totalMonsters = 1
+    for x = 0 to totalMonsters - 1
+        monster = CreateObject("roSGNode", "rcw_Monster")
+        monster.id = "monster_ " + x.toStr()
+        monster.race = "orc"
+        monster.class = "warrior"
+        m.monsters.push(monster)
         mRoom = m.rooms[rnd(m.rooms.count()) - 1] 
-        mobX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
-        mobY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
-        mob.location = [mobX, mobY]
+        monsterX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
+        monsterY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
+        monster.location = [monsterX, monsterY]
         'TODO: Change player move to this model. I don't think we need the holders. 
-        'm.mobHolder.appendChild(mob)
-        m.top.appendChild(mob)
+        'm.monsterHolder.appendChild(monster)
+        m.top.appendChild(monster)
         tileSize = m.global.settings.tile_size
-        mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
-        'setTile(mob, m.mobHolder)
+        monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
+        'setTile(monster, m.monsterHolder)
     end for
 end sub
 
-sub moveMobs()
+sub moveMonsters()
     playerLoc = m.player.location
     
-    for y = 0 to m.mobs.count() - 1
-        if m.mobs[y] = invalid exit for
-        mob = m.mobs[y]
-        if checkMonsterSeesPlayer(mob, playerLoc)
-            mobLoc = mob.location
+    for y = 0 to m.monsters.count() - 1
+        if m.monsters[y] = invalid exit for
+        monster = m.monsters[y]
+        if checkMonsterSeesPlayer(monster, playerLoc)
+            monsterLoc = monster.location
             newLoc = [playerLoc[0], playerLoc[1]]
 
-            if mobLoc[0] < playerLoc[0]
-                newLoc[0] = mobLoc[0] + 1
-            else if mobLoc[0] > playerLoc[0]
-                newLoc[0] = mobLoc[0] - 1
+            if monsterLoc[0] < playerLoc[0]
+                newLoc[0] = monsterLoc[0] + 1
+            else if monsterLoc[0] > playerLoc[0]
+                newLoc[0] = monsterLoc[0] - 1
             end if
 
-            if mobLoc[1] < playerLoc[1]
-                newLoc[1] = mobLoc[1] + 1
-            else if mobLoc[1] > playerLoc[1]
-                newLoc[1] = mobLoc[1] - 1
+            if monsterLoc[1] < playerLoc[1]
+                newLoc[1] = monsterLoc[1] + 1
+            else if monsterLoc[1] > playerLoc[1]
+                newLoc[1] = monsterLoc[1] - 1
             end if
 
             if canOccupy(newLoc)
-                if collisionCheck(mob, newLoc) <> true
-                    mob.location = newLoc
+                if collisionCheck(monster, newLoc) <> true
+                    monster.location = newLoc
                     tileSize = m.global.settings.tile_size
-                    mob.translation = [mob.location[0] * tileSize, mob.location[1] * tileSize]
+                    monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
                 end if
-            else if canOccupy([mobLoc[0], newLoc[1]])
-                mob.location = [mobLoc[0], newLoc[1]]
-                setTile(mob, m.mobHolder)
-            else if canOccupy([newLoc[0], mobLoc[1]])
-                mob.location = [newLoc[0], mobLoc[1]]
-                setTile(mob, m.mobHolder)
+            else if canOccupy([monsterLoc[0], newLoc[1]])
+                monster.location = [monsterLoc[0], newLoc[1]]
+                setTile(monster, m.monsterHolder)
+            else if canOccupy([newLoc[0], monsterLoc[1]])
+                monster.location = [newLoc[0], monsterLoc[1]]
+                setTile(monster, m.monsterHolder)
             end if
         end if
     end for
 end sub
 
-function collisionCheck(mob, newPosition)
-    if mob.id <> m.player.id 'mob is monster
+function collisionCheck(monster, newPosition)
+    if monster.id <> m.player.id 'monster is monster
         if newPosition[0] = m.player.location[0] and newPosition[1] = m.player.location[1]
-            fight(mob)
+            fight(monster)
         else
             return false
         end if
-    else 'mob is player
-        for x = 0 to m.mobs.count() - 1
-            thisMob = m.mobs[x]
-            if newPosition[0] = thisMob.location[0] and newPosition[1] = thisMob.location[1]
+    else 'monster is player
+        for x = 0 to m.monsters.count() - 1
+            thisMonster = m.monsters[x]
+            if newPosition[0] = thisMonster.location[0] and newPosition[1] = thisMonster.location[1]
                 return true
             end if
         end for
@@ -201,9 +201,9 @@ sub fight(monster)
 
     if outcome
         m.top.removeChild(monster)
-        for x = 0 to m.mobs.count() - 1
-            if m.mobs[x].id = monster.id
-                m.mobs.delete(x)
+        for x = 0 to m.monsters.count() - 1
+            if m.monsters[x].id = monster.id
+                m.monsters.delete(x)
                 exit for
             end if
         end for
@@ -212,13 +212,13 @@ sub fight(monster)
     end if
 end sub
 
-function checkMonsterSeesPlayer(mob, playerLoc) as Boolean
-    if mob.seenPlayer 
+function checkMonsterSeesPlayer(monster, playerLoc) as Boolean
+    if monster.seenPlayer 
         return true 
     else
-        mobLoc = mob.location
-        if abs(mobLoc[0] - playerLoc[0]) <= mob.sightLine and abs(mobLoc[1] - playerLoc[1]) <= mob.sightLine
-            mob.seenPlayer = true
+        monsterLoc = monster.location
+        if abs(monsterLoc[0] - playerLoc[0]) <= monster.sightLine and abs(monsterLoc[1] - playerLoc[1]) <= monster.sightLine
+            monster.seenPlayer = true
             return true
         else
             return false

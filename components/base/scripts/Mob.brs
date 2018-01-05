@@ -7,22 +7,31 @@ sub init()
     rect.width = m.tileSize
     rect.height = m.tileSize
     rect.color = "0x276CDBFF"
+    m.classSettings = CreateObject("roSGNode", "ClassSettingsNode")
+    m.raceSettings = CreateObject("roSGNode", "RaceSettingsNode")
+    m.hitPoints = 0
     m.bgHolder.appendChild(rect)
 end sub
 
 sub onClassSet()
-    'TODO: set class/race tile lookup in it's own place
     class = m.top.class
+    m.hitPoints = rnd(m.classSettings.getField(class + "_hit_dice"))
+    ?"HIT POINTS FOR ";class;": ";m.hitPoints
+
     tile = createObject("roSGNode", "Poster")
-    'TODO: Set tile size via settings for different tiles
     tile.loadDisplayMode = "scaleToFill"
     tile.loadWidth = m.tileSize
     tile.loadHeight = m.tileSize
-    tile.uri = "pkg://locale/default/images/giant_amoeba.png"
+    tile.uri = m.tilePath
     m.tileHolder.appendChild(tile)
+    'TODO: Fire post setup after class and race are set.
+    postSetup()
 end sub
 
 sub onRaceSet()
     ?"onRaceSet()"
 end sub
 
+sub postSetup()
+    ?"POST SETUP IN ROOT CLASS, OVERRIDE!"
+end sub
