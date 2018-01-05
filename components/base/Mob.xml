@@ -8,6 +8,7 @@
         <field id="location" type="intArray" value="[0,0]"/>
         <field id="hitDice" type="int" value="0"/>
         <field id="damageDice" type="int" value="5"/>
+        <field id="seen" type="bool" value="false" onChange="onSeenSet" alwaysNotify="true"/>
 	</interface>
 
 	<!-- general scripts -->

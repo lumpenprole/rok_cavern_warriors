@@ -111,6 +111,7 @@ sub playerMove(direction as String)
     end if
     setTile(m.player, m.playerHolder)
 
+    makeVisible(m.player.location, m.player.sightDistance)
     moveMonsters() 
 end sub 
 
@@ -132,8 +133,11 @@ sub addMonsters()
         m.top.appendChild(monster)
         tileSize = m.global.settings.tile_size
         monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
+        monster.seen = false
         'setTile(monster, m.monsterHolder)
     end for
+    'This is set here so that monsters will be made visible if appropriate
+    makeVisible(m.player.location, m.player.sightDistance) 
 end sub
 
 sub moveMonsters()
@@ -418,12 +422,13 @@ sub draw()
 
                 if gType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    '?"floor: ";name
                     tile = CreateObject("roSGNode", "Rectangle")
                     tile.width = tileSize
                     tile.height = tileSize
                     tile.color = "0xEFEEBFFF"
                     tile.translation = [tileSize * x, tileSize * y]
+                    tile.id = name
+                    tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "wall"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -432,6 +437,8 @@ sub draw()
                     tile.height = tileSize
                     tile.color = "0x767B84FF"
                     tile.translation = [tileSize * x, tileSize * y]
+                    tile.id = name
+                    tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -440,6 +447,8 @@ sub draw()
                     tile.height = tileSize
                     tile.color = "0xFaFF05FF"
                     tile.translation = [tileSize * x, tileSize * y]
+                    tile.id = name
+                    tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "downstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -448,6 +457,8 @@ sub draw()
                     tile.height = tileSize
                     tile.color = "0x009900FF"
                     tile.translation = [tileSize * x, tileSize * y]
+                    tile.id = name
+                    tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -456,8 +467,49 @@ sub draw()
                     tile.height = tileSize
                     tile.color = "0x28E014FF"
                     tile.translation = [tileSize * x, tileSize * y]
+                    tile.id = name
+                    tile.visible = false
                     m.roomHolder.appendChild(tile)
                 end if
+            end if
+        end for
+    end for
+end sub
+
+sub makeVisible(location, sightDistance)
+    'TODO: Make sight area into some kind of sphere instead of square
+    startX = location[0] - sightDistance
+    if startX < 0
+        startX = 0
+    end if
+    startY = location[1] - sightDistance
+    if startY < 0
+        startY = 0
+    end if
+    endX = location[0] + sightDistance
+    if endX > m.levelArr.count() - 1
+        endX = m.levelArr.count() - 1
+    end if
+    endY = location[1] + sightDistance
+    if endY > m.levelArr[0].count() - 1
+        endY = m.levelArr[0].count() - 1
+    end if
+
+    for x = startX to endX
+        for y = startY to endY
+            if m.levelArr[x][y] <> invalid and m.levelArr[x][y] <> "none:none"
+                tile = m.roomHolder.findNode("tile_" + x.toStr() + "_" + y.toStr())
+                if not tile.visible
+                    tile.visible = true
+                end if
+                for z = 0 to m.monsters.count() - 1
+                    monster = m.monsters[z]
+                    if monster.seen = false
+                        if monster.location[0] = x and monster.location[1] = y
+                            monster.seen = true
+                        end if
+                    end if
+                end for
             end if
         end for
     end for

@@ -35,3 +35,9 @@ end sub
 sub postSetup()
     ?"POST SETUP IN ROOT CLASS, OVERRIDE!"
 end sub
+
+sub onSeenSet()
+    ?"ON SEEN SET FOR: ";m.top.id
+    m.tileHolder.visible = m.top.seen
+    m.bgHolder.visible = m.top.seen
+end sub
