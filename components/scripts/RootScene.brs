@@ -117,8 +117,8 @@ sub startGame(data as dynamic)
     m.statusBar.width = m.screenSize[1]
     m.statusBar.color = "0xFFFFFFFF"
     statusFont = CreateObject("roSGNode", "Font")
-    statusFont.uri = "pkg:/locale/defaut/fonts/Roboto-Black.ttf"
-    statusFont.size = 12
+    statusFont.uri = "pkg:/locale/default/fonts/Roboto-Black.ttf"
+    statusFont.size = 36
     m.statusBar.font = statusFont
     m.statusBarHolder.appendChild(m.statusBar)
 
@@ -225,6 +225,7 @@ sub onEventCallback()
     else if ev.evType = "goUpstairs"
         goUpstairs()
     else if ev.evType = "statusUpdate"
+        ?"STATUS UPDATE EVENT RECIEVED"
         updateStatus()
     else if ev.evType = "systemMessage"
         systemMessage(ev.data)
