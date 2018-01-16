@@ -9,14 +9,13 @@ sub init()
     rect.color = "0x276CDBFF"
     m.classSettings = CreateObject("roSGNode", "ClassSettingsNode")
     m.raceSettings = CreateObject("roSGNode", "RaceSettingsNode")
-    m.hitPoints = 0
     m.bgHolder.appendChild(rect)
 end sub
 
 sub onClassSet()
     class = m.top.class
-    m.hitPoints = rnd(m.classSettings.getField(class + "_hit_dice"))
-    ?"HIT POINTS FOR ";class;": ";m.hitPoints
+    m.top.hitPoints = rnd(m.classSettings.getField(class + "_hit_dice"))
+    ?"HIT POINTS FOR ";class;": ";m.top.hitPoints
 
     tile = createObject("roSGNode", "Poster")
     tile.loadDisplayMode = "scaleToFill"
@@ -40,4 +39,23 @@ sub onSeenSet()
     ?"ON SEEN SET FOR: ";m.top.id
     m.tileHolder.visible = m.top.seen
     m.bgHolder.visible = m.top.seen
+end sub
+
+sub onDamageTaken()
+    ?"*********************************************"
+    ?"*********************************************"
+    ?m.top.id;" TAKES ";m.top.damageTaken;" DAMAGE"
+    m.top.hitPoints = m.top.hitPoints - m.top.damageTaken
+    ?"HIT POINTS ARE NOW: ";m.top.hitPoints
+    ?"*********************************************"
+    ?"*********************************************"
+    if m.top.hitPoints <= 0
+        death()
+    end if
+end sub
+
+sub death()
+    ?"????????????????????????????????????????????"
+    ?m.top.id;" HAS DIED"
+    ?"????????????????????????????????????????????"
 end sub

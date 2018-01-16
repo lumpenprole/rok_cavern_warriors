@@ -1,4 +1,5 @@
-function createGrid(screenSize, tileSize as Integer) as Dynamic
+function createGrid(screenSize, tileSize as Integer, statusBarSize as Integer) as Dynamic
+    screenSize[0] = screenSize[0] - statusBarSize 'making space for the status bar
     gridWidth = int(screenSize[1] / tileSize)
     gridHeight = int(screenSize[0] / tileSize)
 

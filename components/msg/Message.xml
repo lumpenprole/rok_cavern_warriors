@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_Message" extends="Group">
+	<interface>
+		<field id="messageText" type="string" onChange="handleText"/>
+		<field id="messageAction" type="string" onChange="handleAction"/>
+	</interface>
+
+    <script type="text/brightscript"  uri="pkg:/components/msg/scripts/Message.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+    <children>
+        <group id="message_holder" />
+    </children>
+</component>

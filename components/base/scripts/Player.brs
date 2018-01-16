@@ -5,6 +5,6 @@ sub init()
 end sub
 
 sub postSetup()
-    m.hitPoints = m.hitPoints + 5
-    ?"FINAL HIT POINTS: ";m.hitPoints
+    m.top.hitPoints = m.top.hitPoints + 5
+    ?"FINAL HIT POINTS: ";m.top.hitPoints
 end sub

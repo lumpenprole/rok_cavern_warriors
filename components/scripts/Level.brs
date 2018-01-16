@@ -4,6 +4,7 @@ sub init()
     m.playerHolder = m.top.findNode("player_holder")
     m.monsterHolder = m.top.findNode("monster_holder")
     m.monsters = []
+    m.playerHasDied = false
 end sub
 
 sub setupLevel()
@@ -79,12 +80,15 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
     if press then
         if key = "OK"
-            checkActOnTile()
-            handled = true
+            if not m.playerHasDied
+                checkActOnTile()
+                handled = true
+            end if
         else if key = "left" or key = "right" or key = "up" or key = "down"
             playerMove(key)
         end if
     end if
+    ?"HANDLED: ";handled
     return handled
 end function
 
@@ -120,7 +124,7 @@ sub addMonsters()
     'totalMonsters = 1
     for x = 0 to totalMonsters - 1
         monster = CreateObject("roSGNode", "rcw_Monster")
-        monster.id = "monster_ " + x.toStr()
+        monster.id = "monster_" + x.toStr()
         monster.race = "orc"
         monster.class = "warrior"
         m.monsters.push(monster)
@@ -182,7 +186,7 @@ end sub
 function collisionCheck(monster, newPosition)
     if monster.id <> m.player.id 'monster is monster
         if newPosition[0] = m.player.location[0] and newPosition[1] = m.player.location[1]
-            fight(monster)
+            fight(monster, m.player)
         else
             return false
         end if
@@ -190,6 +194,7 @@ function collisionCheck(monster, newPosition)
         for x = 0 to m.monsters.count() - 1
             thisMonster = m.monsters[x]
             if newPosition[0] = thisMonster.location[0] and newPosition[1] = thisMonster.location[1]
+                fight(m.player, thisMonster)
                 return true
             end if
         end for
@@ -199,21 +204,39 @@ function collisionCheck(monster, newPosition)
 
 end function
 
-sub fight(monster)
-    ?m.player.class;" FIGHTS ";monster.race;" ";monster.class
-    outcome = true 'setting to win every time. 
-
-    if outcome
-        m.top.removeChild(monster)
-        for x = 0 to m.monsters.count() - 1
-            if m.monsters[x].id = monster.id
-                m.monsters.delete(x)
-                exit for
+sub fight(attacker, defender)
+    ?attacker.class;" FIGHTS ";defender.race;" ";defender.class
+    hit = rnd(attacker.hitDice) > defender.armorClass 
+    m.player.hitPoints = -1 
+    if hit
+        defender.damageTaken = rnd(attacker.damageDice)
+        if defender.id = "current_player"
+            fireEvent("statusUpdate")
+        end if
+        if defender.hitPoints <= 0
+            if defender.id = "current_player"
+                playerDead()
+            else
+                monsterDead(defender)
             end if
-        end for
-    else
-        ?"YOU DIE"
+        end if
     end if
+end sub
+
+sub monsterDead(monster)
+    ?"MONSTER ";monster.id;" DIES"
+    m.top.removeChild(monster)
+    for x = 0 to m.monsters.count() - 1
+        if m.monsters[x].id = monster.id
+            m.monsters.delete(x)
+            exit for
+        end if
+    end for
+end sub
+
+sub playerDead()
+    m.playerHasDied = true
+    fireEvent("systemMessage", {messageText:"YOU HAVE DIED"}) 
 end sub
 
 function checkMonsterSeesPlayer(monster, playerLoc) as Boolean
@@ -419,7 +442,9 @@ sub draw()
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
             if(gridSquare <> invalid)
                 gType = gridSquare.split(":")[0]
-
+                
+                'TODO: need to move tile creation into a separate function
+                'and set colors and tiles in the settings
                 if gType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Rectangle")
@@ -513,6 +538,7 @@ sub makeVisible(location, sightDistance)
             end if
         end for
     end for
+
 end sub
 
 sub setTile(tile, holder)

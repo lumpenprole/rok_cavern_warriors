@@ -1,6 +1,7 @@
 sub init()
     ?"RootScene: Init()"
     m.top.id = "RootScene"
+    m.messageActive = false
 
     m.screenSize = [1080, 1920] 'Probably needs to be figured on the fly
 
@@ -23,10 +24,14 @@ sub setup()
     m.levelHolder = m.top.findNode("level_holder")
     m.playerHolder = m.top.findNode("player_holder")
     m.monsterHolder = m.top.findNode("monster_holder")
+    m.statusBarHolder = m.top.findNode("status_holder")
 
     subscribe("startGame", m.top.id)
     subscribe("goDownstairs", m.top.id)
     subscribe("goUpstairs", m.top.id)
+    subscribe("statusUpdate", m.top.id)
+    subscribe("systemMessage", m.top.id)
+    subscribe("removeMessage", m.top.id)
     openCharSelect()
 end sub
 
@@ -86,16 +91,36 @@ sub openCharSelect()
 end sub
 
 sub startGame(data as dynamic)
-    ?"START GAME"
     m.currentLevel = 0
+    statusBarSize = 50 'TODO: put in settings
     level0 = createObject("roSGNode", "rcw_Level")
     level0.id = "level0"
     m.levelSettings = createObject("roSGNode", "LevelSettingsNode")
     m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
     m.global.settings = createObject("roSGNode", "AppSettingsNode")
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
-    m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size)
+    m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size, statusBarSize)
     ?"GRID SIZE: ";m.global.grid[0]
+    
+    bottom = m.screenSize[0] - statusBarSize
+    ?"BOTTOM: ";bottom
+    m.statusBarHolder.translation = [0, bottom]
+    rect = CreateObject("roSGNode", "Rectangle")
+    rect.width = m.screenSize[1]
+    rect.height = statusBarSize
+    rect.color = "0x276CDBFF"
+    m.statusBarHolder.appendChild(rect)
+
+    'TODO: Make the status bar a custom object with labels for each field
+    m.statusBar = CreateObject("roSGNode", "Label")
+    m.statusBar.height = statusBarSize
+    m.statusBar.width = m.screenSize[1]
+    m.statusBar.color = "0xFFFFFFFF"
+    statusFont = CreateObject("roSGNode", "Font")
+    statusFont.uri = "pkg:/locale/defaut/fonts/Roboto-Black.ttf"
+    statusFont.size = 12
+    m.statusBar.font = statusFont
+    m.statusBarHolder.appendChild(m.statusBar)
 
     charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
     m.top.removeChild(charSelect) 
@@ -106,7 +131,6 @@ sub startGame(data as dynamic)
     player = CreateObject("roSGNode", "rcw_Player")
     player.id = "current_player"
     player.class = data.class
-    ?"PLAYER IS CLASS: ";data.class
 
     'm.playerHolder.appendChild(player) This probably isn't the way to go.
     'I'm thinking I need to put the player in the level to check walls, etc. 
@@ -115,6 +139,7 @@ sub startGame(data as dynamic)
     currentHolder.appendChild(player)
     level0.playerSet = true
     level0.setFocus(true)
+    updateStatus()
 end sub
 
 sub goDownstairs()
@@ -171,6 +196,25 @@ sub goUpstairs()
     end if
 end sub
 
+sub updateStatus()
+    currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
+    player = currentPlayerHolder.findNode("current_player")
+    ?"STATUS TEXT: ";"Level";player.level.toStr();" ";player.race;" ";player.class;"  HP:";player.hitPoints.toStr()
+    m.statusBar.text = "Level" + player.level.toStr() + " " + player.race + " " + player.class + "  HP:" + player.hitPoints.toStr()
+end sub
+
+sub systemMessage(evData)
+    m.message = CreateObject("roSGNode", "rcw_Message")
+    m.message.messageText = evData.messageText
+    m.top.appendChild(m.message)
+    m.messageActive = true
+end sub
+
+sub removeMessage()
+    m.top.removeChild(m.message)
+    m.messageActive = false
+end sub
+
 sub onEventCallback()
     ev = m.top.eventCallback
 
@@ -180,5 +224,11 @@ sub onEventCallback()
         goDownstairs()
     else if ev.evType = "goUpstairs"
         goUpstairs()
+    else if ev.evType = "statusUpdate"
+        updateStatus()
+    else if ev.evType = "systemMessage"
+        systemMessage(ev.data)
+    else if ev.evType = "removeMessage"
+        removeMessage()
     end if
 end sub
