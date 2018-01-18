@@ -207,12 +207,9 @@ end function
 sub fight(attacker, defender)
     ?attacker.class;" FIGHTS ";defender.race;" ";defender.class
     hit = rnd(attacker.hitDice) > defender.armorClass 
-    m.player.hitPoints = -1 
     if hit
         defender.damageTaken = rnd(attacker.damageDice)
-        ?"DEFENDER ID: ";defender.id
         if defender.id = "current_player"
-            ?"FIRING STATUS UPDATE EVENT"
             fireEvent("statusUpdate")
         end if
         if defender.hitPoints <= 0

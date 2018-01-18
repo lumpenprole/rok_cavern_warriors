@@ -199,7 +199,6 @@ end sub
 sub updateStatus()
     currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
     player = currentPlayerHolder.findNode("current_player")
-    ?"STATUS TEXT: ";"Level";player.level.toStr();" ";player.race;" ";player.class;"  HP:";player.hitPoints.toStr()
     m.statusBar.text = "Level" + player.level.toStr() + " " + player.race + " " + player.class + "  HP:" + player.hitPoints.toStr()
 end sub
 
@@ -225,7 +224,6 @@ sub onEventCallback()
     else if ev.evType = "goUpstairs"
         goUpstairs()
     else if ev.evType = "statusUpdate"
-        ?"STATUS UPDATE EVENT RECIEVED"
         updateStatus()
     else if ev.evType = "systemMessage"
         systemMessage(ev.data)
