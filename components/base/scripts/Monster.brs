@@ -1,6 +1,6 @@
 sub init()
     ?"MONSTER INIT()"
-    m.tilePath = m.raceSettings.slime_tile
+    m.tilePath = "pkg://locale/default/images/dc-mon/" + m.raceSettings.orc_tile
 end sub
 
 sub postSetup()

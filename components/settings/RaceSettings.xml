@@ -2,7 +2,8 @@
 <!-- this is a data node for event results. Created to keep type safety --> 
 <component name="RaceSettingsNode" extends="Node">
 	<interface>
-	    <field id="human_tile" type="string" value="pkg://locale/default/images/human_m.png"/>
-	    <field id="slime_tile" type="string" value="pkg://locale/default/images/giant_amoeba.png"/>
+	    <field id="human_tile" type="string" value="human_m.png"/>
+	    <field id="slime_tile" type="string" value="giant_amoeba.png"/>
+	    <field id="orc_tile" type="string" value="orc.png"/>
 	</interface> 
 </component>

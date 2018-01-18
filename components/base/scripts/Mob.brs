@@ -7,6 +7,7 @@ sub init()
     rect.width = m.tileSize
     rect.height = m.tileSize
     rect.color = "0x276CDBFF"
+    rect.opacity = 0.0
     m.classSettings = CreateObject("roSGNode", "ClassSettingsNode")
     m.raceSettings = CreateObject("roSGNode", "RaceSettingsNode")
     m.bgHolder.appendChild(rect)
@@ -29,6 +30,7 @@ end sub
 
 sub onRaceSet()
     ?"onRaceSet()"
+    postSetup()
 end sub
 
 sub postSetup()
@@ -39,6 +41,10 @@ sub onSeenSet()
     ?"ON SEEN SET FOR: ";m.top.id
     m.tileHolder.visible = m.top.seen
     m.bgHolder.visible = m.top.seen
+end sub
+
+sub addTile()
+    ?"ADD TILE IN ROOT CLASS, OVERRIDE!"
 end sub
 
 sub onDamageTaken()
