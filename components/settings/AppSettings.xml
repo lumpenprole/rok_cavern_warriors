@@ -3,6 +3,7 @@
 <component name="AppSettingsNode" extends="Node">
     <interface>
         <!-- tiles are squares -->
+        <field id="tileset" type="string" value="tileset_default" />
         <field id="tile_size" type="integer" value="30" />
         <field id="room_min_width" type="integer" value="10" />
         <field id="room_min_height" type="integer" value="8" />

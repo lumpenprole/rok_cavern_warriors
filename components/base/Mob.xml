@@ -3,8 +3,8 @@
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
         <field id="eventCallback" type="node" onChange="onEventCallback"/>
-		<field id="class" type="string" onChange="onClassSet"/>
-        <field id="race" type="string" onChange="onRaceSet"/>
+		<field id="class" type="string" value="none" onChange="onClassSet"/>
+        <field id="race" type="string" value="none" onChange="onRaceSet"/>
         <field id="level" type="int" value="1"/>
         <field id="location" type="intArray" value="[0,0]"/>
         <field id="hitDice" type="int" value="6"/>
@@ -21,6 +21,10 @@
     <children>
         <Group id="bg_holder" />
         <Group id="tile_holder" />
+        <Group id="body_armor_holder" />
+        <Group id="helmet_holder" />
+        <Group id="glove_holder" />
+        <Group id="boot_holder" />
  	</children>
 
 </component>

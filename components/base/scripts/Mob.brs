@@ -3,6 +3,7 @@ sub init()
     m.tileSize = m.global.settings.tile_size
     m.bgHolder = m.top.findNode("bg_holder")
     m.tileHolder = m.top.findNode("tile_holder")
+    m.bodyArmorHolder = m.top.findNode("body_armor_holder")
     rect = CreateObject("roSGNode", "Rectangle")
     rect.width = m.tileSize
     rect.height = m.tileSize
@@ -18,12 +19,6 @@ sub onClassSet()
     m.top.hitPoints = rnd(m.classSettings.getField(class + "_hit_dice"))
     ?"HIT POINTS FOR ";class;": ";m.top.hitPoints
 
-    tile = createObject("roSGNode", "Poster")
-    tile.loadDisplayMode = "scaleToFill"
-    tile.loadWidth = m.tileSize
-    tile.loadHeight = m.tileSize
-    tile.uri = m.tilePath
-    m.tileHolder.appendChild(tile)
     'TODO: Fire post setup after class and race are set.
     postSetup()
 end sub
@@ -43,8 +38,13 @@ sub onSeenSet()
     m.bgHolder.visible = m.top.seen
 end sub
 
-sub addTile()
-    ?"ADD TILE IN ROOT CLASS, OVERRIDE!"
+sub addTile(path)
+    tile = createObject("roSGNode", "Poster")
+    tile.loadDisplayMode = "scaleToFill"
+    tile.loadWidth = m.tileSize
+    tile.loadHeight = m.tileSize
+    tile.uri = path
+    m.tileHolder.appendChild(tile)
 end sub
 
 sub onDamageTaken()
@@ -65,3 +65,14 @@ sub death()
     ?m.top.id;" HAS DIED"
     ?"????????????????????????????????????????????"
 end sub
+
+function getTilePath(tileType as String, tileRace as String, tileSex = "none" as String) as String
+    tiles = m.global.settings.tilemap[tileType]
+    tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/"
+    if tileSex <> "none"
+        tileRace = tileRace + "_" + tileSex
+    end if
+    tilePath = tilePath + tiles[tilerace]
+    return tilePath
+end function
+    

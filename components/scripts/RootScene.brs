@@ -32,6 +32,18 @@ sub setup()
     subscribe("statusUpdate", m.top.id)
     subscribe("systemMessage", m.top.id)
     subscribe("removeMessage", m.top.id)
+
+    m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
+    m.global.settings = createObject("roSGNode", "AppSettingsNode")
+    m.tilesetParser = createObject("roSGNode", "rcw_TileLoader")
+    m.tilesetParser.tileset_folder_name = m.global.settings.tileset
+    m.tilesetParser.observeField("tileset_obj", "tilesetParsed")
+    m.tilesetParser.control = "RUN"
+end sub
+
+sub tilesetParsed(msg as object)
+    m.global.settings.addField("tilemap", "assocarray", false)
+    m.global.settings.tilemap = msg.getData().tileset
     openCharSelect()
 end sub
 
@@ -96,8 +108,6 @@ sub startGame(data as dynamic)
     level0 = createObject("roSGNode", "rcw_Level")
     level0.id = "level0"
     m.levelSettings = createObject("roSGNode", "LevelSettingsNode")
-    m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
-    m.global.settings = createObject("roSGNode", "AppSettingsNode")
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
     m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size, statusBarSize)
     ?"GRID SIZE: ";m.global.grid[0]
@@ -131,6 +141,7 @@ sub startGame(data as dynamic)
     player = CreateObject("roSGNode", "rcw_Player")
     player.id = "current_player"
     player.class = data.class
+    player.race = data.race
 
     'm.playerHolder.appendChild(player) This probably isn't the way to go.
     'I'm thinking I need to put the player in the level to check walls, etc. 

@@ -1,0 +1,33 @@
+{
+  "tileset": {
+    "player": {
+        "human_male": "player/base/human_m.png",
+        "human_female": "player/base/human_f.png",
+        "elf_male": "player/base/elf_m.png",
+        "elf_female": "player/base/elf_f.png",
+        "dwarf_male": "player/base/dwarf_m.png",
+        "dwarf_female": "player/base/dwarf_f.png",
+        "halfef_male": "player/base/elf_m.png",
+        "halfef_female": "player/base/elf_f.png",
+        "halforc_male": "player/base/orc_m.png",
+        "halforc_female": "player/base/orc_f.png",
+        "halfling_male": "player/base/halfling_m.png",
+        "halfling_female": "player/base/halfling_f.png",
+        "gnome_male": "player/base/gnome_m.png",
+        "gnome_female": "player/base/gnome_f.png"
+    },
+    "monster": {
+        "orc": "dc-mon/orc.png"
+    },
+    "dungeon": {
+        "floor0": "dc-dngn/floor/floor_sand_stone0.png",
+        "wall0": "dc-dngn/wall/stone_brick1.png",
+        "stairsdown": "dc-dngn/gateways/dngn_enter.png",
+        "stairsup": "dc-dngn/gateways/dngn_return.png",
+        "dooropen": "dc-dngn/gateways/dngn_stone_arch.png"
+    },
+    "armor": {
+      "patchy_robe": "player/body/robe_brown2.png"
+    }
+  }
+}

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- this is a data node for event results. Created to keep type safety --> 
+<!-- this is a data node for settings unique to races. Created to keep type safety --> 
 <component name="RaceSettingsNode" extends="Node">
 	<interface>
-	    <field id="human_tile" type="string" value="human_m.png"/>
-	    <field id="slime_tile" type="string" value="giant_amoeba.png"/>
-	    <field id="orc_tile" type="string" value="orc.png"/>
 	</interface> 
 </component>

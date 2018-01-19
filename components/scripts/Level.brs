@@ -446,50 +446,50 @@ sub draw()
                 'and set colors and tiles in the settings
                 if gType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.color = "0xEFEEBFFF"
+                    tile.uri = getTilePath("floor0")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "wall"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.color = "0x767B84FF"
+                    tile.uri = getTilePath("wall0")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.color = "0xFaFF05FF"
+                    tile.uri = getTilePath("stairsup")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "downstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.color = "0x009900FF"
+                    tile.uri = getTilePath("stairsdown")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = false
                     m.roomHolder.appendChild(tile)
                 else if gType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
-                    tile = CreateObject("roSGNode", "Rectangle")
+                    tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.color = "0x28E014FF"
+                    tile.uri = getTilePath("dooropen")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = false
@@ -592,3 +592,7 @@ sub checkActOnTile()
     end if
 end sub
 
+function getTilePath(tileName as String) as String
+    tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.dungeon[tilename]
+    return tilePath
+end function
