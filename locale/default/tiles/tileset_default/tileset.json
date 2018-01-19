@@ -27,7 +27,10 @@
         "dooropen": "dc-dngn/gateways/dngn_stone_arch.png"
     },
     "armor": {
-      "patchy_robe": "player/body/robe_brown2.png"
+      "patchy_robe": "player/body/robe_brown2.png",
+      "rusty_chainmail": "player/body/chainmail.png",
+      "beatup_leather": "player/body/leather2.png",
+      "thin_wizard_robe": "player/body/robe_blue.png"
     }
   }
 }

@@ -19,7 +19,17 @@
         <field id="warrior_hit_dice" type="integer" value="10"/>
 
         <!-- player starting equipment. Has to be set in brs -->
-        <field id="monk_starting_equipment" type="assocarray" />
+	    <field id="barbarian_starting_equipment" type="assocarray" />
+	    <field id="bard_starting_equipment" type="assocarray" />
+	    <field id="cleric_starting_equipment" type="assocarray" />
+	    <field id="druid_starting_equipment" type="assocarray" />
+	    <field id="fighter_starting_equipment" type="assocarray" />
+	    <field id="monk_starting_equipment" type="assocarray" />
+	    <field id="paladin_starting_equipment" type="assocarray" />
+	    <field id="ranger_starting_equipment" type="assocarray" />
+	    <field id="rogue_starting_equipment" type="assocarray" />
+	    <field id="sorcerer_starting_equipment" type="assocarray" />
+        <field id="wizard_starting_equipment" type="assocarray" />
     </interface> 
     <script type="text/brightscript"  uri="pkg:/components/settings/scripts/ClassSettings.brs"/>
 </component>
