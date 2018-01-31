@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- this is a data node for settings unique to races. Created to keep type safety --> 
 <component name="RaceSettingsNode" extends="Node">
-	<interface>
-	</interface> 
+    <interface>
+	    <field id="human_bonus" type="intarray" />
+	    <field id="elf_bonus" type="intarray" />
+	    <field id="dwarf_bonus" type="intarray" />
+	    <field id="halfling_bonus" type="intarray" />
+    </interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/RaceSettings.brs"/>
 </component>

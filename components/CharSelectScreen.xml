@@ -20,25 +20,15 @@
                     <ContentNode title="Human" description="human" />
                     <ContentNode title="Elf" description="elf" />
                     <ContentNode title="Dwarf" description="dwarf" />
-                    <ContentNode title="Half-Elf" description="halfelf" />
-                    <ContentNode title="Half-Orc" description="halforc" />
                     <ContentNode title="Halfling" description="halfling" />
-                    <ContentNode title="Gnome" description="gnome" />
                 </ContentNode>
             </LabelList>
 
             <LabelList id="classSelector">
                 <ContentNode id="classSelectorContent" role="content" >
-                    <ContentNode title="Barbarian"  description="barbarian" />
-                    <ContentNode title="Bard"  description="bard" />
-                    <ContentNode title="Cleric"  description="cleric" />
-                    <ContentNode title="Druid"  description="druid" />
                     <ContentNode title="Fighter"  description="fighter" />
-                    <ContentNode title="Monk"  description="monk" />
-                    <ContentNode title="Paladin"  description="paladin" />
-                    <ContentNode title="Ranger"  description="ranger" />
+                    <ContentNode title="Cleric"  description="cleric" />
                     <ContentNode title="Rogue"  description="rogue" />
-                    <ContentNode title="Sorcerer"  description="sorcerer" />
                     <ContentNode title="Wizard"  description="wizard" />
                 </ContentNode>
             </LabelList>

@@ -4,11 +4,11 @@
     <interface>
         <!-- tiles are squares -->
         <field id="tileset" type="string" value="tileset_default" />
-        <field id="tile_size" type="integer" value="30" />
-        <field id="room_min_width" type="integer" value="10" />
-        <field id="room_min_height" type="integer" value="8" />
-        <field id="room_max_width" type="integer" value="20" />
-        <field id="room_max_height" type="integer" value="10" />
+        <field id="tile_size" type="integer" value="50" />
+        <field id="room_min_width" type="integer" value="6" />
+        <field id="room_min_height" type="integer" value="4" />
+        <field id="room_max_width" type="integer" value="16" />
+        <field id="room_max_height" type="integer" value="6" />
 	</interface> 
 </component>
 

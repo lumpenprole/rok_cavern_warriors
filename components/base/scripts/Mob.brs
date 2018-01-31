@@ -12,6 +12,9 @@ sub init()
     m.classSettings = CreateObject("roSGNode", "ClassSettingsNode")
     m.raceSettings = CreateObject("roSGNode", "RaceSettingsNode")
     m.bgHolder.appendChild(rect)
+    m.mind = rollStat()
+    m.strength = rollStat()
+    m.dexterity = rollStat()
 end sub
 
 sub onClassSet()
@@ -75,4 +78,35 @@ function getTilePath(tileType as String, tileRace as String, tileSex = "none" as
     tilePath = tilePath + tiles[tilerace]
     return tilePath
 end function
+
+function getStats() as Object
+    return [m.mind, m.strength, m.dexterity]
+end function
+
+function rollStat() as Integer
+    stats = []
+    for r = 0 to 4
+        stats.push(rnd(6))
+    end for
     
+    lowest = stats[0]
+    remove = 0
+
+    for d = 1 to 4
+        if stats[d] < lowest
+            lowest = stats[d]
+            remove = d
+        end if
+    end for
+    
+    stats.delete(remove)
+
+    stat = 0
+
+    for s = 0 to 3
+        stat = stat + stats[s]
+    end for
+
+    return stat
+end function
+
