@@ -227,7 +227,6 @@ end function
 
 
 sub draw()
-    stop
     tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1

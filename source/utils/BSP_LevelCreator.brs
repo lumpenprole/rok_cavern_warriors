@@ -27,13 +27,11 @@ function walkTree(levelArr as Object, settings as Object) as Object
     'tree consists of of an array of arrays describing squares
     'each square is an array describing [startX, startY, height, width]
     tree = []
-    tree[0] = []
     'depth = settings.maxTreeDepth
     depth = 4
 
     for x = 0 to depth - 1
-        tree.push(forkTree(tree[x], levelArr))
-        stop
+        tree.push(forkTree(tree, levelArr))
     end for
 
 
@@ -58,9 +56,10 @@ function forkTree(tree as Object, levelArr as Object) as Object
             newTree = [[0, 0, square[3], divider[0]], [divider[0], 0, square[2], square[3] - divider[0]]]
         end if
     else
-        for d = 0 to tree.count() - 1
+        currentTree = tree[tree.count() - 1]
+        for d = 0 to currentTree.count() - 1
             'randomly split each box
-            thisBox = tree[d]
+            thisBox = currentTree[d]
             dObj = getRandomDivider(thisBox)
             divider = dObj.divider
             if dObj.direction = "horizontal"
