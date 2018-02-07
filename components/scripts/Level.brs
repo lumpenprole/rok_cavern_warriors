@@ -13,10 +13,16 @@ sub setupLevel()
     
     grid = m.global.grid
 
-    creator = LevelCreator()
-    levelHolder = creator.create(settings, grid)
+    'creator = LevelCreator()
+    'levelHolder = creator.create(settings, grid)
+
+    creator = BSP_LevelCreator()
+    levelHolder = creator.BSPCreate(settings, grid)
+
     m.rooms = levelHolder.rooms
     m.levelArr = levelHolder.levelArr
+    m.upstairs = levelHolder.upstairs
+    m.downstairs = levelHolder.downstairs
 
     draw()
     
@@ -221,6 +227,7 @@ end function
 
 
 sub draw()
+    stop
     tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1
@@ -239,7 +246,7 @@ sub draw()
                     tile.uri = getTilePath("floor0")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
-                    tile.visible = false
+                    tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if gType = "wall"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -249,7 +256,7 @@ sub draw()
                     tile.uri = getTilePath("wall0")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
-                    tile.visible = false
+                    tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if gType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -259,7 +266,7 @@ sub draw()
                     tile.uri = getTilePath("stairsup")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
-                    tile.visible = false
+                    tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if gType = "downstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -269,7 +276,7 @@ sub draw()
                     tile.uri = getTilePath("stairsdown")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
-                    tile.visible = false
+                    tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if gType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
@@ -279,7 +286,7 @@ sub draw()
                     tile.uri = getTilePath("dooropen")
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
-                    tile.visible = false
+                    tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 end if
             end if

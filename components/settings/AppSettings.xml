@@ -2,6 +2,8 @@
 <!-- this is a data node for application wide settings --> 
 <component name="AppSettingsNode" extends="Node">
     <interface>
+        <!-- testing flags -->
+        <field id="level_visible" type="bool" value="true" />
         <!-- tiles are squares -->
         <field id="tileset" type="string" value="tileset_default" />
         <field id="tile_size" type="integer" value="50" />

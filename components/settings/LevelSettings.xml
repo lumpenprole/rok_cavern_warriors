@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- this is a data node for event results. Created to keep type safety --> 
 <component name="LevelSettingsNode" extends="Node">
-	<interface>
+    <interface>
+        <!-- settings for my basic level creator -->
 	    <field id="minRooms" type="integer" value="4"/>
 	    <field id="maxRooms" type="integer" value="7"/>
-	    <field id="roomMargin" type="integer" value="10"/>
+        <field id="roomMargin" type="integer" value="10"/>
+
+        <!-- settings for my basic level creator -->
+	    <field id="maxTreeDepth" type="integer" value="4"/>
+        <field id="roomPadding" type="integer" value="3"/>
+
 	</interface> 
     <script type="text/brightscript"  uri="pkg:/components/settings/scripts/LevelSettings.brs"/>
 </component>

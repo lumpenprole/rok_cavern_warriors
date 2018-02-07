@@ -10,8 +10,9 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/scripts/Level.brs"/>
-    <script type="text/brightscript"  uri="pkg:/source/utils/LevelCreator.brs"/>
+    <!-- <script type="text/brightscript"  uri="pkg:/components/scripts/Level.brs"/> -->
+    <!-- <script type="text/brightscript"  uri="pkg:/source/utils/LevelCreator.brs"/> -->
+    <script type="text/brightscript"  uri="pkg:/source/utils/BSP_LevelCreator.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Math.brs"/>

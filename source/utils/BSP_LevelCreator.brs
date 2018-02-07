@@ -1,13 +1,15 @@
-function LevelCreator()
-    if m.levelCreator = invalid
-        m.levelCreator = {
-            create: _create
+function BSP_LevelCreator()
+    if m.bsp_levelCreator = invalid
+        m.bsp_levelCreator = {
+            BSPCreate: BSP_create
         }
     end if
-    return m.levelCreator
+    return m.bsp_levelCreator
 end function
 
-function _create(settings as Dynamic, grid as Object) as Object
+function BSP_create(settings as Dynamic, grid as Object) as Object
+    returnObj = {rooms:[],levelArr:[]}
+
     levelArr = []
     for x = 0 to grid[0][0] - 1
         levelArr[x] = []
@@ -16,29 +18,183 @@ function _create(settings as Dynamic, grid as Object) as Object
         end for
     end for
 
-    currentPos = [100,100]
-
-    totalRooms = getRandomRange(settings.minRooms, settings.maxRooms)
-    rooms = []
-
-    'Currently this is arbitrary
-    m.startRoom = 0
-
-    for r = 0 to totalRooms - 1
-        ?"TOTAL ROOMS ";totalRooms;" THIS IS ROOM # ";r
-        thisRoom = createRoom()
-        rooms.push(thisRoom)
-    end for
-    returnObj = {rooms:rooms,levelArr:levelArr}
-
-    returnObj = placeRooms(returnObj)
-    returnObj = createCorridoors(returnObj)
+    returnObj = walkTree(levelArr, settings)
 
     return returnObj
 end function
 
+function walkTree(levelArr as Object, settings as Object) as Object
+    'tree consists of of an array of arrays describing squares
+    'each square is an array describing [startX, startY, height, width]
+    tree = []
+    tree[0] = []
+    'depth = settings.maxTreeDepth
+    depth = 4
+
+    for x = 0 to depth - 1
+        tree.push(forkTree(tree[x], levelArr))
+        stop
+    end for
+
+
+    returnObj = createRooms(tree, levelArr, settings)
+    'levelArr = placeRooms(levelArr, rooms)
+    'levelArr = createCorridors(levelArr, rooms)
+
+    return returnObj
+end function
+
+function forkTree(tree as Object, levelArr as Object) as Object
+    newTree = []
+    if tree.count() = 0
+        'create first division
+        square = [0, 0, levelArr[0].count(), levelArr.count()]
+        dObj = getRandomDivider(square)
+        divider = dObj.divider
+
+        if dObj.direction = "horizontal"
+            newTree = [[0, 0, divider[1], levelArr.count()], [0, divider[1], (square[2] - divider[1]), square[3]]]
+        else if dObj.direction = "vertical"
+            newTree = [[0, 0, square[3], divider[0]], [divider[0], 0, square[2], square[3] - divider[0]]]
+        end if
+    else
+        for d = 0 to tree.count() - 1
+            'randomly split each box
+            thisBox = tree[d]
+            dObj = getRandomDivider(thisBox)
+            divider = dObj.divider
+            if dObj.direction = "horizontal"
+                newTree.push([thisBox[0], thisBox[1], divider[1] - thisBox[1], divider[2] - thisbox[0]])
+                newTree.push([divider[0], divider[1] + 1, thisBox[2] - divider[1], divider[2] - thisbox[0] ])
+            else if dObj.direction = "vertical"
+                newTree.push([thisBox[0], thisBox[1], thisBox[2], divider[0] - thisBox[0]])
+                newTree.push([divider[0] + 1, divider[1], thisBox[2], thisBox[3] - divider[0]])
+            end if
+        end for
+    end if
+
+    return newTree
+end function
+
+function getRandomDivider(square as Object) as Object
+    'The divider is described by four integers representing the beginning and end point
+    horiz = rnd(2)
+    height = square[2]
+    width = square[3]
+    bound1 = .35
+    bound2 = .65
+    direction = "none"
+    if horiz = 1 
+        direction = "horizontal"
+        x = square[0]
+        y = getRandomRange(cInt(height * bound1), cInt(height * bound2))
+        divider = [x, y, x + width, y]
+    else
+        direction = "vertical"
+        y = square[1]
+        x = getRandomRange(cInt(width * bound1), cInt(width * bound2))
+        divider = [x, y, x, y + height]
+    end if
+
+    return {divider: divider, direction: direction}
+end function
+
+function createRooms(tree as Object, levelArr as Object, settings as Object) as Object
+    rooms = []
+    roomMin = .4
+    bottomLevel = tree[tree.count() - 1]
+    
+    for s = 0 to bottomLevel.count() - 1
+        square = bottomLevel[s]
+        ?"SQUARE: ";square
+        sX = square[0]
+        sY = square[1]
+        sHeight = square[2]
+        sWidth = square[3]
+        roomHeight = getRandomRange(cInt(sHeight * roomMin), sHeight)
+        roomWidth = getRandomRange(cInt(sWidth * roomMin), sWidth)
+
+        startX = sX + getRandomRange(1, cInt((square[3] - roomWidth) - 1))
+        startY = sY + getRandomRange(1, cInt((square[2] - roomHeight) - 1))
+        room = [startX, startY, roomHeight, roomWidth]
+        ?"ROOM ";s.toStr();": ";room
+        rooms.push(room)
+    end for
+    
+    for r = 0 to rooms.count() - 1
+        room = rooms[r]
+        roomId = "room_" + r.toStr()
+        leftEdge = room[0]
+        rightEdge = leftEdge + room[3]
+        topEdge = room[1]
+        bottomEdge = topEdge + room[2]
+
+        if leftEdge = 0
+            leftEdge = 1
+        end if
+
+        if topEdge = 0
+            topEdge = 1
+        end if
+
+        if rightEdge = levelArr.count()
+            rightEdge = levelArr.count() - 1
+        end if
+
+        if bottomEdge = levelArr[0].count()
+            bottomEdge = levelArr[0].count() - 1
+        end if
+
+
+        'process room into level array
+        for w = leftEdge to rightEdge - 1
+            for h = topEdge to bottomEdge - 1
+                levelArr[w][h] = "floor:" + roomId
+                'Add walls 
+                if w = leftEdge
+                    levelArr[w - 1][h] = "wall:none"
+                else if w = rightEdge - 1
+                    levelArr[w + 1][h] = "wall:none"
+                end if
+
+                if h = topEdge
+                    levelArr[w][h - 1] = "wall:none"
+                else if h = bottomEdge - 1
+                    levelArr[w][h + 1] = "wall:none"
+                end if
+            end for
+
+            'do corners
+            'levelArr[leftEdge - 1][topEdge - 1] = "wall:none"
+            'levelArr[leftEdge - 1][bottomEdge] = "wall:none"
+            'levelArr[rightEdge][topEdge - 1] = "wall:none"
+            'levelArr[rightEdge][bottomEdge] = "wall:none"
+        end for
+    end for
+
+    'set up stairs arbitrairily in the start room
+    upRoomNum = rnd(rooms.count()) - 1
+    uRoom = rooms[upRoomNum]
+    upstairX = getRandomRange(uRoom[0], uRoom[3] + uRoom[0])
+    upstairY = getRandomRange(uRoom[1], uRoom[2] + uRoom[1])
+    levelArr[upstairX][upstairY] = "upstairs:none"
+    downRoomNum = upRoomNum
+
+    while downRoomNum = upRoomNum
+        downRoomNum = rnd(rooms.count() - 1)
+    end while
+
+    dRoom = rooms[downRoomNum]
+    downstairX = getRandomRange(dRoom[2], dRoom[2] + dRoom[0])
+    downstairY = getRandomRange(dRoom[3], dRoom[3] + dRoom[1])
+    levelArr[downstairX][downstairY] = "downstairs:none"
+
+    return {levelArr:levelArr, rooms:rooms, upstairs:[upstairX, upstairY], downstairs:[downstairX, downstairY]}
+
+end function
+
 'Rooms end up being [width, height, x, y]
-function createRoom() as Object
+function _createRoom() as Object
     'TODO: Move the room settings into level settings
     appSettings = m.global.settings
     width = getRandomRange(appSettings.room_min_width, appSettings.room_max_width)
@@ -47,7 +203,7 @@ function createRoom() as Object
     return [width, height]
 end function 
 
-function placeRooms(holder as Object) as Object
+function _placeRooms(holder as Object) as Object
     rooms = holder.rooms
     levelArr = holder.levelArr
     appSettings = m.global.settings
@@ -148,7 +304,7 @@ function placeRooms(holder as Object) as Object
     upstairX = getRandomRange(uRoom[2], uRoom[2] + uRoom[0])
     upstairY = getRandomRange(uRoom[3], uRoom[3] + uRoom[1])
     levelArr[upstairX][upstairY] = "upstairs:none"
-    upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
+    m.upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
     downRoomNum = upRoomNum
 
     'TODO: Fix level placement so that this situation never arises. But sometimes I end up with
@@ -170,12 +326,12 @@ function placeRooms(holder as Object) as Object
     downstairX = getRandomRange(dRoom[2], dRoom[2] + dRoom[0])
     downstairY = getRandomRange(dRoom[3], dRoom[3] + dRoom[1])
     levelArr[downstairX][downstairY] = "downstairs:none"
-    downstairs = [downstairX, downstairY] 'This is so the player can grab the start location easily
+    m.downstairs = [downstairX, downstairY] 'This is so the player can grab the start location easily
 
-    return {rooms:rooms, levelArr:levelArr, upstairs: upstairs, downstairs: downstairs}
+    return {rooms:rooms, levelArr:levelArr}
 end function
 
-function createCorridoors(holder as Object) as Object
+function _createCorridoors(holder as Object) as Object
     rooms = holder.rooms
     levelArr = holder.levelArr
     m.connections = [] 'this is going to be so I can test that you can get out
@@ -204,7 +360,7 @@ function createCorridoors(holder as Object) as Object
     return {rooms:rooms, levelArr:levelArr}
 end function
 
-function pathFind(startLoc, endLoc, levelArr) as Object
+function _pathFind(startLoc, endLoc, levelArr) as Object
     startX = startLoc[0]
     startY = startLoc[1]
     currentDraw = [startX,startY]
@@ -238,7 +394,7 @@ function pathFind(startLoc, endLoc, levelArr) as Object
     return levelArr
 end function
 
-sub addCorridorFloor(x, y, levelArr) as Object
+sub _addCorridorFloor(x, y, levelArr) as Object
     tileType = levelArr[x, y].split(":")[0]
     if tileType <> "upstairs"
         levelArr[x, y] = "floor:none"
