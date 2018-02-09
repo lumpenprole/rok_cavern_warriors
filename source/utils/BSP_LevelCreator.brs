@@ -27,13 +27,14 @@ function walkTree(levelArr as Object, settings as Object) as Object
     'tree consists of of an array of arrays describing squares
     'each square is an array describing [startX, startY, height, width]
     tree = []
+    tree[0] = [[0, 0, levelArr[0].count(), levelArr.count()]]
     'depth = settings.maxTreeDepth
-    depth = 4
+    depth = 3
 
     for x = 0 to depth - 1
-        tree.push(forkTree(tree, levelArr))
+        ?"TREE ";x;": ";tree[x]
+        tree.push(forkTree(tree[x]))
     end for
-
 
     returnObj = createRooms(tree, levelArr, settings)
     'levelArr = placeRooms(levelArr, rooms)
@@ -42,61 +43,39 @@ function walkTree(levelArr as Object, settings as Object) as Object
     return returnObj
 end function
 
-function forkTree(tree as Object, levelArr as Object) as Object
+function forkTree(tree as Object) as Object
     newTree = []
-    if tree.count() = 0
-        'create first division
-        square = [0, 0, levelArr[0].count(), levelArr.count()]
-        dObj = getRandomDivider(square)
-        divider = dObj.divider
-
-        if dObj.direction = "horizontal"
-            newTree = [[0, 0, divider[1], levelArr.count()], [0, divider[1], (square[2] - divider[1]), square[3]]]
-        else if dObj.direction = "vertical"
-            newTree = [[0, 0, square[3], divider[0]], [divider[0], 0, square[2], square[3] - divider[0]]]
-        end if
-    else
-        currentTree = tree[tree.count() - 1]
-        for d = 0 to currentTree.count() - 1
-            'randomly split each box
-            thisBox = currentTree[d]
-            dObj = getRandomDivider(thisBox)
-            divider = dObj.divider
-            if dObj.direction = "horizontal"
-                newTree.push([thisBox[0], thisBox[1], divider[1] - thisBox[1], divider[2] - thisbox[0]])
-                newTree.push([divider[0], divider[1] + 1, thisBox[2] - divider[1], divider[2] - thisbox[0] ])
-            else if dObj.direction = "vertical"
-                newTree.push([thisBox[0], thisBox[1], thisBox[2], divider[0] - thisBox[0]])
-                newTree.push([divider[0] + 1, divider[1], thisBox[2], thisBox[3] - divider[0]])
-            end if
-        end for
-    end if
+    for x = 0 to tree.count() - 1
+        newTree.append(splitSquare(tree[x]))
+    end for
 
     return newTree
 end function
 
-function getRandomDivider(square as Object) as Object
-    'The divider is described by four integers representing the beginning and end point
+function splitSquare(square as Object) as Object
     horiz = rnd(2)
-    height = square[2]
-    width = square[3]
     bound1 = .35
     bound2 = .65
-    direction = "none"
-    if horiz = 1 
-        direction = "horizontal"
-        x = square[0]
-        y = getRandomRange(cInt(height * bound1), cInt(height * bound2))
-        divider = [x, y, x + width, y]
-    else
-        direction = "vertical"
-        y = square[1]
-        x = getRandomRange(cInt(width * bound1), cInt(width * bound2))
-        divider = [x, y, x, y + height]
+    square1 = []
+    square2 = []
+
+    if horiz = 1 'horizontal
+        width = square[3]
+        height1 = getRandomRange(cInt(square[2] * bound1), cInt(square[2] * bound2))
+        height2 = square[2] - height1
+        square1 = [square[0], square[1], height1, width]
+        square2 = [square[0], square[1] + height1, height2, width]
+    else 'vertical
+        height = square[2]
+        width1 = getRandomRange(cInt(square[3] * bound1), cInt(square[3] * bound2))
+        width2 = square[3] - width1
+        square1 = [square[0], square[1], height, width1]
+        square2 = [square[0] + width1, square[1], height, width2]
     end if
 
-    return {divider: divider, direction: direction}
+    return [square1, square2]
 end function
+
 
 function createRooms(tree as Object, levelArr as Object, settings as Object) as Object
     rooms = []
@@ -163,11 +142,12 @@ function createRooms(tree as Object, levelArr as Object, settings as Object) as 
                 end if
             end for
 
+
             'do corners
-            'levelArr[leftEdge - 1][topEdge - 1] = "wall:none"
-            'levelArr[leftEdge - 1][bottomEdge] = "wall:none"
-            'levelArr[rightEdge][topEdge - 1] = "wall:none"
-            'levelArr[rightEdge][bottomEdge] = "wall:none"
+            levelArr[leftEdge - 1][topEdge - 1] = "wall:none"
+            levelArr[leftEdge - 1][bottomEdge] = "wall:none"
+            levelArr[rightEdge][topEdge - 1] = "wall:none"
+            levelArr[rightEdge][bottomEdge] = "wall:none"
         end for
     end for
 

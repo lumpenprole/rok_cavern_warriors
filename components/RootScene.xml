@@ -7,6 +7,8 @@
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/scripts/RootScene.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
+	<!-- testing scripts -->
+    <script type="text/brightscript"  uri="pkg:/source/utils/TestUtils.brs"/>
 
     <children>
         <!-- an animation group to simultaneously animate two float items at once -->
