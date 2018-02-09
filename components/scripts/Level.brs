@@ -10,7 +10,7 @@ end sub
 sub setupLevel()
     settings = m.top.settings
     appSettings = m.global.settings
-    
+
     grid = m.global.grid
 
     'creator = LevelCreator()
@@ -25,7 +25,8 @@ sub setupLevel()
     m.downstairs = levelHolder.downstairs
 
     draw()
-    
+    printLevel(m.levelArr)
+
     m.loadTxt.visible = false
 end sub
 
@@ -78,7 +79,7 @@ sub playerMove(direction as String)
     else if direction = "up"
         checkLoc = [ploc[0], ploc[1] - 1]
     end if
-    
+
     if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
         if collisionCheck(m.player, checkLoc) <> true
             if canOccupy(checkLoc)
@@ -89,8 +90,8 @@ sub playerMove(direction as String)
     setTile(m.player, m.playerHolder)
 
     makeVisible(m.player.location, m.player.sightDistance)
-    moveMonsters() 
-end sub 
+    moveMonsters()
+end sub
 
 sub addMonsters()
     totalMonsters = rnd(7)
@@ -101,11 +102,11 @@ sub addMonsters()
         monster.race = "orc"
         monster.class = "warrior"
         m.monsters.push(monster)
-        mRoom = m.rooms[rnd(m.rooms.count()) - 1] 
+        mRoom = m.rooms[rnd(m.rooms.count()) - 1]
         monsterX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
         monsterY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
         monster.location = [monsterX, monsterY]
-        'TODO: Change player move to this model. I don't think we need the holders. 
+        'TODO: Change player move to this model. I don't think we need the holders.
         'm.monsterHolder.appendChild(monster)
         m.top.appendChild(monster)
         tileSize = m.global.settings.tile_size
@@ -114,12 +115,12 @@ sub addMonsters()
         'setTile(monster, m.monsterHolder)
     end for
     'This is set here so that monsters will be made visible if appropriate
-    makeVisible(m.player.location, m.player.sightDistance) 
+    makeVisible(m.player.location, m.player.sightDistance)
 end sub
 
 sub moveMonsters()
     playerLoc = m.player.location
-    
+
     for y = 0 to m.monsters.count() - 1
         if m.monsters[y] = invalid exit for
         monster = m.monsters[y]
@@ -179,7 +180,7 @@ end function
 
 sub fight(attacker, defender)
     ?attacker.class;" FIGHTS ";defender.race;" ";defender.class
-    hit = rnd(attacker.hitDice) > defender.armorClass 
+    hit = rnd(attacker.hitDice) > defender.armorClass
     if hit
         defender.damageTaken = rnd(attacker.damageDice)
         if defender.id = "current_player"
@@ -208,12 +209,12 @@ end sub
 
 sub playerDead()
     m.playerHasDied = true
-    fireEvent("systemMessage", {messageText:"YOU HAVE DIED"}) 
+    fireEvent("systemMessage", {messageText:"YOU HAVE DIED"})
 end sub
 
 function checkMonsterSeesPlayer(monster, playerLoc) as Boolean
-    if monster.seenPlayer 
-        return true 
+    if monster.seenPlayer
+        return true
     else
         monsterLoc = monster.location
         if abs(monsterLoc[0] - playerLoc[0]) <= monster.sightLine and abs(monsterLoc[1] - playerLoc[1]) <= monster.sightLine
@@ -234,7 +235,7 @@ sub draw()
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
             if(gridSquare <> invalid)
                 gType = gridSquare.split(":")[0]
-                
+
                 'TODO: need to move tile creation into a separate function
                 'and set colors and tiles in the settings
                 if gType = "floor"
@@ -355,7 +356,7 @@ function canOccupy(tileLoc)
     else
         return false
     end if
-end function 
+end function
 
 function contains(item, arr)
     for x = 0 to arr.count() - 1
@@ -379,9 +380,9 @@ sub checkActOnTile()
     tileType = arr[0]
     tileData = arr[1]
     if tileType = "downstairs"
-        fireEvent("goDownstairs", {}) 
+        fireEvent("goDownstairs", {})
     else if tileType = "upstairs"
-        fireEvent("goUpstairs", {}) 
+        fireEvent("goUpstairs", {})
     end if
 end sub
 

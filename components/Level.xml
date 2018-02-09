@@ -16,14 +16,16 @@
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Math.brs"/>
-	<!-- testing scripts -->
+    <!-- testing scripts -->
     <script type="text/brightscript"  uri="pkg:/source/utils/TestUtils.brs"/>
+
+    <script type="text/brightscript"  uri="pkg:/source/utils/LevelDebug.brs"/>	
 
     <children>
         <Rectangle id="background" translation="[0,0]" width="1920" height="1080" color="0x000000FF" />
         <Group id="layout" translation="[0,0]">
             <Label color="0x669900FF" text="LOADING..." horizAlign="center" translation="[1460,540]" id="loading_text" />
-                
+
         </Group>
         <Group id="room_holder" translation="[0,0]" />
         <Group id="player_holder" translation="[0,0]" />
