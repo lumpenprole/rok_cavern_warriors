@@ -3,8 +3,14 @@ function createGrid(screenSize, tileSize as Integer, statusBarSize as Integer) a
     gridWidth = int(screenSize[1] / tileSize)
     gridHeight = int(screenSize[0] / tileSize)
 
+    ?"GRID WIDTH: ";gridWidth
+    ?"GRID HEIGHT: ";gridHeight
+
     gridX = int((screenSize[0] mod tileSize) / 2)
     gridY = int((screenSize[1] mod tileSize) / 2)
+
+    ?"GRID X: ";gridX
+    ?"GRID Y: ";gridY
 
     return [[gridWidth, gridHeight], [gridX, gridY]]
 end function

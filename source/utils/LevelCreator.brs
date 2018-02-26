@@ -29,10 +29,11 @@ function _create(settings as Dynamic, grid as Object) as Object
         thisRoom = createRoom()
         rooms.push(thisRoom)
     end for
-    returnObj = {rooms:rooms,levelArr:levelArr}
+    returnObj = {rooms:rooms, levelArr:levelArr}
 
     returnObj = placeRooms(returnObj)
     returnObj = createCorridoors(returnObj)
+    returnObj = setStairs(returnObj)
 
     return returnObj
 end function
@@ -142,37 +143,7 @@ function placeRooms(holder as Object) as Object
     'rooms array should only contain rooms that were processed
     rooms = newRooms
 
-    'set up stairs arbitrairily in the start room
-    upRoomNum = rnd(rooms.count() - 1)
-    uRoom = rooms[upRoomNum]
-    upstairX = getRandomRange(uRoom[2], uRoom[2] + uRoom[0])
-    upstairY = getRandomRange(uRoom[3], uRoom[3] + uRoom[1])
-    levelArr[upstairX][upstairY] = "upstairs:none"
-    upstairs = [upstairX, upstairY] 'This is so the player can grab the start location easily
-    downRoomNum = upRoomNum
-
-    'TODO: Fix level placement so that this situation never arises. But sometimes I end up with
-    'two rooms, and the while loops really hard and sometimes crashes. Also, I don't think you 
-    'should ever have only two rooms, but that's an issue to resolve when I redo levels. 
-    if rooms.count() = 2
-        if upRoomNum = 1
-            downRoomNum = 2
-        else
-            downRoomNum = 1
-        end if
-    else
-        while downRoomNum = upRoomNum
-            downRoomNum = rnd(rooms.count() - 1)
-        end while
-    end if
-
-    dRoom = rooms[downRoomNum]
-    downstairX = getRandomRange(dRoom[2], dRoom[2] + dRoom[0])
-    downstairY = getRandomRange(dRoom[3], dRoom[3] + dRoom[1])
-    levelArr[downstairX][downstairY] = "downstairs:none"
-    downstairs = [downstairX, downstairY] 'This is so the player can grab the start location easily
-
-    return {rooms:rooms, levelArr:levelArr, upstairs: upstairs, downstairs: downstairs}
+    return {rooms:rooms, levelArr:levelArr}
 end function
 
 function createCorridoors(holder as Object) as Object
@@ -245,4 +216,32 @@ sub addCorridorFloor(x, y, levelArr) as Object
     end if
     return levelArr
 end sub
+
+function setStairs(holder) as Object
+    rooms = holder.rooms
+    levelArr = holder.levelArr
+    'TODO: Rewrite all these variables so this is clearer and maybe change room to be
+    '[x,y,w,h]
+    'instead of how it is now, which is:
+    '[w,h,x,y]
+
+    upRoomNum = rnd(rooms.count()) - 1
+    uRoom = rooms[upRoomNum]
+    upstairX = getRandomRange(uRoom[2], uRoom[2] + uRoom[0])
+    upstairY = getRandomRange(uRoom[3], uRoom[3] + uRoom[1])
+    levelArr[upstairX][upstairY] = "upstairs:none"
+    downRoomNum = upRoomNum
+
+    while downRoomNum = upRoomNum
+        downRoomNum = rnd(rooms.count() - 1)
+    end while
+
+    dRoom = rooms[downRoomNum]
+    downstairX = getRandomRange(dRoom[2], dRoom[2] + dRoom[0])
+    downstairY = getRandomRange(dRoom[3], dRoom[3] + dRoom[1])
+    levelArr[downstairX][downstairY] = "downstairs:none"
+
+    return {levelArr:levelArr, rooms:rooms, upstairs:[upstairX, upstairY], downstairs:[downstairX, downstairY]}
+
+end function
 

@@ -11,6 +11,5 @@ splash_screen_hd=pkg:/locale/default/images/tmp_rok.png
 splash_color=#ffffff
 splash_min_time=1000
 ui_resolutions=fhd
-uri_resolution_autosub=$$RES$$, 480p, 720p, 1080p
 is_staging_server=true
 log_level=DEBUG

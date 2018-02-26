@@ -28,11 +28,12 @@ function walkTree(levelArr as Object, settings as Object) as Object
     'each square is an array describing [startX, startY, height, width]
     tree = []
     tree[0] = [[0, 0, levelArr[0].count(), levelArr.count()]]
-    'depth = settings.maxTreeDepth
-    depth = 3
+    depth = settings.maxTreeDepth
+
+    m.dividerBoundary1 = settings.dividerBoundary1
+    m.dividerBoundary2 = settings.dividerBoundary2
 
     for x = 0 to depth - 1
-        ?"TREE ";x;": ";tree[x]
         tree.push(forkTree(tree[x]))
     end for
 
@@ -54,8 +55,8 @@ end function
 
 function splitSquare(square as Object) as Object
     horiz = rnd(2)
-    bound1 = .35
-    bound2 = .65
+    bound1 = m.dividerBoundary1
+    bound2 = m.dividerBoundary2
     square1 = []
     square2 = []
 

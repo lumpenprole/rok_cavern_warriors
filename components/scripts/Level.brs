@@ -13,11 +13,11 @@ sub setupLevel()
 
     grid = m.global.grid
 
-    'creator = LevelCreator()
-    'levelHolder = creator.create(settings, grid)
+    creator = LevelCreator()
+    levelHolder = creator.create(settings, grid)
 
-    creator = BSP_LevelCreator()
-    levelHolder = creator.BSPCreate(settings, grid)
+    'creator = BSP_LevelCreator()
+    'levelHolder = creator.BSPCreate(settings, grid)
 
     m.rooms = levelHolder.rooms
     m.levelArr = levelHolder.levelArr
