@@ -21,10 +21,11 @@
     <children>
         <Group id="bg_holder" />
         <Group id="tile_holder" />
+        <Group id="boots_holder" />
         <Group id="body_armor_holder" />
+        <Group id="pants_holder" />
         <Group id="helmet_holder" />
-        <Group id="glove_holder" />
-        <Group id="boot_holder" />
+        <Group id="gloves_holder" />
  	</children>
 
 </component>

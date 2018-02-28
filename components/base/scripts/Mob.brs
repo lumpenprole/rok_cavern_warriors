@@ -4,6 +4,10 @@ sub init()
     m.bgHolder = m.top.findNode("bg_holder")
     m.tileHolder = m.top.findNode("tile_holder")
     m.bodyArmorHolder = m.top.findNode("body_armor_holder")
+    m.pantsHolder = m.top.findNode("pants_holder")
+    m.helmetHolder = m.top.findNode("helmet_holder")
+    m.glovesHolder = m.top.findNode("gloves_holder")
+    m.bootsHolder = m.top.findNode("boots_holder")
     rect = CreateObject("roSGNode", "Rectangle")
     rect.width = m.tileSize
     rect.height = m.tileSize

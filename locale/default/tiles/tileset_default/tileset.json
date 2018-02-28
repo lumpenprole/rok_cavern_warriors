@@ -31,6 +31,15 @@
       "rusty_chainmail": "player/body/chainmail.png",
       "beatup_leather": "player/body/leather2.png",
       "thin_wizard_robe": "player/body/robe_blue.png"
+    },
+    "pants": {
+      "rusty_chain_pants": "player/legs/leg_armor01.png",
+      "beatup_leather_pants": "player/legs/pants_brown.png"
+    },
+    "helmet": {
+      "rusty_chain_helmet": "player/head/chain.png",
+      "beatup_leather_helmet": "player/head/cap_black.png",
+      "patchy_wizard_hat": "player/head/wizard_brown.png"
     }
   }
 }
