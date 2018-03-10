@@ -99,20 +99,15 @@ sub addMonsters()
     for x = 0 to totalMonsters - 1
         monster = CreateObject("roSGNode", "rcw_Monster")
         monster.id = "monster_" + x.toStr()
-        monster.race = "orc"
-        monster.class = "warrior"
+        monster.race = "kobold"
+        'monster.class = "warrior"
         m.monsters.push(monster)
         mRoom = m.rooms[rnd(m.rooms.count()) - 1]
-        monsterX = getRandomRange(mRoom[2], mRoom[2] + mRoom[0])
-        monsterY = getRandomRange(mRoom[3], mRoom[3] + mRoom[1])
-        monster.location = [monsterX, monsterY]
-        'TODO: Change player move to this model. I don't think we need the holders.
-        'm.monsterHolder.appendChild(monster)
+        monster.location = placeRandomlyInRoom(mRoom)
         m.top.appendChild(monster)
         tileSize = m.global.settings.tile_size
         monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
-        monster.seen = false
-        'setTile(monster, m.monsterHolder)
+        monster.seen = m.global.settings.level_visible
     end for
     'This is set here so that monsters will be made visible if appropriate
     makeVisible(m.player.location, m.player.sightDistance)
@@ -179,7 +174,7 @@ function collisionCheck(monster, newPosition)
 end function
 
 sub fight(attacker, defender)
-    ?attacker.class;" FIGHTS ";defender.race;" ";defender.class
+    ?attacker.race;" ";attacker.class;" FIGHTS ";defender.race;" ";defender.class
     hit = rnd(attacker.hitDice) > defender.armorClass
     if hit
         defender.damageTaken = rnd(attacker.damageDice)
@@ -340,22 +335,30 @@ sub setTile(tile, holder)
 end sub
 
 function canOccupy(tileLoc)
+    openTile = false
     tile = m.levelArr[tileLoc[0], tileLoc[1]]
     arr = tile.split(":")
     tileType = arr[0]
     tileData = arr[1]
 
     if tileType = "floor" or tileType = "upstairs" or tileType = "downstairs"
-        return true
+        openTile = true
     else if tileType = "door"
         if tileData = "open"
-            return true
+            openTile = true
         else
-            return false
+            openTile = false
         end if
-    else
-        return false
     end if
+
+    for x = 0 to m.monsters.count() - 1
+        monster = m.monsters[x]
+        if tileLoc[0] = monster.location[0] and tileLoc[1] = monster.location[1]
+            openTile = false
+        end if
+    end for
+
+    return openTile
 end function
 
 function contains(item, arr)
@@ -390,3 +393,17 @@ function getTilePath(tileName as String) as String
     tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.dungeon[tilename]
     return tilePath
 end function
+
+function placeRandomlyInRoom(room as Object) as Object
+    'room is an array describing [startX, startY, height, width]
+    sX = room[0] + 1
+    sY = room[1] + 1
+    w = sX + (room[3] - 1)
+    h = sY + (room[2] - 1)
+
+    newX = getRandomRange(sX, w)
+    newY = getRandomRange(sY, h)
+    
+    return [newX, newY]
+end function
+

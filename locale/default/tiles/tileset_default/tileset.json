@@ -17,7 +17,8 @@
         "gnome_female": "player/base/gnome_f.png"
     },
     "monster": {
-        "orc": "dc-mon/orc.png"
+        "orc": "dc-mon/orc.png",
+        "kobold": "dc-mon/kobold.png"
     },
     "dungeon": {
         "floor0": "dc-dngn/floor/floor_sand_stone0.png",

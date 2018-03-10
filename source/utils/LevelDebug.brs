@@ -1,4 +1,4 @@
-function printLevel(levelArr)
+sub printLevel(levelArr)
     ?"****LEVEL****"
     ?""
     ?""
@@ -41,4 +41,23 @@ function printLevel(levelArr)
     end for
     ?""
     ?""
-end function
+end sub
+
+'this is a specific debug for the BSP generator. 
+sub printTree(tree, levelArr)
+    for x = 0 to tree.count() - 1
+        thisBox = tree[x]
+        for w = thisBox[0] to thisBox[3] - 1
+            for h = thisBox[1] to thisBox[2] - 1
+                if w = thisBox[0] or w = thisBox[3] - 1 or h = thisbox[1] or h = thisBox[2] - 1
+                    levelArr[w][h] = "wall:none"
+                else
+                    levelArr[w][h] = "floor:none"
+                end if
+            end for
+        end for
+    end for
+
+    printLevel(levelArr)
+end sub
+

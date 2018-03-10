@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="MonsterSettingsNode" extends="Node">
+	<interface>
+        <!-- monster settings -->
+	    <field id="badger" type="assocarray" />
+	    <field id="ankheg" type="assocarray" />
+	    <field id="bugbear" type="assocarray" />
+	    <field id="choker" type="assocarray" />
+	    <field id="raptor" type="assocarray" />
+	    <field id="dire_rat" type="assocarray" />
+	    <field id="dwarf" type="assocarray" />
+	    <field id="earth_elemental" type="assocarray" />
+	    <field id="elf" type="assocarray" />
+	    <field id="gargoyle" type="assocarray" />
+	    <field id="goblin" type="assocarray" />
+	    <field id="griffon" type="assocarray" />
+	    <field id="halfling" type="assocarray" />
+	    <field id="hellhound" type="assocarray" />
+	    <field id="hill_giant" type="assocarray" />
+	    <field id="hobgoblin" type="assocarray" />
+	    <field id="human_commoner" type="assocarray" />
+	    <field id="spider" type="assocarray" />
+	    <field id="kobold" type="assocarray" />
+	    <field id="ogre" type="assocarray" />
+	    <field id="orc" type="assocarray" />
+	    <field id="owlbear" type="assocarray" />
+	    <field id="rust_monster" type="assocarray" />
+	    <field id="shadow" type="assocarray" />
+	    <field id="skeleton_warrior" type="assocarray" />
+	    <field id="stirge" type="assocarray" />
+	    <field id="stone_golem" type="assocarray" />
+	    <field id="troll" type="assocarray" />
+	    <field id="werewolf" type="assocarray" />
+	    <field id="wight" type="assocarray" />
+	    <field id="wolf" type="assocarray" />
+	    <field id="wyvern" type="assocarray" />
+        <field id="zombie" type="assocarray" />
+
+        <!-- monster weapons -->
+        <field id="badger_claw" type="assocarray" />
+        <field id="ankheg_bite" type="assocarray" />
+        <field id="morningstar" type="assocarray" />
+		<field id="javelin" type="assocarray" />
+        <field id="choker_tentacle" type="assocarray" />
+        <field id="raptor_talons" type="assocarray" />
+        <field id="rat_bite" type="assocarray" />
+        <field id="waraxe" type="assocarray" />
+		<field id="shortbow" type="assocarray" />
+        <field id="elemental_slam" type="assocarray" />
+        <field id="longsword" type="assocarray" />
+		<field id="longbow" type="assocarray" />
+        <field id="gargoyle_claw" type="assocarray" />
+        <field id="griffon_bite" type="assocarray" />
+        <field id="shortsword" type="assocarray" />
+		<field id="light_crossbow" type="assocarray" />
+        <field id="hellhound_bite" type="assocarray" />
+        <field id="greatclub" type="assocarray" />
+		<field id="rock" type="assocarray" />
+        <field id="dagger" type="assocarray" />
+		<field id="sling" type="assocarray" />
+        <field id="spider_bite" type="assocarray" />
+        <field id="spear" type="assocarray" />
+        <field id="falchion" type="assocarray" />
+        <field id="owlbear_claw" type="assocarray" />
+        <field id="rust_touch" type="assocarray" />
+        <field id="shadow_touch" type="assocarray" />
+        <field id="scimitar" type="assocarray" />
+        <field id="stirge_touch" type="assocarray" />
+        <field id="golem_slam" type="assocarray" />
+        <field id="troll_claw" type="assocarray" />
+        <field id="werewolf_claw" type="assocarray" />
+        <field id="wight_slam" type="assocarray" />
+        <field id="wolf_bite" type="assocarray" />
+        <field id="sting" type="assocarray" />
+        <field id="zombie_slam" type="assocarray" />
+
+    </interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/MonsterSettings.brs"/>
+</component>
