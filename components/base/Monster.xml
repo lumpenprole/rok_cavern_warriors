@@ -4,6 +4,8 @@
 	<interface>
         <field id="seenPlayer" type="bool" value="false"/>
         <field id="sightLine" type="int" value="5"/>
+        <field id="setMeleeWeapon" type="bool" onChange="setMeleeWeapon" alwaysNotify="true"/>
+        <field id="weapons" type="assocarray"/>
 	</interface>
 
 	<!-- general scripts -->

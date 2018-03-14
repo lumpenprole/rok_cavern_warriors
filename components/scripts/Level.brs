@@ -174,15 +174,27 @@ function collisionCheck(monster, newPosition)
 end function
 
 sub fight(attacker, defender)
-    ?attacker.race;" ";attacker.class;" FIGHTS ";defender.race;" ";defender.class
-    hit = rnd(attacker.hitDice) > defender.armorClass
+    ?attacker.race;" ";attacker.class;" ATTACKS ";defender.race;" ";defender.class;" WITH ";attacker.meleeWeapon;"!"
+    monsterAttack = defender.id = "current_player"
+
+    if monsterAttack
+        attacker.setMeleeWeapon = true
+    end if
+
+    attack = rnd(20) + attacker.attackBonus
+
+    hit = attack > defender.armorClass
     if hit
-        defender.damageTaken = rnd(attacker.damageDice)
-        if defender.id = "current_player"
+        damage = 0
+        for x = 0 to int(attacker.damageDice[0])
+            damage = damage + rnd(attacker.damageDice[1])
+        end for
+        defender.damageTaken = damage
+        if monsterAttack
             fireEvent("statusUpdate")
         end if
         if defender.hitPoints <= 0
-            if defender.id = "current_player"
+            if monsterAttack
                 playerDead()
             else
                 monsterDead(defender)

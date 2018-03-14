@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ItemSettingsNode" extends="Node">
+	<interface>
+        <!-- item settings -->
+        <field id="spiked_chain" type="assocarray" />
+        <field id="falchion" type="assocarray" />
+        <field id="heavy_flail" type="assocarray" />
+        <field id="glaive" type="assocarray" />
+        <field id="greataxe" type="assocarray" />
+        <field id="greatclub" type="assocarray" />
+        <field id="greatsword" type="assocarray" />
+        <field id="guisarme" type="assocarray" />
+        <field id="halberd" type="assocarray" />
+        <field id="lance" type="assocarray" />
+        <field id="longspear" type="assocarray" />
+        <field id="quarterstaff" type="assocarray" />
+        <field id="scythe" type="assocarray" />
+        <field id="spear" type="assocarray" />
+        <field id="unarmed" type="assocarray" />
+        <field id="throwingAxe" type="assocarray" />
+        <field id="dagger" type="assocarray" />
+        <field id="lightHammer" type="assocarray" />
+        <field id="handaxe" type="assocarray" />
+        <field id="lightMace" type="assocarray" />
+        <field id="lightPick" type="assocarray" />
+        <field id="sap" type="assocarray" />
+        <field id="sickle" type="assocarray" />
+        <field id="shortSword" type="assocarray" />
+        <field id="handCrossbow" type="assocarray" />
+        <field id="heavyCrossbow" type="assocarray" />
+        <field id="lightCrossbow" type="assocarray" />
+        <field id="dart" type="assocarray" />
+        <field id="javelin" type="assocarray" />
+        <field id="longbow" type="assocarray" />
+        <field id="shortbow" type="assocarray" />
+        <field id="sling" type="assocarray" />
+        <field id="battleaxe" type="assocarray" />
+        <field id="club" type="assocarray" />
+        <field id="flail" type="assocarray" />
+        <field id="longsword" type="assocarray" />
+        <field id="heavyMace" type="assocarray" />
+        <field id="morningstar" type="assocarray" />
+        <field id="heavyPick" type="assocarray" />
+        <field id="rapier" type="assocarray" />
+        <field id="scimitar" type="assocarray" />
+        <field id="shortspear" type="assocarray" />
+        <field id="bastardSword" type="assocarray" />
+        <field id="trident" type="assocarray" />
+        <field id="dwarvenWaraxe" type="assocarray" />
+        <field id="warhammer" type="assocarray" />
+        <field id="whip" type="assocarray" />
+        <field id="buckler" type="assocarray" />
+        <field id="lightWoodenShield" type="assocarray" />
+        <field id="lightSteelShield" type="assocarray" />
+        <field id="heavyWoodenShield" type="assocarray" />
+        <field id="heavySteelShield" type="assocarray" />
+        <field id="towerShield" type="assocarray" />
+        <field id="padded" type="assocarray" />
+        <field id="leather" type="assocarray" />
+        <field id="studdedLeather" type="assocarray" />
+        <field id="chainShirt" type="assocarray" />
+        <field id="hide" type="assocarray" />
+        <field id="scale" type="assocarray" />
+        <field id="chainmail" type="assocarray" />
+        <field id="breastplate" type="assocarray" />
+        <field id="splint" type="assocarray" />
+        <field id="banded" type="assocarray" />
+        <field id="halfPlate" type="assocarray" />
+        <field id="fullPlate" type="assocarray" />
+    </interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/ItemSettings.brs"/>
+</component>

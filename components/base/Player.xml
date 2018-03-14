@@ -7,6 +7,7 @@
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Player.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/itemUtils.brs"/>
 
     <children>
  	</children>

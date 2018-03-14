@@ -1,0 +1,71 @@
+sub init()
+    processItems()
+end sub
+
+sub processItems()
+    m.top.spiked_chain = {itemType: "twohanded", name: "Chain, spiked", cost: 25, damage_dice_num: 2, damage_dice_type: 4, range: 0}
+    m.top.falchion = {itemType: "twohanded", name: "Falchion", cost: 75, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.heavy_flail = {itemType: "twohanded", name: "Flail, heavy", cost: 15, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.glaive = {itemType: "twohanded", name: "Glaive", cost: 8, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.greataxe = {itemType: "twohanded", name: "Greataxe", cost: 20, damage_dice_num: 1, damage_dice_type: 10, range: 0}
+    m.top.greatclub = {itemType: "twohanded", name: "Greatclub", cost: 5, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.greatsword = {itemType: "twohanded", name: "Greatsword", cost: 50, damage_dice_num: 2, damage_dice_type: 6, range: 0}
+    m.top.guisarme = {itemType: "twohanded", name: "Guisarme", cost: 9, damage_dice_num: 2, damage_dice_type: 4, range: 0}
+    m.top.halberd = {itemType: "twohanded", name: "Halberd", cost: 10, damage_dice_num: 1, damage_dice_type: 10, range: 0}
+    m.top.lance = {itemType: "twohanded", name: "Lance", cost: 10, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.longspear = {itemType: "twohanded", name: "Longspear", cost: 5, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.quarterstaff = {itemType: "twohanded", name: "Quarterstaff", cost: 0, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.scythe = {itemType: "twohanded", name: "Scythe", cost: 18, damage_dice_num: 2, damage_dice_type: 4, range: 0}
+    m.top.spear = {itemType: "twohanded", name: "Spear", cost: 2, damage_dice_num: 1, damage_dice_type: 8, range: 20}
+    m.top.unarmed = {itemType: "light", name: "Unarmed Strike", cost: 0, damage_dice_num: 1, damage_dice_type: 3, range: 0}
+    m.top.throwingAxe = {itemType: "light", name: "Axe, throwing", cost: 8, damage_dice_num: 1, damage_dice_type: 6, range: 10}
+    m.top.dagger = {itemType: "light", name: "Dagger", cost: 2, damage_dice_num: 1, damage_dice_type: 4, range: 10}
+    m.top.lightHammer = {itemType: "light", name: "Hammer, light", cost: 1, damage_dice_num: 1, damage_dice_type: 6, range: 20}
+    m.top.handaxe = {itemType: "light", name: "Handaxe", cost: 6, damage_dice_num: 1, damage_dice_type: 4, range: 0}
+    m.top.lightMace = {itemType: "light", name: "Mace, light", cost: 5, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.lightPick = {itemType: "light", name: "Pick, light", cost: 4, damage_dice_num: 1, damage_dice_type: 4, range: 0}
+    m.top.sap = {itemType: "light", name: "Sap", cost: 1, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.sickle = {itemType: "light", name: "Sickle", cost: 6, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.shortSword = {itemType: "light", name: "Sword, short", cost: 10, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.handCrossbow = {itemType: "ranged", name: "Crossbow, hand", cost: 100, damage_dice_num: 1, damage_dice_type: 4, range: 30}
+    m.top.heavyCrossbow = {itemType: "ranged", name: "Crossbow, heavy", cost: 50, damage_dice_num: 1, damage_dice_type: 10, range: 120}
+    m.top.lightCrossbow = {itemType: "ranged", name: "Crossbow, light", cost: 35, damage_dice_num: 1, damage_dice_type: 8, range: 80}
+    m.top.dart = {itemType: "ranged", name: "Dart", cost: 1, damage_dice_num: 1, damage_dice_type: 4, range: 20}
+    m.top.javelin = {itemType: "ranged", name: "Javelin", cost: 1, damage_dice_num: 1, damage_dice_type: 6, range: 30}
+    m.top.longbow = {itemType: "ranged", name: "Longbow", cost: 75, damage_dice_num: 1, damage_dice_type: 8, range: 100}
+    m.top.shortbow = {itemType: "ranged", name: "Shortbow", cost: 30, damage_dice_num: 1, damage_dice_type: 6, range: 60}
+    m.top.sling = {itemType: "ranged", name: "Sling", cost: 0, damage_dice_num: 1, damage_dice_type: 4, range: 50}
+    m.top.battleaxe = {itemType: "onehanded", name: "Battleaxe", cost: 10, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.club = {itemType: "onehanded", name: "Club", cost: 0, damage_dice_num: 1, damage_dice_type: 6, range: 10}
+    m.top.flail = {itemType: "onehanded", name: "Flail", cost: 8, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.longsword = {itemType: "onehanded", name: "Longsword", cost: 15, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.heavyMace = {itemType: "onehanded", name: "Mace, heavy", cost: 12, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.morningstar = {itemType: "onehanded", name: "Morningstar", cost: 8, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.heavyPick = {itemType: "onehanded", name: "Pick, heavy", cost: 8, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.rapier = {itemType: "onehanded", name: "Rapier", cost: 20, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.scimitar = {itemType: "onehanded", name: "Scimitar", cost: 15, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.shortspear = {itemType: "onehanded", name: "Shortspear", cost: 1, damage_dice_num: 1, damage_dice_type: 6, range: 20}
+    m.top.bastardSword = {itemType: "onehanded", name: "Sword, bastard", cost: 35, damage_dice_num: 1, damage_dice_type: 10, range: 0}
+    m.top.trident = {itemType: "onehanded", name: "Trident", cost: 15, damage_dice_num: 1, damage_dice_type: 8, range: 10}
+    m.top.dwarvenWaraxe = {itemType: "onehanded", name: "Waraxe, dwarven", cost: 30, damage_dice_num: 1, damage_dice_type: 10, range: 0}
+    m.top.warhammer = {itemType: "onehanded", name: "Warhammer", cost: 12, damage_dice_num: 1, damage_dice_type: 8, range: 0}
+    m.top.whip = {itemType: "onehanded", name: "Whip", cost: 1, damage_dice_num: 1, damage_dice_type: 3, range: 0}
+    m.top.buckler = {itemType: "shield", name: "Buckler", cost: 15, bonus: 1 }
+    m.top.lightWoodenShield = {itemType: "shield", name: "Shield, light wooden", cost: 3, bonus: 1 }
+    m.top.lightSteelShield = {itemType: "shield", name: "Shield, light steel", cost: 9, bonus: 1 }
+    m.top.heavyWoodenShield = {itemType: "shield", name: "Shield, heavy wooden", cost: 7, bonus: 2 }
+    m.top.heavySteelShield = {itemType: "shield", name: "Shield, heavy steel", cost: 20, bonus: 2 }
+    m.top.towerShield = {itemType: "shield", name: "Shield, tower", cost: 30, bonus: 4 }
+    m.top.padded = {itemType: "armor", name: "Padded", cost: 2, bonus: 1 }
+    m.top.leather = {itemType: "armor", name: "Leather", cost: 10, bonus: 2 }
+    m.top.studdedLeather = {itemType: "armor", name: "Studded Leather", cost: 25, bonus: 3 }
+    m.top.chainShirt = {itemType: "armor", name: "Chain Shirt", cost: 100, bonus: 4 }
+    m.top.hide = {itemType: "armor", name: "Hide", cost: 15, bonus: 3 }
+    m.top.scale = {itemType: "armor", name: "Scale Mail", cost: 50, bonus: 4 }
+    m.top.chainmail = {itemType: "armor", name: "Chainmail", cost: 150, bonus: 5 }
+    m.top.breastplate = {itemType: "armor", name: "Breastplate", cost: 200, bonus: 5 }
+    m.top.splint = {itemType: "armor", name: "Splint Mail", cost: 200, bonus: 6 }
+    m.top.banded = {itemType: "armor", name: "Banded Mail", cost: 250, bonus: 6 }
+    m.top.halfPlate = {itemType: "armor", name: "Half-plate", cost: 600, bonus: 7 }
+    m.top.fullPlate = {itemType: "armor", name: "Full Plate", cost: 1500, bonus: 8 }
+end sub

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- this is a data node for event results. Created to keep type safety --> 
+<component name="MonsterSettingsNode" extends="Node">
+	<interface>
+        <!-- monster settings -->
+        <!-- animals -->
+	    <field id="badger" type="assocarray" />
+		<field id="black_bear" type="assocarray" />
+		<field id="brown_bear" type="assocarray" />
+		<field id="boar" type="assocarray" />
+		<field id="cat" type="assocarray" />
+		<field id="crocodile" type="assocarray" />
+		<field id="dog" type="assocarray" />
+		<field id="donkey" type="assocarray" />
+		<field id="eagle" type="assocarray" />
+		<field id="giant_crocodile" type="assocarray" />
+		<field id="horse" type="assocarray" />
+		<field id="mule" type="assocarray" />
+		<field id="pony" type="assocarray" />
+		<field id="small_boa_constrictor" type="assocarray" />
+		<field id="giant_boa_constrictor" type="assocarray" />
+		<field id="small_viper" type="assocarray" />
+		<field id="large_viper" type="assocarray" />
+		<field id="huge_viper" type="assocarray" />
+		<field id="war_dog" type="assocarray" />
+		<field id="heavy_warhorse" type="assocarray" />
+		<field id="light_warhorse" type="assocarray" />
+		<field id="warpony" type="assocarray" />
+		<field id="wolf" type="assocarray" />
+		<field id="ankheg" type="assocarray" />
+		<field id="assassin_vine" type="assocarray" />
+		<field id="bugbear" type="assocarray" />
+		<field id="choker" type="assocarray" />
+        <field id="cockatrice" type="assocarray" />
+
+        <!-- dinosaurs -->
+	    <field id="deinonychus" type="assocarray" />
+	    <field id="megaraptor" type="assocarray" />
+	    <field id="triceratops" type="assocarray" />
+	    <field id="tyrannosaurus" type="assocarray" />
+
+        <!-- dire animals -->
+	    <field id="dire_bear" type="assocarray" />
+	    <field id="dire_rat" type="assocarray" />
+	    <field id="dire_wolf" type="assocarray" />
+
+        <!-- dragons -->
+	    <field id="young_red" type="assocarray" />
+	    <field id="very_old_red" type="assocarray" />
+	    <field id="adult_gold" type="assocarray" />
+	    <field id="young_adult_silver" type="assocarray" />
+
+        <!-- creatures -->
+	    <field id="dwarf" type="assocarray" />
+	    <field id="earth_elemental" type="assocarray" />
+	    <field id="elf" type="assocarray" />
+	    <field id="gargoyle" type="assocarray" />
+	    <field id="gelatinous_cube" type="assocarray" />
+	    <field id="ghoul" type="assocarray" />
+	    <field id="gnoll" type="assocarray" />
+	    <field id="goblin" type="assocarray" />
+	    <field id="griffon" type="assocarray" />
+	    <field id="halfling" type="assocarray" />
+	    <field id="hellhound" type="assocarray" />
+	    <field id="hill_giant" type="assocarray" />
+	    <field id="hobgoblin" type="assocarray" />
+	    <field id="human_commoner" type="assocarray" />
+	    <field id="spider" type="assocarray" />
+	    <field id="kobold" type="assocarray" />
+	    <field id="lizardfolk" type="assocarray" />
+	    <field id="ogre" type="assocarray" />
+	    <field id="orc" type="assocarray" />
+	    <field id="owlbear" type="assocarray" />
+	    <field id="shadow" type="assocarray" />
+	    <field id="shambling_mound" type="assocarray" />
+	    <field id="skeleton_warrior" type="assocarray" />
+	    <field id="stirge" type="assocarray" />
+	    <field id="stone_golem" type="assocarray" />
+	    <field id="troll" type="assocarray" />
+	    <field id="werewolf" type="assocarray" />
+	    <field id="wight" type="assocarray" />
+	    <field id="wyvern" type="assocarray" />
+        <field id="zombie" type="assocarray" />
+    </interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/MonsterSettings.brs"/>
+</component>

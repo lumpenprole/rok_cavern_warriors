@@ -37,6 +37,8 @@ sub setup()
     m.global.settings = createObject("roSGNode", "AppSettingsNode")
     m.global.settings.addField("monster", "node", false) 
     m.global.settings.monster = createObject("roSGNode", "MonsterSettingsNode")
+    m.global.settings.addField("items", "node", false) 
+    m.global.settings.items = createObject("roSGNode", "ItemSettingsNode")
     m.tilesetParser = createObject("roSGNode", "rcw_TileLoader")
     m.tilesetParser.tileset_folder_name = m.global.settings.tileset
     m.tilesetParser.observeField("tileset_obj", "tilesetParsed")

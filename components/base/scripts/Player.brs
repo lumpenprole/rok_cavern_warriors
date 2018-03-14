@@ -22,7 +22,7 @@ sub postSetup()
         m.strength = m.strength + m.raceBonus[1]
         m.dexterity = m.dexterity + m.raceBonus[2]
         m.top.hitPoints = m.strength + rnd(6)
-        ?"FINAL HIT POINTS: ";m.top.hitPoints
+        m.top.attackBonus = getStatBonus(m.strength)
         setTile()
     end if
 end sub
@@ -37,6 +37,7 @@ sub setTile()
 end sub
 
 sub processStartingEquipment()
+
     if m.classSettings[m.top.class + "_starting_equipment"] <> invalid
         sEquip = m.classSettings[m.top.class + "_starting_equipment"]
         if sEquip.armor <> invalid
@@ -54,7 +55,13 @@ sub processStartingEquipment()
         if sEquip.boots <> invalid
             loadGloves(m.global.settings.tilemap.boots[sEquip.boots])
         end if
+
+        weaponArr = sEquip.weapon.split("_")
+        modifier = weaponArr[0]
+
+        setWeapon(modifier, weaponArr[1])
     end if
+    setArmorClass(sEquip.armor)
 end sub
 
 sub loadBodyArmor(armorPath as String)
@@ -102,6 +109,29 @@ sub loadBoots(bootsPath as String)
     m.bootsHolder.appendChild(bootsTile)
 end sub
 
-sub levelUp()
-    m.top.hitPoints = m.top.hitPoints + rnd(6)
+sub setArmorClass(armor as String)
+    'TODO: handler armor bonuses per rules
+    m.top.armorClass = getBaseAc() + 2
 end sub
+
+sub setWeapon(modifier, weaponId)
+    details = m.global.settings.items.getField(weaponId)
+    m.top.meleeWeapon = details.name
+    m.top.damageDice = [details.damage_dice_num, details.damage_dice_type]
+end sub
+
+sub levelUp()
+    m.top.level = m.top.level + 1
+    m.top.hitPoints = m.top.hitPoints + rnd(6)
+    m.top.attackBonus = getStatBonus(m.strength) + m.top.level
+end sub
+
+function getBaseAc() 
+    dexBonus = getStatBonus(m.dexterity)
+    return 10 + dexBonus 
+end function
+
+function getStatBonus(stat as Integer)
+    return int((stat - 10)/2)
+end function
+
