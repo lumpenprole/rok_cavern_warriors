@@ -88,8 +88,9 @@ sub playerMove(direction as String)
         end if
     end if
     setTile(m.player, m.playerHolder)
-
     makeVisible(m.player.location, m.player.sightDistance)
+    m.player.timeIncrement = 1
+    fireEvent("statusUpdate")
     moveMonsters()
 end sub
 

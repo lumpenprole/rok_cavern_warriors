@@ -3,6 +3,7 @@
     <!-- I don't think this needs to extend a base page or anything -->
     <interface>
         <field id="sightDistance" type="int" value="5"/>
+        <field id="timeIncrement" type="int" value="0" onChange="handleTimeIncrement" alwaysNotify="true"/>
 	</interface>
 
 	<!-- general scripts -->

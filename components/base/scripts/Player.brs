@@ -4,7 +4,11 @@ sub init()
     m.top.seen = true
     'TODO: ADD SEX OPTION
     m.sex = "male" 
+    m.totalHitpoints = 0
     m.top.level = 1
+    m.healingTimeout = 4
+    m.currentHealingClock = 0
+    m.healingBonus = 0
 end sub
 
 sub onRaceSet()
@@ -21,7 +25,8 @@ sub postSetup()
         m.mind = m.mind + m.raceBonus[0]
         m.strength = m.strength + m.raceBonus[1]
         m.dexterity = m.dexterity + m.raceBonus[2]
-        m.top.hitPoints = m.strength + rnd(6)
+        m.totalHitpoints = m.strength + rnd(6)
+        m.top.hitPoints = m.totalHitPoints
         m.top.attackBonus = getStatBonus(m.strength)
         setTile()
     end if
@@ -134,4 +139,16 @@ end function
 function getStatBonus(stat as Integer)
     return int((stat - 10)/2)
 end function
+
+sub handleTimeIncrement()
+    timeIncrement = m.top.timeIncrement
+    m.currentHealingClock = m.currentHealingClock + timeIncrement
+    if m.currentHealingClock > m.healingTimeout
+        if m.top.hitPoints < m.totalHitpoints
+            m.top.hitPoints = m.top.hitPoints + 1 + m.healingBonus
+        end if
+        m.currentHealingClock = 0
+    end if
+end sub
+
 
