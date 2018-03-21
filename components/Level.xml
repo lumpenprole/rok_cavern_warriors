@@ -2,6 +2,8 @@
 <component name="rcw_Level" extends="Group">
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
+        <field id="levelDepth" type="int" value="-1"/>
+
 		<field id="eventFired" type="node" onChange="eventHandler"/>
 		<field id="settings" type="node" onChange="setupLevel"/>
 		<field id="startPoint" type="intarray" />

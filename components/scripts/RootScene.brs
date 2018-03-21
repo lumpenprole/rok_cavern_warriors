@@ -111,6 +111,7 @@ sub startGame(data as dynamic)
     statusBarSize = 50 'TODO: put in settings
     level0 = createObject("roSGNode", "rcw_Level")
     level0.id = "level0"
+    level0.levelDepth = 0
     m.levelSettings = createObject("roSGNode", "LevelSettingsNode")
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
     m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size, statusBarSize)
@@ -169,6 +170,7 @@ sub goDownstairs()
         currentLevel = m.levelHolder.getChild(m.currentLevel)
         'CREATE NEW LEVEL
         nextLevel = createObject("roSGNode", "rcw_Level")
+        nextLevel.levelDepth = nextLevelNum
         nextLevel.settings = m.levelSettings
         m.levelHolder.appendChild(nextLevel)
         currentHolder = nextLevel.findNode("player_holder")

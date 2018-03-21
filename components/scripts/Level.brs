@@ -251,7 +251,7 @@ sub draw()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.uri = getTilePath("floor0")
+                    tile.uri = getFloorTile()
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
@@ -261,7 +261,7 @@ sub draw()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
                     tile.height = tileSize
-                    tile.uri = getTilePath("wall0")
+                    tile.uri = getWallTile()
                     tile.translation = [tileSize * x, tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
@@ -401,6 +401,30 @@ sub checkActOnTile()
         fireEvent("goUpstairs", {})
     end if
 end sub
+
+function getFloorTile() as String
+    if m.top.levelDepth < 1
+        tileNum = rnd(10) - 1
+        tileName = "sandstone_floor" + tileNum.toStr()
+    else if m.top.levelDepth < 6
+        tileNum = rnd(7) - 1
+        tileName = "floor_vines" + tileNum.toStr()
+    end if
+
+    return getTilePath(tileName)
+end function
+
+function getWallTile() as String
+    if m.top.levelDepth < 1
+        tileNum = rnd(10) - 1
+        tileName = "sandstone_wall" + tileNum.toStr()
+    else if m.top.levelDepth < 6 
+        tileNum = rnd(7) - 1
+        tileName = "wall_vines" + tileNum.toStr()
+    end if
+
+    return getTilePath(tileName)
+end function
 
 function getTilePath(tileName as String) as String
     tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.dungeon[tilename]

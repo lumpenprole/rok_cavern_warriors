@@ -7,7 +7,7 @@
 	    <field id="maxRooms" type="integer" value="7"/>
         <field id="roomMargin" type="integer" value="10"/>
 
-        <!-- settings for my basic level creator -->
+        <!-- settings for my BSP level creator -->
 	    <field id="maxTreeDepth" type="integer" value="5"/>
 	    <field id="dividerBoundary1" type="float" value=".2"/>
 	    <field id="dividerBoundary2" type="float" value=".8"/>
