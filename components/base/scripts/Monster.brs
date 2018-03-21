@@ -12,7 +12,13 @@ sub onRaceSet()
     race = m.top.race
     monsterSettings = m.settings[race]
     m.top.weapons = monsterSettings.weapons
-    m.top.hitPoints = (monsterSettings.hitdice_amount * monsterSettings.dice) + monsterSettings.hitdice_bonus
+    hp = 0
+    for x = 0 to monsterSettings.hitdice_amount
+        hp = hp + rnd(monsterSettings.dice)
+    end for
+    hp = hp + monsterSettings.hitdice_bonus
+    m.top.hitPoints = hp
+    m.top.experience = (monsterSettings.hitdice_amount * monsterSettings.dice) + monsterSettings.hitdice_bonus
     m.top.title = monsterSettings.title
     'TODO: Handle distance vs melee weapons
     m.top.armorClass = monsterSettings.ac

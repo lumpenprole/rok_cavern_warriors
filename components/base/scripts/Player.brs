@@ -128,7 +128,17 @@ end sub
 sub levelUp()
     m.top.level = m.top.level + 1
     m.top.hitPoints = m.top.hitPoints + rnd(6)
-    m.top.attackBonus = getStatBonus(m.strength) + m.top.level
+    m.top.attackBonus =  attackBonus + 1
+
+    if m.top.level MOD 3 = 0
+        if m.top.class = "fighter"
+            m.top.strength = m.top.strength + 1
+        else if m.top.class = "rogue"
+            m.top.dexterity = m.top.dexterity + 1
+        else if m.top.class = "cleric" or m.top.class = "wizard"
+            m.top.mind = m.top.mind _ 1
+        end if
+    end if
 end sub
 
 function getBaseAc() 
@@ -151,4 +161,12 @@ sub handleTimeIncrement()
     end if
 end sub
 
-
+sub handleAddExperience()
+    m.top.experience = m.top.experience + m.top.addExperience
+    ?"EXPERIENCE IS NOW: ";m.top.experience
+    nextLevel = (2 ^ m.top.level) * 50
+    ?"NEXT LEVEL IS: ";nextLevel
+    if m.top.experience > nextLevel
+        levelUp()
+    end if
+end sub

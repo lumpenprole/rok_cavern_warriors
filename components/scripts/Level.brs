@@ -206,6 +206,8 @@ end sub
 
 sub monsterDead(monster)
     ?"MONSTER ";monster.id;" DIES"
+    ?"MONSTER EXP: ";monster.experience
+    m.player.addExperience = monster.experience
     m.top.removeChild(monster)
     for x = 0 to m.monsters.count() - 1
         if m.monsters[x].id = monster.id

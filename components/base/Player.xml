@@ -4,6 +4,7 @@
     <interface>
         <field id="sightDistance" type="int" value="5"/>
         <field id="timeIncrement" type="int" value="0" onChange="handleTimeIncrement" alwaysNotify="true"/>
+        <field id="addExperience" type="int" value="0" onChange="handleAddExperience" alwaysNotify="true"/>
 	</interface>
 
 	<!-- general scripts -->

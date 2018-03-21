@@ -9,6 +9,7 @@
         <field id="location" type="intArray" value="[0,0]"/>
         <field id="hitPoints" type="int" value="0"/>
         <field id="damageDice" type="intArray"/>
+        <field id="experience" type="int"/>
         <field id="attackBonus" type="int" value="0"/>
         <field id="armorClass" type="int" value="5"/>
         <field id="meleeWeapon" type="string"/>
