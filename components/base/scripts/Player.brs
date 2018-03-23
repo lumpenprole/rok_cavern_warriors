@@ -136,7 +136,7 @@ sub levelUp()
         else if m.top.class = "rogue"
             m.top.dexterity = m.top.dexterity + 1
         else if m.top.class = "cleric" or m.top.class = "wizard"
-            m.top.mind = m.top.mind _ 1
+            m.top.mind = m.top.mind + 1
         end if
     end if
 end sub
