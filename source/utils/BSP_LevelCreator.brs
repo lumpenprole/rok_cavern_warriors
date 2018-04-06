@@ -27,7 +27,7 @@ function BSP_walkTree(levelArr as Object, settings as Object) as Object
     'tree consists of of an array of arrays describing squares
     'each square is an array describing [startX, startY, height, width]
     tree = []
-    tree[0] = [[0, 0, levelArr[0].count(), levelArr.count()]]
+    tree[0] = [[0, 0, levelArr[0].count() - 1, levelArr.count() - 1]]
     depth = settings.maxTreeDepth
 
     m.dividerBoundary1 = settings.dividerBoundary1

@@ -126,17 +126,18 @@ sub setWeapon(modifier, weaponId)
 end sub
 
 sub levelUp()
+    ?"LEVEL UP!"
     m.top.level = m.top.level + 1
     m.top.hitPoints = m.top.hitPoints + rnd(6)
-    m.top.attackBonus =  attackBonus + 1
+    m.top.attackBonus =  m.top.attackBonus + 1
 
     if m.top.level MOD 3 = 0
         if m.top.class = "fighter"
-            m.top.strength = m.top.strength + 1
+            m.strength = m.strength + 1
         else if m.top.class = "rogue"
-            m.top.dexterity = m.top.dexterity + 1
+            m.dexterity = m.dexterity + 1
         else if m.top.class = "cleric" or m.top.class = "wizard"
-            m.top.mind = m.top.mind + 1
+            m.mind = m.mind + 1
         end if
     end if
 end sub
@@ -164,7 +165,8 @@ end sub
 sub handleAddExperience()
     m.top.experience = m.top.experience + m.top.addExperience
     ?"EXPERIENCE IS NOW: ";m.top.experience
-    nextLevel = (2 ^ m.top.level) * 50
+    'nextLevel = (2 ^ m.top.level) * 50
+    nextLevel = m.top.level * 10 'TESTING ONLY
     ?"NEXT LEVEL IS: ";nextLevel
     if m.top.experience > nextLevel
         levelUp()
