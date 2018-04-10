@@ -33,8 +33,8 @@ function BSP_walkTree(levelArr as Object, settings as Object) as Object
     m.dividerBoundary1 = settings.dividerBoundary1
     m.dividerBoundary2 = settings.dividerBoundary2
 
-    for x = 0 to depth - 1
-        tree.push(BSP_forkTree(tree[x]))
+    for x = 1 to depth
+        tree.push(BSP_forkTree(tree[x - 1], levelArr))
     end for
 
     returnObj = BSP_createRooms(tree, levelArr, settings)
@@ -43,32 +43,34 @@ function BSP_walkTree(levelArr as Object, settings as Object) as Object
     return returnObj
 end function
 
-function BSP_forkTree(tree as Object) as Object
-    newTree = []
-    for x = 0 to tree.count() - 1
-        newTree.append(BSP_splitSquare(tree[x]))
+'levelArr is only in for testing. Remove when done. 
+function BSP_forkTree(level as Object, levelArr) as Object
+    newLevel = []
+    for x = 0 to level.count() - 1
+        newLevel.append(BSP_splitSquare(level[x]))
     end for
 
-    return newTree
+    return newLevel
 end function
 
 function BSP_splitSquare(square as Object) as Object
+    'square is an array describing [startX, startY, height, width]
     horiz = rnd(2)
     bound1 = m.dividerBoundary1
     bound2 = m.dividerBoundary2
     square1 = []
     square2 = []
+    width = square[3]
+    height = square[2]
 
     if horiz = 1 'horizontal
-        width = square[3]
-        height1 = getRandomRange(cInt(square[2] * bound1), cInt(square[2] * bound2))
-        height2 = square[2] - height1
+        height1 = getRandomRange(cInt(height * bound1), cInt(height * bound2))
+        height2 = height - height1
         square1 = [square[0], square[1], height1, width]
         square2 = [square[0], square[1] + height1, height2, width]
     else 'vertical
-        height = square[2]
-        width1 = getRandomRange(cInt(square[3] * bound1), cInt(square[3] * bound2))
-        width2 = square[3] - width1
+        width1 = getRandomRange(cInt(width * bound1), cInt(width * bound2))
+        width2 = width - width1
         square1 = [square[0], square[1], height, width1]
         square2 = [square[0] + width1, square[1], height, width2]
     end if
