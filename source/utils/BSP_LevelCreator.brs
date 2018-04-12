@@ -152,7 +152,7 @@ function BSP_createRooms(tree as Object, levelArr as Object, settings as Object)
             levelArr[rightEdge][bottomEdge] = "wall:none"
         end for
     end for
-
+    
     'set up stairs arbitrairily in the start room
     upRoomNum = rnd(rooms.count()) - 1
     uRoom = rooms[upRoomNum]
@@ -163,10 +163,12 @@ function BSP_createRooms(tree as Object, levelArr as Object, settings as Object)
     while downRoomNum = upRoomNum
         downRoomNum = rnd(rooms.count() - 1)
     end while
-
+    
     dRoom = rooms[downRoomNum]
+    ?"DOWN ROOM: ";downRoomNum
     dLoc = BSP_placeRandomlyInRoom(dRoom)
-    levelArr[dRoom[0]][dRoom[1]] = "downstairs:none"
+    levelArr[dLoc[0]][dLoc[1]] = "downstairs:none"
+    ?"DOWN LOCATION: ";dLoc
 
     return {levelArr:levelArr, rooms:rooms, upstairs:upLoc, downstairs:dLoc}
 
@@ -239,7 +241,7 @@ end function
 
 sub BSP_addCorridorFloor(x, y, levelArr) as Object
     tileType = levelArr[x, y].split(":")[0]
-    if tileType <> "upstairs"
+    if tileType <> "upstairs" and tileType <> "downstairs"
         levelArr[x, y] = "floor:none"
     end if
     return levelArr
@@ -254,13 +256,13 @@ end function
 
 function BSP_placeRandomlyInRoom(room as Object) as Object
     'room is an array describing [startX, startY, height, width]
-    sX = room[0] + 1
-    sY = room[1] + 1
-    w = sX + (room[3] - 1)
-    h = sY + (room[2] - 1)
+    sX = room[0]
+    sY = room[1]
+    w = sX + (room[3])
+    h = sY + (room[2])
 
-    newX = getRandomRange(sX, w)
-    newY = getRandomRange(sY, h)
+    newX = getRandomRange(sX + 1, w - 1)
+    newY = getRandomRange(sY + 1, h - 1)
     
     return [newX, newY]
 end function

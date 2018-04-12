@@ -174,8 +174,9 @@ function collisionCheck(monster, newPosition)
 
 end function
 
-sub fight(attacker, defender)
+sub fight(attacker as Object, defender as Object)
     ?attacker.race;" ";attacker.class;" ATTACKS ";defender.race;" ";defender.class;" WITH ";attacker.meleeWeapon;"!"
+    fireAttackAnimation(attacker, defender)
     monsterAttack = defender.id = "current_player"
 
     if monsterAttack
@@ -441,14 +442,17 @@ end function
 
 function placeRandomlyInRoom(room as Object) as Object
     'room is an array describing [startX, startY, height, width]
-    sX = room[0] + 1
-    sY = room[1] + 1
-    w = sX + (room[3] - 1)
-    h = sY + (room[2] - 1)
+    sX = room[0]
+    sY = room[1]
+    w = sX + (room[3])
+    h = sY + (room[2])
 
-    newX = getRandomRange(sX, w)
-    newY = getRandomRange(sY, h)
+    newX = getRandomRange(sX + 1, w - 1)
+    newY = getRandomRange(sY + 1, h - 1)
     
     return [newX, newY]
 end function
 
+sub fireAttackAnimation(attacker as Object, attacked as Object)
+
+end sub
