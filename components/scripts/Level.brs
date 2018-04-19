@@ -407,11 +407,11 @@ end sub
 
 function getFloorTile() as String
     if m.top.levelDepth < 1
-        tileNum = rnd(10) - 1
-        tileName = "sandstone_floor" + tileNum.toStr()
+        tileNum = rnd(9) - 1
+        tileName = "sand_floor" + tileNum.toStr()
     else if m.top.levelDepth < 3
-        tileNum = rnd(7) - 1
-        tileName = "floor_nerves" + tileNum.toStr()
+        tileNum = rnd(8) - 1
+        tileName = "grey_dirt_floor" + tileNum.toStr()
     else if m.top.levelDepth < 6
         tileNum = rnd(7) - 1
         tileName = "floor_vines" + tileNum.toStr()
@@ -422,11 +422,11 @@ end function
 
 function getWallTile() as String
     if m.top.levelDepth < 1
-        tileNum = rnd(10) - 1
-        tileName = "sandstone_wall" + tileNum.toStr()
+        tileNum = rnd(8) - 1
+        tileName = "brick_brown_wall" + tileNum.toStr()
     else if m.top.levelDepth < 3 
-        tileNum = rnd(7) - 1
-        tileName = "wall_flesh" + tileNum.toStr()
+        tileNum = rnd(4) - 1
+        tileName = "brick_gray_wall" + tileNum.toStr()
     else if m.top.levelDepth < 6 
         tileNum = rnd(7) - 1
         tileName = "wall_vines" + tileNum.toStr()
