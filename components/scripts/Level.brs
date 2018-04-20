@@ -453,6 +453,21 @@ function placeRandomlyInRoom(room as Object) as Object
     return [newX, newY]
 end function
 
-sub fireAttackAnimation(attacker as Object, attacked as Object)
+sub fireAttackAnimation(attacker as Object, defender as Object)
+    aX = attacker.location[0]
+    aY = attacker.location[1]
+    dX = defender.location[0]
+    dY = defender.location[1]
 
+    if aX < dX
+        direction = "right"
+    else if aX > dX
+        direction = "left"
+    else if aY < dY
+        direction = "down"
+    else if aY > dY
+        direction = "up"
+    end if
+
+    attacker.fireCombatAnim = direction
 end sub

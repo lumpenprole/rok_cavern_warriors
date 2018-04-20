@@ -8,6 +8,7 @@ sub init()
     m.helmetHolder = m.top.findNode("helmet_holder")
     m.glovesHolder = m.top.findNode("gloves_holder")
     m.bootsHolder = m.top.findNode("boots_holder")
+    m.mobHolder = m.top.findNode("mob_holder")
     rect = CreateObject("roSGNode", "Rectangle")
     rect.width = m.tileSize
     rect.height = m.tileSize
@@ -19,6 +20,8 @@ sub init()
     m.mind = rollStat()
     m.strength = rollStat()
     m.dexterity = rollStat()
+    m.combatAnimation = m.top.findNode("combat_animation")
+    m.combatVector = m.top.findNode("combat_vector")
 end sub
 
 sub onClassSet()
@@ -114,3 +117,23 @@ function rollStat() as Integer
     return stat
 end function
 
+sub handleCombatAnim()
+    dir = m.top.fireCombatAnim
+    moveChange = 10
+
+    aX = m.mobHolder.translation[0]
+    aY = m.mobHolder.translation[1]
+
+    if dir = "left"
+        kV = [[aX, aY], [aX - moveChange, aY], [aX, aY]]
+    else if dir = "right"
+        kV = [[aX, aY], [aX + moveChange, aY], [aX, aY]]
+    else if dir = "up"
+        kV = [[aX, aY], [aX, aY - moveChange], [aX, aY]]
+    else if dir = "down"
+        kV = [[aX, aY], [aX, aY + moveChange], [aX, aY]]
+    end if
+
+    m.combatVector.keyValue = kV
+    m.combatAnimation.control = "start"
+end sub    

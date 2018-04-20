@@ -16,21 +16,33 @@
         <field id="rangedWeapon" type="string"/>
         <field id="seen" type="bool" value="false" onChange="onSeenSet" alwaysNotify="true"/>
         <field id="damageTaken" type="int" value="0" onChange="onDamageTaken" alwaysNotify="true"/>
+        <field id="fireCombatAnim" type="string" onChange="handleCombatAnim" alwaysNotify="true"/>
 	</interface>
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Mob.brs"/>
 
     <children>
-        <Group id="bg_holder" />
-        <Group id="tile_holder" />
-        <Group id="boots_holder" />
-        <Group id="body_armor_holder" />
-        <Group id="pants_holder" />
-        <Group id="helmet_holder" />
-        <Group id="gloves_holder" />
+        <Group id="mob_holder">
+            <Group id="bg_holder" />
+            <Group id="tile_holder" />
+            <Group id="boots_holder" />
+            <Group id="body_armor_holder" />
+            <Group id="pants_holder" />
+            <Group id="helmet_holder" />
+            <Group id="gloves_holder" />
+        </Group>
+        <Animation
+            id="combat_animation"
+            duration="0.3"
+            repeat="false"
+            easeFunction="linear">
+            <Vector2DFieldInterpolator
+                id = "combat_vector"
+                key="[0, 0.5, 1]"
+                fieldToInterp="mob_holder.translation"/>
+        </Animation>
  	</children>
-
 </component>
 
 
