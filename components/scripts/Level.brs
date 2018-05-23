@@ -61,6 +61,9 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
             end if
         else if key = "left" or key = "right" or key = "up" or key = "down"
             playerMove(key)
+        else if key = "play"
+            pd = getPlayerData()
+            fireEvent("handleGameModalOnOff", {playerData: pd})
         end if
     end if
     return handled
@@ -471,3 +474,11 @@ sub fireAttackAnimation(attacker as Object, defender as Object)
 
     attacker.fireCombatAnim = direction
 end sub
+
+function getPlayerData() as Object
+    pObj = {}
+    pObj.class = m.player.class
+    pObj.race = m.player.race
+    pObj.hp = m.player.hp
+end function 
+

@@ -25,6 +25,7 @@ sub setup()
     m.playerHolder = m.top.findNode("player_holder")
     m.monsterHolder = m.top.findNode("monster_holder")
     m.statusBarHolder = m.top.findNode("status_holder")
+    m.modalHolder = m.top.findNode("modal_holder")
 
     subscribe("startGame", m.top.id)
     subscribe("goDownstairs", m.top.id)
@@ -138,7 +139,13 @@ sub startGame(data as dynamic)
     m.statusBarHolder.appendChild(m.statusBar)
 
     charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
-    m.top.removeChild(charSelect) 
+    m.top.removeChild(charSelect)
+
+    m.gameModal = CreateObject("roSGNode", "rcw_GameModal")
+    m.gameModal.visible = false
+    m.gameModal.translation = [200,200]
+    subscribe("handleGameModalOnOff", m.gameModal.id)
+    m.modalHolder.appendChild(m.gameModal)
 
     m.levelHolder.appendChild(level0)
     level0.settings = m.levelSettings 
@@ -147,9 +154,6 @@ sub startGame(data as dynamic)
     player.id = "current_player"
     player.class = data.class
     player.race = data.race
-
-    'm.playerHolder.appendChild(player) This probably isn't the way to go.
-    'I'm thinking I need to put the player in the level to check walls, etc. 
 
     currentHolder = level0.findNode("player_holder")
     currentHolder.appendChild(player)

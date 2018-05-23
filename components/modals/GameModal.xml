@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_GameModal" extends="Group">
+	<interface>
+		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+	</interface>
+
+    <script type="text/brightscript"  uri="pkg:/components/modals/scripts/GameModal.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+
+    <children>
+        <Group id="tab_holder" translation="[0,0]" />
+        <Group id="screen_holder" translation="[0,0]" />
+        <Rectangle width="500" height="500" color="0x6959FFFF" />
+ 	</children>
+</component>
+
+
