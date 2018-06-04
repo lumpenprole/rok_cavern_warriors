@@ -9,10 +9,11 @@ sub init()
 end sub
 
 sub setup()
-    'I'm probably going to have to refactor this to be a true
-    'queue. But I really want to get something moving now. 
-    m.global.addField("event", "node", true)
-    m.global.observeField("event", "handleEvent")
+    m.global.addField("event", "array", true)
+    m.global.addField("eventFlag", "string", true)
+    m.global.event = []
+    m.global.eventFlag = ""
+    m.global.observeField("eventFlag", "handleEvent")
 
     'Event node:
     'id: A unique id that's used in identifying the event. I'm not sure we need it, but we might want to cancel events
@@ -72,18 +73,23 @@ end sub
 
 'This will basically be the event lookup table
 sub handleEvent()
-    ev = m.global.event
-    evType = ev.evType
-    data = ev.data
-    if evType = "subscribe"
-        'TODO: check for fields and throw error if they don't exist.
-        subscribe(data.evType, data.nodeId)
-    else if evType = "unsubscribe"
-        'TODO: check for fields and throw error if they don't exist.
-        unsubscribe(data.evType, data.nodeId)
-    else
-        broadcastEvent(evType, data)
-    end if
+    ?"EVENT LIST: ";m.global.event.count()
+    while m.global.event.count() > 0
+        queue = m.global.event
+        ev = queue.pop()
+        evType = ev.evType
+        data = ev.data
+        if evType = "subscribe"
+            'TODO: check for fields and throw error if they don't exist.
+            subscribe(data.evType, data.nodeId)
+        else if evType = "unsubscribe"
+            'TODO: check for fields and throw error if they don't exist.
+            unsubscribe(data.evType, data.nodeId)
+        else
+            broadcastEvent(evType, data)
+        end if
+        m.global.event = queue
+    end while
 end sub
 
 'broadcast event to all subscribers
@@ -116,7 +122,7 @@ sub startGame(data as dynamic)
     m.levelSettings = createObject("roSGNode", "LevelSettingsNode")
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
     m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size, statusBarSize)
-    ?"GRID SIZE: ";m.global.grid[0]
+    subscribe("handleGameModalOnOff", level0.id)
     
     bottom = m.screenSize[0] - statusBarSize
     ?"BOTTOM: ";bottom
@@ -145,6 +151,7 @@ sub startGame(data as dynamic)
     m.gameModal.visible = false
     m.gameModal.translation = [600,100]
     subscribe("handleGameModalOnOff", m.gameModal.id)
+    subscribe("modalKeyEvent", m.gameModal.id)
     m.modalHolder.appendChild(m.gameModal)
 
     m.levelHolder.appendChild(level0)
@@ -177,6 +184,7 @@ sub goDownstairs()
         nextLevel.levelDepth = nextLevelNum
         nextLevel.settings = m.levelSettings
         m.levelHolder.appendChild(nextLevel)
+        subscribe("handleGameModalOnOff", nextLevel.id)
         currentHolder = nextLevel.findNode("player_holder")
         currentHolder.appendChild(player)
         nextLevel.playerSet = true

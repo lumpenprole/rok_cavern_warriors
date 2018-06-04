@@ -8,21 +8,37 @@ end sub
 
 sub onEventCallback()
     ev = m.top.eventCallBack
+    et = ev.evType
     
-    if ev.evType = "handleGameModalOnOff"
+    if et = "handleGameModalOnOff"
         handleGameModalOnOff(ev.data)
+    else if et = "modalKeyEvent"
+        handleModalKeyEvent(ev.data)
     end if
 end sub
 
 sub handleGameModalOnOff(data as object)
     if m.top.visible
+        ?"TURNING GAME MODAL OFF!"
         m.top.visible = false
     else
+        ?"TURNING GAME MODAL ON!"
         m.top.visible = true
         for each key in data.playerData
             ?key;": ";data.playerData[key]
         end for
         updateData()
+    end if
+end sub
+
+sub handleModalKeyEvent(keyHolder as object)
+    key = keyHolder.key
+    press = keyHolder.press
+    if press
+        if key = "play"
+            ?"GOT PLAY"
+            fireEvent("handleGameModalOnOff", {})
+        end if
     end if
 end sub
 

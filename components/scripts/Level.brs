@@ -11,6 +11,8 @@ sub setupLevel()
     settings = m.top.settings
     appSettings = m.global.settings
 
+    m.modalOn = false
+
     grid = m.global.grid
 
     'creator = LevelCreator()
@@ -53,17 +55,21 @@ end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
-    if press then
-        if key = "OK"
-            if not m.playerHasDied
-                checkActOnTile()
-                handled = true
+    if m.modalOn
+        fireEvent("modalKeyEvent", {key: key, press: press})
+    else
+        if press then
+            if key = "OK"
+                if not m.playerHasDied
+                    checkActOnTile()
+                    handled = true
+                end if
+            else if key = "left" or key = "right" or key = "up" or key = "down"
+                playerMove(key)
+            else if key = "play"
+                pd = getPlayerData()
+                fireEvent("handleGameModalOnOff", {playerData: pd})
             end if
-        else if key = "left" or key = "right" or key = "up" or key = "down"
-            playerMove(key)
-        else if key = "play"
-            pd = getPlayerData()
-            fireEvent("handleGameModalOnOff", {playerData: pd})
         end if
     end if
     return handled
@@ -494,3 +500,16 @@ function getPlayerData() as Object
     return pObj
 end function 
 
+sub onEventCallback(data as Object)
+    ev = m.top.eventCallBack
+    et = ev.evType
+
+    if et = "handleGameModalOnOff"
+        ?"RECIEVED MODAL EVENT!!!!!!!!!!!!!!"
+        if m.modalOn
+            m.modalOn = false
+        else 
+            m.modalOn = true
+        end if
+    end if
+end sub

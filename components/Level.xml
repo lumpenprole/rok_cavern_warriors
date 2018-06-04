@@ -4,7 +4,8 @@
 	<interface>
         <field id="levelDepth" type="int" value="-1"/>
 
-		<field id="eventFired" type="node" onChange="eventHandler"/>
+        <field id="eventFired" type="node" onChange="eventHandler"/>
+		<field id="eventCallback" type="node" onChange="onEventCallback"/>
 		<field id="settings" type="node" onChange="setupLevel"/>
 		<field id="startPoint" type="intarray" />
 		<field id="playerSet" type="bool" value="false" onChange="onPlayerSet" />

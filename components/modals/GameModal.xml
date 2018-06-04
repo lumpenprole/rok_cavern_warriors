@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="rcw_GameModal" extends="Group">
 	<interface>
+        <field id="eventFired" type="node" onChange="eventHandler"/>
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
 	</interface>
 
