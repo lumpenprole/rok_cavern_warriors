@@ -8,9 +8,13 @@
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>
-        <Group id="tab_holder" translation="[0,0]" />
-        <Group id="screen_holder" translation="[0,0]" />
-        <Rectangle width="500" height="500" color="0x6959FFFF" />
+        <Rectangle width="600" height="800" color="0x6959FFFF" />
+        <Group id="screen_holder" translation="[0,50]" />
+        <Group id="tab_holder" translation="[0,0]">
+            <rcw_GameModalTab id="tab_0" translation="[0,0]" />
+            <rcw_GameModalTab id="tab_1" translation="[200,0]" />
+            <rcw_GameModalTab id="tab_2" translation="[400,0]" />
+        </Group>
  	</children>
 </component>
 

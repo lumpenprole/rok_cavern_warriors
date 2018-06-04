@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_GameModalTab" extends="Group">
+	<interface>
+        <field id="selected" type="bool" onChange="handleSelected" />
+        <field id="labelTxt" type="string" onChange="handleLabel" />
+	</interface>
+
+    <script type="text/brightscript"  uri="pkg:/components/modals/scripts/GameModalTab.brs"/>
+
+    <children>
+        <Rectangle width="200" height="50" color="0x69FFFFFF" id="bg"/>
+        <Label width="200" height="50" horizAlign="center" vertAlign="center" id="tabLabel" color="0xFFFFFFFF" />
+ 	</children>
+</component>
+
+
+

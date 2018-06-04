@@ -3,6 +3,7 @@ sub init()
     m.top.id = "GameModal"
     m.top.visible = false
     'TODO: Set the size of this from the root and make it relative
+    setupTabs()
 end sub
 
 sub onEventCallback()
@@ -26,4 +27,12 @@ sub handleGameModalOnOff(data as object)
 end sub
 
 sub updateData()
+end sub
+
+sub setupTabs()
+    txts = ["Char", "Inv", "Game"]
+    for t = 0 to 2
+        tb = m.top.findNode("tab_" + t.toStr())
+        tb.labelTxt = txts[t]
+    end for
 end sub

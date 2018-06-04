@@ -143,7 +143,7 @@ sub startGame(data as dynamic)
 
     m.gameModal = CreateObject("roSGNode", "rcw_GameModal")
     m.gameModal.visible = false
-    m.gameModal.translation = [200,200]
+    m.gameModal.translation = [600,100]
     subscribe("handleGameModalOnOff", m.gameModal.id)
     m.modalHolder.appendChild(m.gameModal)
 

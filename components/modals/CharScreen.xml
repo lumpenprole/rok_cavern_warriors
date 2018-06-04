@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_CharScreen" extends="Group">
+	<interface>
+		<field id="screenData" type="assocarray" onChange="handleData"/>
+	</interface>
+
+    <script type="text/brightscript"  uri="pkg:/components/modals/scripts/CharScreen.brs"/>
+
+    <children>
+        <Label id="testLabel" />
+ 	</children>
+</component>
+

@@ -479,6 +479,18 @@ function getPlayerData() as Object
     pObj = {}
     pObj.class = m.player.class
     pObj.race = m.player.race
-    pObj.hp = m.player.hp
+    pObj.hp = m.player.hitPoints
+    pObj.level = m.player.level
+    pObj.xp = m.player.experience
+    pObj.ac = m.player.armorClass
+    pObj.inv = {
+        melee: m.player.meleeWeapon
+        ranged: m.player.rangedWeapon
+        armor: "TBD"
+        sack:[
+            {TBD: "tbd"}
+            ]
+        }
+    return pObj
 end function 
 
