@@ -956,4 +956,6 @@ sub processMonsters()
                         bonus: 1
                        }},
 			 title: "Zombie"}
+
+    m.top.monsterLevels =[["badger", "dire_rat", "goblin", "kobold",]]
 end sub

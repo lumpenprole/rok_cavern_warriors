@@ -9,11 +9,17 @@ sub init()
 end sub
 
 sub setup()
-    m.global.addField("event", "array", true)
-    m.global.addField("eventFlag", "string", true)
-    m.global.event = []
-    m.global.eventFlag = ""
-    m.global.observeField("eventFlag", "handleEvent")
+    eventTimer = createObject("roSGNode", "Timer")
+    eventTimer.duration = .01
+    eventTimer.repeat = false
+    eventTimer.observeField("fire", "handleEvent")
+
+    m.global.addFields({
+        events: {
+            timer: eventTimer,
+            queue: []
+        }
+    })
 
     'Event node:
     'id: A unique id that's used in identifying the event. I'm not sure we need it, but we might want to cancel events
@@ -73,9 +79,8 @@ end sub
 
 'This will basically be the event lookup table
 sub handleEvent()
-    ?"EVENT LIST: ";m.global.event.count()
-    while m.global.event.count() > 0
-        queue = m.global.event
+    if m.global.events.queue.count() > 0
+        queue = m.global.events.queue
         ev = queue.pop()
         evType = ev.evType
         data = ev.data
@@ -88,13 +93,12 @@ sub handleEvent()
         else
             broadcastEvent(evType, data)
         end if
-        m.global.event = queue
-    end while
+        m.global.events.queue = queue
+    end if
 end sub
 
 'broadcast event to all subscribers
 sub broadcastEvent(evType as String, data as dynamic)
-    ?"Firing event result handler for event : ";evType
     callbackNode = createObject("roSGNode", "EventCallbackNode")
     callbackNode.evType = evType
     callbackNode.data = data
@@ -125,7 +129,6 @@ sub startGame(data as dynamic)
     subscribe("handleGameModalOnOff", level0.id)
     
     bottom = m.screenSize[0] - statusBarSize
-    ?"BOTTOM: ";bottom
     m.statusBarHolder.translation = [0, bottom]
     rect = CreateObject("roSGNode", "Rectangle")
     rect.width = m.screenSize[1]
@@ -150,6 +153,7 @@ sub startGame(data as dynamic)
     m.gameModal = CreateObject("roSGNode", "rcw_GameModal")
     m.gameModal.visible = false
     m.gameModal.translation = [600,100]
+    m.gameModal.id = "mainModal"
     subscribe("handleGameModalOnOff", m.gameModal.id)
     subscribe("modalKeyEvent", m.gameModal.id)
     m.modalHolder.appendChild(m.gameModal)
@@ -171,8 +175,6 @@ end sub
 
 sub goDownstairs()
     nextLevelNum = m.currentLevel + 1
-    ?"NEXT LEVEL: ";nextLevelNum
-    ?"LEVEL COUNT: ";m.levelHolder.getChildCount() - 1
     currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
     player = currentPlayerHolder.findNode("current_player")
     currentPlayerHolder.removeChildren(player)

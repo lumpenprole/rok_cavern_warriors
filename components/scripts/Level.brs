@@ -505,7 +505,6 @@ sub onEventCallback(data as Object)
     et = ev.evType
 
     if et = "handleGameModalOnOff"
-        ?"RECIEVED MODAL EVENT!!!!!!!!!!!!!!"
         if m.modalOn
             m.modalOn = false
         else 
