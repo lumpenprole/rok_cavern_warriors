@@ -9,7 +9,7 @@
 
     <children>
         <Rectangle width="200" height="50" color="0x69FFFFFF" id="bg"/>
-        <Label width="200" height="50" horizAlign="center" vertAlign="center" id="tabLabel" color="0xFFFFFFFF" />
+        <Label width="200" height="50" horizAlign="center" vertAlign="center" id="tabLabel" color="0x000000FF" />
  	</children>
 </component>
 

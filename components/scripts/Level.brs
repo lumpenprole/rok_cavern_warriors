@@ -56,7 +56,7 @@ end sub
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
     if m.modalOn
-        fireEvent("modalKeyEvent", {key: key, press: press})
+        fireEvent("modalKeyEvent", {key: key, press: press, player: m.player})
     else
         if press then
             if key = "OK"

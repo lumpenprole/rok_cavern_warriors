@@ -10,7 +10,11 @@
 
     <children>
         <Rectangle width="600" height="800" color="0x6959FFFF" />
-        <Group id="screen_holder" translation="[0,50]" />
+        <Group id="screen_holder" translation="[0,50]">
+            <rcw_CharScreen id="char_screen" translation="[0,50]" />
+            <rcw_InvScreen id="inv_screen" translation="[0,50]" />
+            <rcw_optScreen id="opt_screen" translation="[0,50]" />
+        </Group>
         <Group id="tab_holder" translation="[0,0]">
             <rcw_GameModalTab id="tab_0" translation="[0,0]" />
             <rcw_GameModalTab id="tab_1" translation="[200,0]" />
