@@ -184,7 +184,7 @@ function collisionCheck(monster, newPosition)
 end function
 
 sub fight(attacker as Object, defender as Object)
-    ?attacker.race;" ";attacker.class;" ATTACKS ";defender.race;" ";defender.class;" WITH ";attacker.meleeWeapon;"!"
+    ?attacker.race;" ";attacker.class;" ATTACKS ";defender.race;" ";defender.class;" WITH ";attacker.mainHand;"!"
     fireAttackAnimation(attacker, defender)
     monsterAttack = defender.id = "current_player"
 
@@ -490,9 +490,10 @@ function getPlayerData() as Object
     pObj.xp = m.player.experience
     pObj.ac = m.player.armorClass
     pObj.inv = {
-        melee: m.player.meleeWeapon
+        mainHand: m.player.mainHand
+        offHand: m.player.offHand
         ranged: m.player.rangedWeapon
-        armor: "TBD"
+        armor: m.player.armorArray
         sack:[
             {TBD: "tbd"}
             ]

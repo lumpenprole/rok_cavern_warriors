@@ -41,24 +41,35 @@ sub setTile()
     processStartingEquipment()
 end sub
 
-sub processStartingEquipment()
-
+sub processStartingEquipment() 'TODO: Update tilemap to reflect new slot names
+    armorArray = {
+        torso: "None",
+        legs: "None",
+        head: "None",
+        gloves: "None",
+        boots: "None"
+    }
     if m.classSettings[m.top.class + "_starting_equipment"] <> invalid
         sEquip = m.classSettings[m.top.class + "_starting_equipment"]
-        if sEquip.armor <> invalid
-            loadBodyArmor(m.global.settings.tilemap.armor[sEquip.armor])
+        if sEquip.torso <> invalid
+            loadBodyArmor(m.global.settings.tilemap.armor[sEquip.torso])
+            armorArray.torso = sEquip.torso
         end if
-        if sEquip.pants <> invalid
-            loadPants(m.global.settings.tilemap.pants[sEquip.pants])
+        if sEquip.legs <> invalid
+            loadPants(m.global.settings.tilemap.pants[sEquip.legs])
+            armorArray.legs = sEquip.legs
         end if
-        if sEquip.helmet <> invalid
-            loadHelmet(m.global.settings.tilemap.helmet[sEquip.helmet])
+        if sEquip.head <> invalid
+            loadHelmet(m.global.settings.tilemap.helmet[sEquip.head])
+            armorArray.head = sEquip.head
         end if
         if sEquip.gloves <> invalid
             loadGloves(m.global.settings.tilemap.gloves[sEquip.gloves])
+            armorArray.gloves = sEquip.gloves
         end if
         if sEquip.boots <> invalid
-            loadGloves(m.global.settings.tilemap.boots[sEquip.boots])
+            loadBoots(m.global.settings.tilemap.boots[sEquip.boots])
+            armorArray.boots = sEquip.boots
         end if
 
         weaponArr = sEquip.weapon.split("_")
@@ -66,7 +77,8 @@ sub processStartingEquipment()
 
         setWeapon(modifier, weaponArr[1])
     end if
-    setArmorClass(sEquip.armor)
+    m.top.armorArray = armorArray
+    setArmorClass(sEquip.torso)
 end sub
 
 sub loadBodyArmor(armorPath as String)
@@ -121,7 +133,7 @@ end sub
 
 sub setWeapon(modifier, weaponId)
     details = m.global.settings.items.getField(weaponId)
-    m.top.meleeWeapon = details.name
+    m.top.mainHand = details.name
     m.top.damageDice = [details.damage_dice_num, details.damage_dice_type]
 end sub
 

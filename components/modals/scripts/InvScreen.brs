@@ -7,14 +7,16 @@ sub handleData()
     textBox = m.top.findNode("INVENTORY")
     txt = ""
     invData = m.top.screenData.playerData.inv
-    for each key in invData
-        if key <> "sack"
-            ?"inv ";key;": ";invData[key]
-            txt = txt + key + ": " + invData[key] + chr(10)
-        end if
-    end for
-
-    txt = chr(10) + "SACK: " + chr(10)
+    armor = invData.armor
+    txt = txt + "Main Hand: " + invData.mainHand + chr(10)
+    txt = txt + "Off Hand: " + invData.offHand + chr(10)
+    txt = txt + "Armor: " + chr(10)
+    txt = txt + chr(9) + "Head: " + armor.head + chr(10) 
+    txt = txt + chr(9) + "Torso: " + armor.torso + chr(10)
+    txt = txt + chr(9) + "Legs: " + armor.legs + chr(10)
+    txt = txt + chr(9) + "Gloves: " + armor.gloves + chr(10)
+    txt = txt + chr(9) + "Boots: " + armor.boots + chr(10)
+    txt = txt + chr(10) + "SACK: " + chr(10)
 
     sack = invData.sack
     for s = 0 to sack.count() - 1
