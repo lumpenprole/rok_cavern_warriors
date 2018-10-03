@@ -9,5 +9,5 @@ sub init()
     m.top.ranger_starting_equipment = {torso: "beatup_leather", legs: "beatup_leather_pants", weapon: "rusty_dagger"}
     m.top.rogue_starting_equipment = {torso: "beatup_leather", legs: "beatup_leather_pants", weapon: "rusty_dagger"}
     m.top.sorcerer_starting_equipment = {torso: "thin_wizard_robe", head: "patchy_wizard_hat", weapon: "weak_quarterstaff"}
-    m.top.wizard_starting_equipment = {torso: "thin_wizard_robe", head: "patchy_wizard_hat", weapon: "rusty_quarterstaff"}
+    m.top.wizard_starting_equipment = {torso: "thin_wizard_robe", head: "patchy_wizard_hat", weapon: "rusty_quarterstaff", ranged: "spell@magic_missle"}
 end sub

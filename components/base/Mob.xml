@@ -14,7 +14,8 @@
         <field id="armorClass" type="int" value="5"/>
         <field id="mainHand" type="string"/>
         <field id="offHand" type="string"/>
-        <field id="rangedWeapon" type="string"/>
+        <field id="rangedWeapon" type="string" value="none"/>
+        <field id="rangedWeaponType" type="string" value="none"/>
         <field id="seen" type="bool" value="false" onChange="onSeenSet" alwaysNotify="true"/>
         <field id="damageTaken" type="int" value="0" onChange="onDamageTaken" alwaysNotify="true"/>
         <field id="fireCombatAnim" type="string" onChange="handleCombatAnim" alwaysNotify="true"/>

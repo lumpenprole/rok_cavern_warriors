@@ -5,6 +5,9 @@ sub init()
     m.monsterHolder = m.top.findNode("monster_holder")
     m.monsters = []
     m.playerHasDied = false
+    m.aimSquare = m.top.findNode("aim_square")
+    m.aimSquare.opacity = 0
+    m.aimingLocation = [0,0]
 end sub
 
 sub setupLevel()
@@ -12,6 +15,7 @@ sub setupLevel()
     appSettings = m.global.settings
 
     m.modalOn = false
+    m.aiming = false
 
     grid = m.global.grid
 
@@ -61,14 +65,30 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         if press then
             if key = "OK"
                 if not m.playerHasDied
-                    checkActOnTile()
+
+                    if m.aiming
+                        fireRangedWeapon()
+                    else
+                        checkActOnTile()
+                    end if
+
                     handled = true
                 end if
             else if key = "left" or key = "right" or key = "up" or key = "down"
-                playerMove(key)
+                if not m.aiming
+                    playerMove(key)
+                else
+                    aim(key)
+                end if
             else if key = "play"
                 pd = getPlayerData()
                 fireEvent("handleGameModalOnOff", {playerData: pd})
+            else if key = "options"
+                ?"RANGED ATTACK"
+                if m.player.rangedWeapon <> "none"
+                    ?"RANGED WEAPON: ";m.player.rangedWeapon
+                    handleRangedAttack(m.player.rangedWeaponType, m.player.rangedWeapon)
+                end if
             end if
         end if
     end if
@@ -212,6 +232,49 @@ sub fight(attacker as Object, defender as Object)
             end if
         end if
     end if
+end sub
+
+sub handleRangedAttack(weaponType, weapon)
+    ?"FIRE ";weapon;" WHICH IS A ";weaponType
+    if weaponType = "spell"
+        spell = m.global.settings.spells.lookup(weapon)
+        ?"CASTING ";spell.name
+    end if
+
+    tileSize = m.global.settings.tile_size
+    ploc = m.player.location
+    m.aimSquare.width = tileSize
+    m.aimSquare.height = tileSize
+    m.aimSquare.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
+    m.aimingLocation = ploc
+    m.aimSquare.opacity = 1
+    m.aiming = true
+end sub
+
+sub aim(direction as string)
+    ?"MOVING AIMING SQUARE TO: ";key
+    cloc = m.aimingLocation
+    tileSize = m.global.settings.tile_size
+    checkLoc = []
+    if direction = "left"
+        checkLoc = [cloc[0] - 1, cloc[1]]
+    else if direction = "right"
+        checkLoc = [cloc[0] + 1, cloc[1]]
+    else if direction = "down"
+        checkLoc = [cloc[0], cloc[1] + 1]
+    else if direction = "up"
+        checkLoc = [cloc[0], cloc[1] - 1]
+    end if
+
+    m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
+    m.aimingLocation = checkLoc
+
+end sub 
+
+sub fireRangedWeapon()
+    ?"FIRING RANGED WEAPON!"
+    m.aiming = false
+    m.aimSquare.opacity = 0
 end sub
 
 sub monsterDead(monster)

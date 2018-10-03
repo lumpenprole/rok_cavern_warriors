@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpellSettingsNode" extends="Node">
+	<interface>
+        <!-- spell settings -->
+        <field id="magic_missle" type="assocarray" />
+    </interface> 
+    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/SpellSettings.brs"/>
+</component>

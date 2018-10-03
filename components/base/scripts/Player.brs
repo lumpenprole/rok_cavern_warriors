@@ -76,6 +76,10 @@ sub processStartingEquipment() 'TODO: Update tilemap to reflect new slot names
         modifier = weaponArr[0]
 
         setWeapon(modifier, weaponArr[1])
+
+        if sEquip.lookup("ranged") <> invalid
+            setRanged(sEquip.ranged)
+        end if
     end if
     m.top.armorArray = armorArray
     setArmorClass(sEquip.torso)
@@ -135,6 +139,12 @@ sub setWeapon(modifier, weaponId)
     details = m.global.settings.items.getField(weaponId)
     m.top.mainHand = details.name
     m.top.damageDice = [details.damage_dice_num, details.damage_dice_type]
+end sub
+
+sub setRanged(rangedString)
+    rArr = rangedString.split("@")
+    m.top.rangedWeaponType = rArr[0]
+    m.top.rangedWeapon = rArr[1]
 end sub
 
 sub levelUp()
