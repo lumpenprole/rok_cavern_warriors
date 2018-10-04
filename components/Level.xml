@@ -32,5 +32,18 @@
         <Group id="player_holder" translation="[0,0]" />
         <Group id="monster_holder" translation="[0,0]" />
         <Rectangle width="1.0" height="1.0" color="0xB4CEF7CC" id="aim_square" translation="[0,0]" />
+        <Group id="ranged_weapon_holder" translation="[0,0]" />
+
+        <Animation
+            id="ranged_attack_animation"
+            duration="0.3"
+            repeat="false"
+            easeFunction="linear">
+            <Vector2DFieldInterpolator
+                id = "ranged_vector"
+                key="[0, 0.5, 1]"
+                fieldToInterp="ranged_weapon_holder.translation"/>
+        </Animation>
+        
  	</children>
 </component>

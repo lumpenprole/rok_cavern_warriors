@@ -189,6 +189,9 @@
       "rusty_chain_helmet": "player/head/chain.png",
       "beatup_leather_helmet": "player/head/cap_black.png",
       "patchy_wizard_hat": "player/head/wizard_brown.png"
+    },
+    "spells": {
+      "magic_missle": "spells/conjuration/magic_dart.png"
     }
   }
 }

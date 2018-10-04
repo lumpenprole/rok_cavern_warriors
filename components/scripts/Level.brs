@@ -8,6 +8,9 @@ sub init()
     m.aimSquare = m.top.findNode("aim_square")
     m.aimSquare.opacity = 0
     m.aimingLocation = [0,0]
+    m.rangedHolder = m.top.findNode("ranged_weapon_holder")
+    m.rangedAttackAnim = m.top.findNode("ranged_attack_animation")
+    m.rangedAttackVector = m.top.findNode("ranged_vector")
 end sub
 
 sub setupLevel()
@@ -252,7 +255,6 @@ sub handleRangedAttack(weaponType, weapon)
 end sub
 
 sub aim(direction as string)
-    ?"MOVING AIMING SQUARE TO: ";key
     cloc = m.aimingLocation
     tileSize = m.global.settings.tile_size
     checkLoc = []
@@ -265,16 +267,38 @@ sub aim(direction as string)
     else if direction = "up"
         checkLoc = [cloc[0], cloc[1] - 1]
     end if
-
-    m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
-    m.aimingLocation = checkLoc
+   
+    if canAim(checkLoc[0], checkLoc[1])
+        m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
+        m.aimingLocation = checkLoc
+    end if
 
 end sub 
 
 sub fireRangedWeapon()
-    ?"FIRING RANGED WEAPON!"
     m.aiming = false
     m.aimSquare.opacity = 0
+    
+    if m.player.rangedWeaponType = "spell"
+        tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.spells[m.player.rangedWeapon]
+    end if
+
+    tileSize = m.global.settings.tile_size
+    tile = CreateObject("roSGNode", "Poster")
+    tile.id = "RangedTile"
+    tile.width = tileSize
+    tile.height = tileSize
+    tile.uri = tilePath
+    ploc = m.player.location
+    tile.visible = true
+    m.rangedHolder.appendChild(tile)
+    m.rangedHolder.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
+    m.rangedHolder.opacity = 1
+
+    
+    'TODO: allow monsters to fire ranged weapons
+    fireRangedAttackAnimation(m.player.location, m.aimingLocation)
+
 end sub
 
 sub monsterDead(monster)
@@ -449,6 +473,56 @@ function canOccupy(tileLoc)
     return openTile
 end function
 
+function canAim(tileLoc0, tileLoc1) as boolean
+    checkTile = [tileLoc0, tileLoc1]
+    'TODO: monsters will need this when they can shoot
+    finalTile = m.player.location
+    
+    while not (checkTile[0] = finalTile[0] and checkTile[1] = finalTile[1])
+        tile = m.levelArr[checkTile[0], checkTile[1]]
+        arr = tile.split(":")
+        tileType = arr[0]
+        tileData = arr[1]
+        openTile = false
+        
+        'Is tile open
+        if tileType = "floor" or tileType = "upstairs" or tileType = "downstairs"
+            openTile = true
+        else if tileType = "door"
+            if tileData = "open"
+                openTile = true
+            else
+                openTile = false
+            end if
+        end if
+
+        ?"OPEN TILE: ";openTile
+
+        ?"FINALTILE: [";finalTile[0];", ";finalTile[1];"]"
+        if openTile
+            ?"CHECKTILE BEFORE: [";checkTile[0];", ";checkTile[1];"]"
+            if checkTile[0] < finalTile[0]
+                checkTile[0] = checkTile[0] + 1
+            else if checkTile[0] > finalTile[0]
+                checkTile[0] = checkTile[0] - 1
+            end if
+
+            if checkTile[1] < finalTile[1]
+                checkTile[1] = checkTile[1] + 1
+            else if checkTile[1] > finalTile[1]
+                checkTile[1] = checkTile[1] - 1
+            end if
+            ?"CHECKTILE AFTER: [";checkTile[0];", ";checkTile[1];"]"
+        else
+            openTile = false
+            exit while
+        end if
+    end while
+
+    return openTile
+
+end function
+
 function contains(item, arr)
     for x = 0 to arr.count() - 1
         if arr[x] = item
@@ -540,8 +614,74 @@ sub fireAttackAnimation(attacker as Object, defender as Object)
     else if aY > dY
         direction = "up"
     end if
-
     attacker.fireCombatAnim = direction
+end sub
+
+sub fireRangedAttackAnimation(attacker as Object, defender as Object)
+    tileSize = m.global.settings.tile_size
+    aX = attacker[0] * tileSize
+    aY = attacker[1] * tileSize
+    dX = defender[0] * tileSize
+    dY = defender[1] * tileSize
+    
+    ud = "none"
+    lr = "none"
+
+    if aX < dX
+        lr = "right"
+    else if aX > dX
+        lr = "left"
+    end if
+
+    if aY < dY
+        ud = "down"
+    else if aY > dY
+        ud = "up"
+    end if
+
+    m.rangedHolder.scaleRotateCenter = [tilesize/2, tilesize/2]
+    if lr = "none"
+        if ud = "up"
+            m.rangedHolder.rotation = 5.49
+        else if ud = "down"
+            m.rangedHolder.rotation = 2.35
+        end if
+    else if ud = "none"
+        if lr = "left"
+            m.rangedHolder.rotation = 0.78
+        else if lr = "right"
+            m.rangedHolder.rotation = 3.92
+        end if
+    else
+        if ud = "up"
+            if lr = "right"
+                m.rangedHolder.rotation = 4.71
+            else if lr = "left"
+                m.rangedHolder.rotation = 0.0
+            end if
+        else if ud = "down"
+            if lr = "left"
+                m.rangedHolder.rotation = 1.57
+            else if lr = "right"
+                m.rangedHolder.rotation = 3.14
+            end if
+        end if
+    end if
+    
+    keyVal = [[aX, aY], [aX + (dX - aX) / 2, aY + (dY - aY) / 2], [dX, dY]]
+
+    m.rangedAttackVector.keyValue = keyVal
+    m.rangedAttackAnim.observeField("state", "deleteRangedAnimation")
+    m.rangedAttackAnim.control = "start"
+
+end sub
+
+sub deleteRangedAnimation(msg)
+    currentState = msg.getData()
+    if currentState = "stopped"
+        m.rangedHolder.opacity = 0
+        m.rangedAttackAnim.unobserveField("state")
+    end if
 end sub
 
 function getPlayerData() as Object
