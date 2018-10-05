@@ -517,19 +517,8 @@ function canAim(tileLoc0, tileLoc1) as boolean
             m.aimingTiles.push(checkTile)
             
             'Set check tile to next tile. 
-            ?"CHECKTILE BEFORE: [";checkTile[0];", ";checkTile[1];"]"
-            if checkTile[0] < finalTile[0]
-                checkTile[0] = checkTile[0] + 1
-            else if checkTile[0] > finalTile[0]
-                checkTile[0] = checkTile[0] - 1
-            end if
-
-            if checkTile[1] < finalTile[1]
-                checkTile[1] = checkTile[1] + 1
-            else if checkTile[1] > finalTile[1]
-                checkTile[1] = checkTile[1] - 1
-            end if
-            ?"CHECKTILE AFTER: [";checkTile[0];", ";checkTile[1];"]"
+            'TODO: Implement some version of Breshenhams's line here
+            'https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Line_equation
         else
             exit while
         end if
