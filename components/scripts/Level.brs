@@ -11,6 +11,7 @@ sub init()
     m.rangedHolder = m.top.findNode("ranged_weapon_holder")
     m.rangedAttackAnim = m.top.findNode("ranged_attack_animation")
     m.rangedAttackVector = m.top.findNode("ranged_vector")
+    m.aimingTiles = []
 end sub
 
 sub setupLevel()
@@ -267,6 +268,8 @@ sub aim(direction as string)
     else if direction = "up"
         checkLoc = [cloc[0], cloc[1] - 1]
     end if
+
+    clearAimingTiles()
    
     if canAim(checkLoc[0], checkLoc[1])
         m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
@@ -473,6 +476,14 @@ function canOccupy(tileLoc)
     return openTile
 end function
 
+sub clearAimingTiles()
+    for x = 0 to m.aimingTiles.count() - 1
+        tileLoc = m.aimingTiles[x]
+        tile = m.roomHolder.findNode("tile_" + tileLoc[0].toStr() + "_" + tileLoc[1].toStr())
+        tile.blendColor = "0xFFFFFFFF"
+    end for
+end sub
+
 function canAim(tileLoc0, tileLoc1) as boolean
     checkTile = [tileLoc0, tileLoc1]
     'TODO: monsters will need this when they can shoot
@@ -500,6 +511,12 @@ function canAim(tileLoc0, tileLoc1) as boolean
 
         ?"FINALTILE: [";finalTile[0];", ";finalTile[1];"]"
         if openTile
+            'set tile to a blend color to show aiming path
+            tileGraphic = m.roomHolder.findNode("tile_" + checkTile[0].toStr() + "_" + checkTile[1].toStr())
+            tileGraphic.blendColor = "0xB4CEF755"
+            m.aimingTiles.push(checkTile)
+            
+            'Set check tile to next tile. 
             ?"CHECKTILE BEFORE: [";checkTile[0];", ";checkTile[1];"]"
             if checkTile[0] < finalTile[0]
                 checkTile[0] = checkTile[0] + 1
@@ -514,7 +531,6 @@ function canAim(tileLoc0, tileLoc1) as boolean
             end if
             ?"CHECKTILE AFTER: [";checkTile[0];", ";checkTile[1];"]"
         else
-            openTile = false
             exit while
         end if
     end while
