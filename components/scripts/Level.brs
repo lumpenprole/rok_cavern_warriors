@@ -268,8 +268,6 @@ sub aim(direction as string)
     else if direction = "up"
         checkLoc = [cloc[0], cloc[1] - 1]
     end if
-
-    clearAimingTiles()
    
     if canAim(checkLoc[0], checkLoc[1])
         m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
@@ -449,7 +447,7 @@ sub setTile(tile, holder)
     holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
 end sub
 
-function canOccupy(tileLoc)
+function canOccupy(tileLoc, checkMonster = true)
     openTile = false
     tile = m.levelArr[tileLoc[0], tileLoc[1]]
     arr = tile.split(":")
@@ -465,13 +463,15 @@ function canOccupy(tileLoc)
             openTile = false
         end if
     end if
-
-    for x = 0 to m.monsters.count() - 1
-        monster = m.monsters[x]
-        if tileLoc[0] = monster.location[0] and tileLoc[1] = monster.location[1]
-            openTile = false
-        end if
-    end for
+    
+    if checkMonster
+        for x = 0 to m.monsters.count() - 1
+            monster = m.monsters[x]
+            if tileLoc[0] = monster.location[0] and tileLoc[1] = monster.location[1]
+                openTile = false
+            end if
+        end for
+    end if
 
     return openTile
 end function
@@ -489,43 +489,127 @@ function canAim(tileLoc0, tileLoc1) as boolean
     'TODO: monsters will need this when they can shoot
     finalTile = m.player.location
     
-    while not (checkTile[0] = finalTile[0] and checkTile[1] = finalTile[1])
-        tile = m.levelArr[checkTile[0], checkTile[1]]
-        arr = tile.split(":")
-        tileType = arr[0]
-        tileData = arr[1]
+    tile = m.levelArr[checkTile[0], checkTile[1]]
+    arr = tile.split(":")
+    tileType = arr[0]
+    tileData = arr[1]
+    openTile = false
+    
+    'Is tile open
+    if canOccupy(checkTile, false)
+        openTile = true
+    else
         openTile = false
+    end if
+
+    pathData = []
+    if openTile
         
-        'Is tile open
-        if tileType = "floor" or tileType = "upstairs" or tileType = "downstairs"
-            openTile = true
-        else if tileType = "door"
-            if tileData = "open"
-                openTile = true
+        'Set check tile to next tile. 
+        x0 = checkTile[0]
+        x1 = finalTile[0]
+        y0 = checkTile[1]
+        y1 = finalTile[1]
+        
+        if abs(y1 - y0) < abs(x1 - x0)
+            if x0 > x1
+                pathData = plotLineLow(x1, y1, x0, y0)
             else
-                openTile = false
+                pathData = plotLineLow(x0, y0, x1, y1)
+            end if
+        else
+            if y0 > y1
+                pathData = plotLineHigh(x1, y1, x0, y0)
+            else
+                pathData = plotLineHigh(x0, y0, y1, y1)
             end if
         end if
 
-        ?"OPEN TILE: ";openTile
+    end if
 
-        ?"FINALTILE: [";finalTile[0];", ";finalTile[1];"]"
-        if openTile
-            'set tile to a blend color to show aiming path
-            tileGraphic = m.roomHolder.findNode("tile_" + checkTile[0].toStr() + "_" + checkTile[1].toStr())
+    if openTile
+        openTile = pathData[0]
+    end if
+
+    if openTile
+        'drawPath
+        clearAimingTiles()
+        for x = 0 to pathData[1].count() - 1
+            tileLoc = pathData[1][x]
+            tileGraphic = m.roomHolder.findNode("tile_" + tileLoc[0].toStr() + "_" + tileLoc[1].toStr())
             tileGraphic.blendColor = "0xB4CEF755"
-            m.aimingTiles.push(checkTile)
-            
-            'Set check tile to next tile. 
-            'TODO: Implement some version of Breshenhams's line here
-            'https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Line_equation
-        else
-            exit while
-        end if
-    end while
+        end for
+        m.aimingTiles = pathData[1]
+    end if
 
     return openTile
 
+end function
+
+function plotLineLow(x0, y0, x1, y1) as Object
+    dx = x1 - x0
+    dy = y1 - y0
+    yi = 1
+    if dy < 0
+        yi = -1
+        dy = -dy
+    end if
+    D = 2*dy - dx
+    y = y0
+
+    isGoodPath = true
+    newAimPath = []
+    for x = x0 to x1
+        'Is tile open
+        if not canOccupy([x, y], false)
+            isGoodPath = false
+            exit for
+        end if
+
+        newAimPath.push([x, y])
+
+        if D > 0
+            y = y + yi
+            D = D - 2*dx
+        end if
+        D = D + 2*dy
+    end for
+    
+    return [isGoodPath, newAimPath]
+
+end function
+
+function plotLineHigh(x0, y0, x1, y1) as Object
+    dx = x1 - x0
+    dy = y1 - y0
+    xi = 1
+    if dx < 0
+        xi = -1
+        dx = -dx
+    end if
+    D = 2*dx - dy
+    x = x0
+
+    isGoodPath = true
+    newAimPath = []
+
+    for y = y0 to y1
+        'Is tile open
+        if not canOccupy([x, y], false)
+            isGoodPath = false
+            exit for
+        end if
+
+        newAimPath.push([x, y])
+
+        if D > 0
+            x = x + xi
+            D = D - 2*dy
+        end if
+        D = D + 2*dx
+    end for
+
+    return [isGoodPath, newAimPath]
 end function
 
 function contains(item, arr)
