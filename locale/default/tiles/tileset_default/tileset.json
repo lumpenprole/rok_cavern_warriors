@@ -191,7 +191,10 @@
       "patchy_wizard_hat": "player/head/wizard_brown.png"
     },
     "spells": {
-      "magic_missle": "spells/conjuration/magic_dart.png"
+      "magic_missle": "effect/magic_dart5.png"
+    },
+    "effects": {
+      "mob_hit": "effect/bolt04.png"
     }
   }
 }

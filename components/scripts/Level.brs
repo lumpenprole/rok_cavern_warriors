@@ -707,6 +707,7 @@ sub fireAttackAnimation(attacker as Object, defender as Object)
 end sub
 
 sub fireRangedAttackAnimation(attacker as Object, defender as Object)
+    clearAimingTiles()
     tileSize = m.global.settings.tile_size
     aX = attacker[0] * tileSize
     aY = attacker[1] * tileSize

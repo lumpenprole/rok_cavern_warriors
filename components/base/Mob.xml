@@ -33,6 +33,7 @@
             <Group id="pants_holder" />
             <Group id="helmet_holder" />
             <Group id="gloves_holder" />
+            <Group id="hit_holder" />
         </Group>
         <Animation
             id="combat_animation"

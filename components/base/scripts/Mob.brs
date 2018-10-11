@@ -9,6 +9,7 @@ sub init()
     m.glovesHolder = m.top.findNode("gloves_holder")
     m.bootsHolder = m.top.findNode("boots_holder")
     m.mobHolder = m.top.findNode("mob_holder")
+    m.hitHolder = m.top.findNode("hit_holder")
     rect = CreateObject("roSGNode", "Rectangle")
     rect.width = m.tileSize
     rect.height = m.tileSize
@@ -22,6 +23,22 @@ sub init()
     m.dexterity = rollStat()
     m.combatAnimation = m.top.findNode("combat_animation")
     m.combatVector = m.top.findNode("combat_vector")
+
+    'Set up hit graphic
+    m.hitHolder.opacity = 0
+    hitPath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.effects.mob_hit
+    hitGraphic = createObject("roSGNode", "Poster")
+    hitGraphic.loadDisplayMode = "scaleToFill"
+    hitGraphic.loadWidth = m.tileSize
+    hitGraphic.loadHeight = m.tileSize
+    hitGraphic.uri = hitPath
+    m.hitHolder.appendChild(hitGraphic)
+
+    m.hitTimer = CreateObject("roSGNode", "Timer")
+    m.hitTimer.id = "hitTimer"
+    m.hitTimer.repeat = "false"
+    m.hitTimer.duration = 0.5
+    m.hitTimer.observeField("fire", "killHitGraphic")
 end sub
 
 sub onClassSet()
@@ -35,6 +52,7 @@ end sub
 
 sub onRaceSet()
     ?"onRaceSet()"
+
     postSetup()
 end sub
 
@@ -65,6 +83,8 @@ sub onDamageTaken()
     ?"HIT POINTS ARE NOW: ";m.top.hitPoints
     ?"*********************************************"
     ?"*********************************************"
+    m.hitHolder.opacity = 1
+    m.hitTimer.control = "start"
     if m.top.hitPoints <= 0
         death()
     end if
@@ -137,3 +157,7 @@ sub handleCombatAnim()
     m.combatVector.keyValue = kV
     m.combatAnimation.control = "start"
 end sub    
+
+sub killHitGraphic()
+    m.hitHolder.opacity = 0
+end sub
