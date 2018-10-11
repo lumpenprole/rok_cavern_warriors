@@ -11,6 +11,8 @@
         <field id="damageDice" type="intArray"/>
         <field id="experience" type="int"/>
         <field id="attackBonus" type="int" value="0"/>
+        <field id="spellBonus" type="int" value="0"/>
+        <field id="missleBonus" type="int" value="0"/>
         <field id="armorClass" type="int" value="5"/>
         <field id="mainHand" type="string"/>
         <field id="offHand" type="string"/>

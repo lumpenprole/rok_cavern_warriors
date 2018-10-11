@@ -28,6 +28,8 @@ sub postSetup()
         m.totalHitpoints = m.strength + rnd(6)
         m.top.hitPoints = m.totalHitPoints
         m.top.attackBonus = getStatBonus(m.strength)
+        m.top.spellBonus = getStatBonus(m.mind)
+        m.top.missleBonus = getStatBonus(m.dexterity)
         setTile()
     end if
 end sub

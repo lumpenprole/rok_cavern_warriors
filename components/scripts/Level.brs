@@ -297,9 +297,66 @@ sub fireRangedWeapon()
     m.rangedHolder.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
     m.rangedHolder.opacity = 1
 
-    
+     
     'TODO: allow monsters to fire ranged weapons
-    fireRangedAttackAnimation(m.player.location, m.aimingLocation)
+    attacker = m.player
+    monsterAttack = false
+    fireRangedAttackAnimation(attacker.location, m.aimingLocation)
+    
+    'TODO: Spell use needs to advance turn
+    bonus = 0
+    if attacker.rangedWeaponType = "spell"
+        bonus = attacker.spellBonus 
+    else if attacker.rangedWeaponType = "missle"
+        bonus = attacker.missleBonus
+    end if
+
+    for x = 0 to m.monsters.count() - 1
+        monster = m.monsters[x]
+        if monster.location[0] = m.aimingLocation[0] and monster.location[1] = m.aimingLocation[1]
+            defender = monster
+            exit for
+        end if
+    end for
+    
+    hit = false
+    if not type(defender) = "<uninitialized>"
+        hit = (rnd(20) + bonus) > defender.armorClass
+    end if
+
+    if hit
+        damage = 0
+        if attacker.rangedWeaponType = "spell"
+            spellData = m.global.settings.spells[attacker.rangedWeapon]
+            if attacker.level <= spellData.level_bonus_top
+                for d = 0 to (attacker.level * spellData.level_bonus)
+                    damage = damage + rnd(spellData.damage_dice_type)
+                end for
+            else
+                for d = 0 to (spellData.spell_bonus_top * spellData.level_bonus)
+                    damage = damage + rnd(spellData.damage_dice_type)
+                end for
+            end if
+        else if attacker.rangedWeaponType = "missle"
+            missleData = m.global.settings.missles[attacker.rangedWeapon]
+
+            for x = 0 to int(attacker.damageDice[0])
+                damage = damage + rnd(attacker.damageDice[1])
+            end for
+        end if
+
+        defender.damageTaken = damage
+        if monsterAttack
+            fireEvent("statusUpdate")
+        end if
+        if defender.hitPoints <= 0
+            if monsterAttack
+                playerDead()
+            else
+                monsterDead(defender)
+            end if
+        end if
+    end if
 
 end sub
 
@@ -830,7 +887,6 @@ sub setTileData(tileLoc, param, bool)
         end for
     end if
     m.levelArr[tileLoc[0], tileLoc[1]] = tType + ":" + data.join(",")
-    ?"NEW TILE DATA: " + m.levelArr[tileLoc[0], tileLoc[1]]
 end sub
 
 function getPlayerData() as Object
