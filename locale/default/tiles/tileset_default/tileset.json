@@ -194,7 +194,8 @@
       "magic_missle": "effect/magic_dart5.png"
     },
     "effects": {
-      "mob_hit": "effect/bolt04.png"
+      "mob_hit": "effect/bolt04.png",
+      "bones": "item/food/bone.png"
     }
   }
 }

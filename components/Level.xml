@@ -29,6 +29,7 @@
 
         </Group>
         <Group id="room_holder" translation="[0,0]" />
+        <Group id="bones_holder" translation="[0,0]" />
         <Group id="player_holder" translation="[0,0]" />
         <Group id="monster_holder" translation="[0,0]" />
         <Rectangle width="1.0" height="1.0" color="0xB4CEF7CC" id="aim_square" translation="[0,0]" />

@@ -3,6 +3,7 @@ sub init()
     m.roomHolder = m.top.findNode("room_holder")
     m.playerHolder = m.top.findNode("player_holder")
     m.monsterHolder = m.top.findNode("monster_holder")
+    m.bonesHolder = m.top.findNode("bones_holder")
     m.monsters = []
     m.playerHasDied = false
     m.aimSquare = m.top.findNode("aim_square")
@@ -307,6 +308,8 @@ sub monsterDead(monster)
     ?"MONSTER EXP: ";monster.experience
     m.player.addExperience = monster.experience
     m.top.removeChild(monster)
+    setTileData(monster.location,"bones", true)
+    setBones(monster.location)
     for x = 0 to m.monsters.count() - 1
         if m.monsters[x].id = monster.id
             m.monsters.delete(x)
@@ -314,6 +317,20 @@ sub monsterDead(monster)
         end if
     end for
 end sub
+
+sub setBones(bonesLoc)
+    tileSize = m.global.settings.tile_size
+    x = bonesLoc[0]
+    y = bonesLoc[1]
+    bonesTile = CreateObject("roSGNode", "Poster")
+    bonesTile.width = tileSize
+    bonesTile.height = tileSize
+    bonesTile.uri = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.effects.bones
+    bonesTile.translation = [x * tileSize, y * tileSize]
+    bonesTile.id = "bones_" + x.toStr() + "_" + y.toStr()
+    m.bonesHolder.appendChild(bonesTile)
+end sub
+
 
 sub playerDead()
     m.playerHasDied = true
@@ -340,13 +357,12 @@ sub draw()
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
+            tileData = parseTileData(m.levelArr[x][y])
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
-            if(gridSquare <> invalid)
-                gType = gridSquare.split(":")[0]
-
+            if(tileData <> invalid)
                 'TODO: need to move tile creation into a separate function
                 'and set colors and tiles in the settings
-                if gType = "floor"
+                if tileData.tileType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
@@ -356,7 +372,7 @@ sub draw()
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
-                else if gType = "wall"
+                else if tileData.tileType = "wall"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
@@ -366,7 +382,7 @@ sub draw()
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
-                else if gType = "upstairs"
+                else if tileData.tileType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
@@ -376,7 +392,7 @@ sub draw()
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
-                else if gType = "downstairs"
+                else if tileData.tileType = "downstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
@@ -386,7 +402,7 @@ sub draw()
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
-                else if gType = "door"
+                else if tileData.tileType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
                     tile.width = tileSize
@@ -396,6 +412,10 @@ sub draw()
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
+                end if
+
+                if tileData.bones
+                    setBones([x, y])
                 end if
             end if
         end for
@@ -449,15 +469,12 @@ end sub
 
 function canOccupy(tileLoc, checkMonster = true)
     openTile = false
-    tile = m.levelArr[tileLoc[0], tileLoc[1]]
-    arr = tile.split(":")
-    tileType = arr[0]
-    tileData = arr[1]
+    tile = parseTileData(m.levelArr[tileLoc[0], tileLoc[1]])
 
-    if tileType = "floor" or tileType = "upstairs" or tileType = "downstairs"
+    if tile.tileType = "floor" or tile.tileType = "upstairs" or tile.tileType = "downstairs"
         openTile = true
-    else if tileType = "door"
-        if tileData = "open"
+    else if tile.tileType = "door"
+        if tile.open = true
             openTile = true
         else
             openTile = false
@@ -489,10 +506,6 @@ function canAim(tileLoc0, tileLoc1) as boolean
     'TODO: monsters will need this when they can shoot
     finalTile = m.player.location
     
-    tile = m.levelArr[checkTile[0], checkTile[1]]
-    arr = tile.split(":")
-    tileType = arr[0]
-    tileData = arr[1]
     openTile = false
     
     'Is tile open
@@ -629,13 +642,10 @@ end function
 
 sub checkActOnTile()
     ploc = m.player.location
-    tile = m.levelArr[pLoc[0], pLoc[1]]
-    arr = tile.split(":")
-    tileType = arr[0]
-    tileData = arr[1]
-    if tileType = "downstairs"
+    tile = parseTileData(m.levelArr[pLoc[0], pLoc[1]])
+    if tile.tileType = "downstairs"
         fireEvent("goDownstairs", {})
-    else if tileType = "upstairs"
+    else if tile.tileType = "upstairs"
         fireEvent("goUpstairs", {})
     end if
 end sub
@@ -772,6 +782,55 @@ sub deleteRangedAnimation(msg)
         m.rangedHolder.opacity = 0
         m.rangedAttackAnim.unobserveField("state")
     end if
+end sub
+
+function parseTileData(tileLoc as String) as Object
+    tile = {}
+    arr = tileLoc.split(":")
+    tile.tileType = arr[0]
+
+    tile.open = false
+    tile.bones = false
+
+    tileData = arr[1].split(",")
+    if tileData.count() > 0
+        for x = 0 to tileData.count() - 1
+            dt = tileData[x]
+            if dt = "open"
+                tile.open = true
+            else if dt = "bones"
+                tile.bones = true
+            end if
+        end for
+    end if
+    return tile
+end function
+
+sub setTileData(tileLoc, param, bool)
+    tileArr = m.levelArr[tileLoc[0], tileLoc[1]].split(":")
+    tType = tileArr[0]
+    data = tileArr[1].split(",")
+    if bool
+        containsParam = false
+        for x = 0 to data.count() - 1
+            if data[x] = param
+                containsParam = true
+            end if
+        end for
+
+        if not containsParam
+            data.push(param)
+        end if
+    else
+        for x = 0 to data.count() - 1
+            if data[x] = param
+                data.delete(x)
+                exit for
+            end if
+        end for
+    end if
+    m.levelArr[tileLoc[0], tileLoc[1]] = tType + ":" + data.join(",")
+    ?"NEW TILE DATA: " + m.levelArr[tileLoc[0], tileLoc[1]]
 end sub
 
 function getPlayerData() as Object

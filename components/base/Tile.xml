@@ -11,5 +11,6 @@
 
     <children>
         <Poster id="img" width="50" height="50" />
+        <Poster id="bones" width="50" height="50" />
  	</children>
 </component>
