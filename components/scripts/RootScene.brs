@@ -172,6 +172,7 @@ sub startGame(data as dynamic)
     currentHolder.appendChild(player)
     level0.playerSet = true
     level0.setFocus(true)
+    subscribe("endTurn", level0.id)
     updateStatus()
 end sub
 
@@ -187,8 +188,11 @@ sub goDownstairs()
         nextLevel = createObject("roSGNode", "rcw_Level")
         nextLevel.levelDepth = nextLevelNum
         nextLevel.settings = m.levelSettings
+        nextLevel.id = "level" + nextLevelNum.toStr()
         m.levelHolder.appendChild(nextLevel)
         subscribe("handleGameModalOnOff", nextLevel.id)
+        unsubscribe("endTurn", currentLevel.id)
+        subscribe("endTurn", nextLevel.id)
         currentHolder = nextLevel.findNode("player_holder")
         currentHolder.appendChild(player)
         nextLevel.playerSet = true
@@ -196,6 +200,7 @@ sub goDownstairs()
         m.currentLevel = nextLevelNum 
     else
         'SHOW LEVEL
+        currentLevel = m.levelHolder.getChild(m.currentLevel)
         currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
         player = currentPlayerHolder.findNode("current_player")
         currentPlayerHolder.removeChildren(player)
@@ -204,6 +209,8 @@ sub goDownstairs()
         nextHolder.appendChild(player)
         m.levelHolder.getChild(m.currentLevel).visible = false
         nextLevel.visible = true
+        unsubscribe("endTurn", currentLevel.id)
+        subscribe("endTurn", nextLevel.id)
         nextLevel.setFocus(true)
         nextLevel.playerStairs = "down" 
         m.currentLevel = nextLevelNum
@@ -214,6 +221,7 @@ sub goUpstairs()
     if m.currentLevel = 0
         ?"FIRE QUIT MODAL HERE"
     else
+        currentLevel = m.levelHolder.getChild(m.currentLevel)
         nextLevelNum = m.currentLevel - 1
         currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
         player = currentPlayerHolder.findNode("current_player")
@@ -222,6 +230,8 @@ sub goUpstairs()
         nextHolder = nextLevel.findNode("player_holder")
         nextHolder.appendChild(player)
         m.levelHolder.getChild(m.currentLevel).visible = false
+        unsubscribe("endTurn", currentLevel.id)
+        subscribe("endTurn", nextLevel.id)
         nextLevel.visible = true
         nextLevel.setFocus(true)
         nextLevel.playerStairs = "up" 

@@ -3,6 +3,7 @@
     <!-- I don't think this needs to extend a base page or anything -->
 	<interface>
         <field id="eventCallback" type="node" onChange="onEventCallback"/>
+        <field id="eventFired" type="node" onChange="eventHandler"/>
 		<field id="class" type="string" value="none" onChange="onClassSet"/>
         <field id="race" type="string" value="none" onChange="onRaceSet"/>
         <field id="level" type="int" value="1"/>
@@ -25,6 +26,7 @@
 
 	<!-- general scripts -->
     <script type="text/brightscript"  uri="pkg:/components/base/scripts/Mob.brs"/>
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>
         <Group id="mob_holder">

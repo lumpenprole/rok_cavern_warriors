@@ -160,4 +160,9 @@ end sub
 
 sub killHitGraphic()
     m.hitHolder.opacity = 0
+    if m.top.class = "monster"
+        fireEvent("endTurn", {turnType: "player"})
+    else
+        fireEvent("endTurn", {turnType: "monster"})
+    end if
 end sub

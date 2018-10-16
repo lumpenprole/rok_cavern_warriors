@@ -125,7 +125,7 @@ sub playerMove(direction as String)
     makeVisible(m.player.location, m.player.sightDistance)
     m.player.timeIncrement = 1
     fireEvent("statusUpdate")
-    moveMonsters()
+    handleTurnEnd({turnType: "player"})
 end sub
 
 sub addMonsters()
@@ -235,6 +235,12 @@ sub fight(attacker as Object, defender as Object)
             else
                 monsterDead(defender)
             end if
+        end if
+    else
+        if monsterAttack
+            handleTurnEnd({turnType: "monster"})
+        else
+            handleTurnEnd({turnType: "player"})
         end if
     end if
 end sub
@@ -356,8 +362,14 @@ sub fireRangedWeapon()
                 monsterDead(defender)
             end if
         end if
+    else
+        if monsterAttack
+            handleTurnEnd({turnType: "monster"})
+        else
+            handleTurnEnd({turnType: "player"})
+        end if
     end if
-
+    'moveMonsters() I think I need to make a turn system. 
 end sub
 
 sub monsterDead(monster)
@@ -889,6 +901,15 @@ sub setTileData(tileLoc, param, bool)
     m.levelArr[tileLoc[0], tileLoc[1]] = tType + ":" + data.join(",")
 end sub
 
+sub handleTurnEnd(evData)
+    ?"HANDLE TURN END FOR ";evData.turnType
+    if evData.turnType = "player"
+        moveMonsters()
+    else
+        ?"DO SOMETHING"
+    end if
+end sub
+
 function getPlayerData() as Object
     pObj = {}
     pObj.class = m.player.class
@@ -919,5 +940,7 @@ sub onEventCallback(data as Object)
         else 
             m.modalOn = true
         end if
+    else if et = "endTurn"
+        handleTurnEnd(ev.data)
     end if
 end sub
