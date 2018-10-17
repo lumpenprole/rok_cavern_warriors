@@ -89,10 +89,16 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 pd = getPlayerData()
                 fireEvent("handleGameModalOnOff", {playerData: pd})
             else if key = "options"
-                ?"RANGED ATTACK"
                 if m.player.rangedWeapon <> "none"
-                    ?"RANGED WEAPON: ";m.player.rangedWeapon
-                    handleRangedAttack(m.player.rangedWeaponType, m.player.rangedWeapon)
+                    if m.aiming
+                        'cancel ranged weapon
+                        m.aimSquare.opacity = 0
+                        clearAimingTiles()
+                        m.aiming = false
+                    else
+                        ?"RANGED WEAPON: ";m.player.rangedWeapon
+                        handleRangedAttack(m.player.rangedWeaponType, m.player.rangedWeapon)
+                    end if
                 end if
             end if
         end if
@@ -339,7 +345,7 @@ sub fireRangedWeapon()
                     damage = damage + rnd(spellData.damage_dice_type)
                 end for
             else
-                for d = 0 to (spellData.spell_bonus_top * spellData.level_bonus)
+                for d = 0 to (spellData.level_bonus_top * spellData.level_bonus)
                     damage = damage + rnd(spellData.damage_dice_type)
                 end for
             end if
@@ -603,7 +609,7 @@ function canAim(tileLoc0, tileLoc1) as boolean
             if y0 > y1
                 pathData = plotLineHigh(x1, y1, x0, y0)
             else
-                pathData = plotLineHigh(x0, y0, y1, y1)
+                pathData = plotLineHigh(x0, y0, x1, y1)
             end if
         end if
 
@@ -902,7 +908,6 @@ sub setTileData(tileLoc, param, bool)
 end sub
 
 sub handleTurnEnd(evData)
-    ?"HANDLE TURN END FOR ";evData.turnType
     if evData.turnType = "player"
         moveMonsters()
     else
