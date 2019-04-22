@@ -81,6 +81,9 @@
 	    <field id="wight" type="assocarray" />
 	    <field id="wyvern" type="assocarray" />
         <field id="zombie" type="assocarray" />
+
+        <!-- holder by level -->
+        <field id="monsterLevels" type="array" />
     </interface> 
     <script type="text/brightscript"  uri="pkg:/components/settings/scripts/MonsterSettings.brs"/>
 </component>

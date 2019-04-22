@@ -137,10 +137,14 @@ end sub
 sub addMonsters()
     totalMonsters = rnd(7)
     'totalMonsters = 1
+    'TODO infer monster level
+    monsterLevel = 0
+    monsterArr = m.global.settings.monster.monsterLevels[monsterLevel]
+    monsterTotal = monsterArr.count() - 1
     for x = 0 to totalMonsters - 1
         monster = CreateObject("roSGNode", "rcw_Monster")
         monster.id = "monster_" + x.toStr()
-        monster.race = "kobold"
+        monster.race = monsterArr[rnd(monsterTotal) - 1]
         'monster.class = "warrior"
         m.monsters.push(monster)
         mRoom = m.rooms[rnd(m.rooms.count()) - 1]

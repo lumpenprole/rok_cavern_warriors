@@ -58,6 +58,11 @@ end sub
 sub tilesetParsed(msg as object)
     m.global.settings.addField("tilemap", "assocarray", false)
     m.global.settings.tilemap = msg.getData().tileset
+    setupGame()
+end sub
+
+sub setupGame()
+    'This is where we set different level types and monster spread. 
     openCharSelect()
 end sub
 

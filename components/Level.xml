@@ -10,6 +10,7 @@
 		<field id="startPoint" type="intarray" />
 		<field id="playerSet" type="bool" value="false" onChange="onPlayerSet" />
 		<field id="playerStairs" type="string" onChange="onPlayerStairs" />
+		<field id="monsterLevels" type="array" />
 	</interface>
 
 	<!-- general scripts -->
