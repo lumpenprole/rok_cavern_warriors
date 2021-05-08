@@ -12,6 +12,7 @@ sub init()
     m.rangedHolder = m.top.findNode("ranged_weapon_holder")
     m.rangedAttackAnim = m.top.findNode("ranged_attack_animation")
     m.rangedAttackVector = m.top.findNode("ranged_vector")
+    m.lastRangedAttack = invalid
     m.aimingTiles = []
 end sub
 
@@ -70,7 +71,6 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         if press then
             if key = "OK" then
                 if not m.playerHasDied then
-
                     if m.aiming then
                         fireRangedWeapon()
                     else
@@ -96,7 +96,6 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                         clearAimingTiles()
                         m.aiming = false
                     else
-                        ?"RANGED WEAPON: ";m.player.rangedWeapon
                         handleRangedAttack(m.player.rangedWeaponType, m.player.rangedWeapon)
                     end if
                 end if
@@ -268,9 +267,13 @@ sub handleRangedAttack(weaponType, weapon)
     m.aimSquare.width = tileSize
     m.aimSquare.height = tileSize
     m.aimSquare.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
-    m.aimingLocation = ploc
     m.aimSquare.opacity = 1
-    m.aiming = true
+    if m.lastRangedAttack = invalid
+        m.aimingLocation = ploc
+        m.aiming = true
+    else 
+        aimTo(m.lastRangedAttack.location)
+    end if
 end sub
 
 sub aim(direction as string)
@@ -293,6 +296,15 @@ sub aim(direction as string)
     end if
 
 end sub 
+
+sub aimTo(location)
+    tileSize = m.global.settings.tile_size
+    if canAim(location[0], location[1])
+        m.aimSquare.translation = [location[0] * tileSize, location[1] * tileSize]
+        m.aimingLocation = m.aimSquare.translation
+        m.aiming = true
+    end if
+end sub
 
 sub fireRangedWeapon()
     m.aiming = false
@@ -332,16 +344,15 @@ sub fireRangedWeapon()
         monster = m.monsters[x]
         if monster.location[0] = m.aimingLocation[0] and monster.location[1] = m.aimingLocation[1]
             defender = monster
+            m.lastRangedAttack = monster
             exit for
         end if
     end for
     
     hit = false
     if not type(defender) = "<uninitialized>"
-        rangedRoll = rnd(20)
-        ?"TO HIT = "; rangedRoll; " + "; bonus
-        ?"Defender armor: "; defender.armorClass
-        hit = (rnd(20) + bonus) > defender.armorClass
+        rangedRoll = rnd(20) + 10 + bonus
+        hit = rangedRoll > defender.armorClass
     end if
 
     if hit
@@ -390,6 +401,7 @@ sub monsterDead(monster)
     ?"MONSTER ";monster.id;" DIES"
     ?"MONSTER EXP: ";monster.experience
     m.player.addExperience = monster.experience
+    m.lastRangedAttack = invalid
     m.top.removeChild(monster)
     setTileData(monster.location,"bones", true)
     setBones(monster.location)
