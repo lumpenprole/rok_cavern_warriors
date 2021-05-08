@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="rcw_CharSelect">
-    <!-- I don't think this needs to extend a base page or anything -->
+<component name="rcw_CharSelect" extends="Group">
 	<interface>
 		<field id="eventFired" type="node" onChange="eventHandler"/>
 	</interface>

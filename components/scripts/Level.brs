@@ -53,7 +53,7 @@ end sub
 sub onPlayerStairs()
     tileSize = m.global.settings.tile_size
     m.player = m.playerHolder.findNode("current_player")
-    if m.top.playerStairs = "down"
+    if m.top.playerStairs = "down" then
         m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
         m.player.location = m.upstairs
     else if m.top.playerStairs = "up"
@@ -68,10 +68,10 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         fireEvent("modalKeyEvent", {key: key, press: press, player: m.player})
     else
         if press then
-            if key = "OK"
-                if not m.playerHasDied
+            if key = "OK" then
+                if not m.playerHasDied then
 
-                    if m.aiming
+                    if m.aiming then
                         fireRangedWeapon()
                     else
                         checkActOnTile()
@@ -80,7 +80,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                     handled = true
                 end if
             else if key = "left" or key = "right" or key = "up" or key = "down"
-                if not m.aiming
+                if not m.aiming then
                     playerMove(key)
                 else
                     aim(key)
@@ -90,7 +90,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 fireEvent("handleGameModalOnOff", {playerData: pd})
             else if key = "options"
                 if m.player.rangedWeapon <> "none"
-                    if m.aiming
+                    if m.aiming = true
                         'cancel ranged weapon
                         m.aimSquare.opacity = 0
                         clearAimingTiles()
@@ -110,7 +110,7 @@ sub playerMove(direction as String)
 
     ploc = m.player.location
     checkLoc = []
-    if direction = "left"
+    if direction = "left" then
         checkLoc = [ploc[0] - 1, ploc[1]]
     else if direction = "right"
         checkLoc = [ploc[0] + 1, ploc[1]]
@@ -120,13 +120,14 @@ sub playerMove(direction as String)
         checkLoc = [ploc[0], ploc[1] - 1]
     end if
 
-    if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid
-        if collisionCheck(m.player, checkLoc) <> true
-            if canOccupy(checkLoc)
+    if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid then
+        if collisionCheck(m.player, checkLoc) <> true then
+            if canOccupy(checkLoc) then
                 m.player.location = checkLoc
             end if
         end if
     end if
+
     setTile(m.player, m.playerHolder)
     makeVisible(m.player.location, m.player.sightDistance)
     m.player.timeIncrement = 1
@@ -337,6 +338,9 @@ sub fireRangedWeapon()
     
     hit = false
     if not type(defender) = "<uninitialized>"
+        rangedRoll = rnd(20)
+        ?"TO HIT = "; rangedRoll; " + "; bonus
+        ?"Defender armor: "; defender.armorClass
         hit = (rnd(20) + bonus) > defender.armorClass
     end if
 

@@ -42,9 +42,9 @@ sub init()
 end sub
 
 sub onClassSet()
-    class = m.top.class
-    m.top.hitPoints = rnd(m.classSettings.getField(class + "_hit_dice"))
-    ?"HIT POINTS FOR ";class;": ";m.top.hitPoints
+    playerClass = m.top.class
+    m.top.hitPoints = rnd(m.classSettings.getField(playerClass + "_hit_dice"))
+    ?"HIT POINTS FOR ";playerClass;": ";m.top.hitPoints
 
     'TODO: Fire post setup after class and race are set.
     postSetup()
