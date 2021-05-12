@@ -272,6 +272,8 @@ sub handleRangedAttack(weaponType, weapon)
         m.aimingLocation = ploc
         m.aiming = true
     else 
+        m.aiming = true
+        m.aimingLocation = m.lastRangedAttack.location
         aimTo(m.lastRangedAttack.location)
     end if
 end sub
@@ -301,8 +303,7 @@ sub aimTo(location)
     tileSize = m.global.settings.tile_size
     if canAim(location[0], location[1])
         m.aimSquare.translation = [location[0] * tileSize, location[1] * tileSize]
-        m.aimingLocation = m.aimSquare.translation
-        m.aiming = true
+        m.aimingLocation = location
     end if
 end sub
 
@@ -330,6 +331,7 @@ sub fireRangedWeapon()
     'TODO: allow monsters to fire ranged weapons
     attacker = m.player
     monsterAttack = false
+    ?"Firing ranged animation. attacker: "; attacker.location; ", aiming location: "; m.aimingLocation
     fireRangedAttackAnimation(attacker.location, m.aimingLocation)
     
     'TODO: Spell use needs to advance turn
