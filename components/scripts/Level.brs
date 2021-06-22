@@ -49,6 +49,7 @@ sub onPlayerSet()
     m.player.location = m.upstairs
 
     addMonsters()
+    addItems()
 end sub
 
 sub onPlayerStairs()
@@ -156,6 +157,18 @@ sub addMonsters()
     end for
     'This is set here so that monsters will be made visible if appropriate
     makeVisible(m.player.location, m.player.sightDistance)
+end sub
+
+sub addItems()
+    'TODO: Actually make this work. This is just placing a sword on every level so I can test items
+    sword = CreateObject("roSGNode", "rcw_Item")
+    sword.itemType = ["weapon", "short_sword"]
+    mRoom = m.rooms[rnd(m.rooms.count()) - 1]
+    sword.location = placeRandomlyInRoom(mRoom)
+    m.top.appendChild(sword)
+    tileSize = m.global.settings.tile_size
+    sword.translation = [sword.location[0] * tileSize, sword.location[1] * tileSize]
+    sword.seen = m.global.settings.level_visible
 end sub
 
 sub moveMonsters()

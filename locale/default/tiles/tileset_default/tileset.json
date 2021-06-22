@@ -188,6 +188,9 @@
       "beatup_leather_helmet": "player/head/cap_black.png",
       "patchy_wizard_hat": "player/head/wizard_brown.png"
     },
+    "weapon": {
+      "short_sword": "item/weapon/short_sword1.png"
+    },
     "spells": {
       "magic_missle": "effect/magic_dart5.png"
     },

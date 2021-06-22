@@ -25,7 +25,7 @@
         <field id="lightPick" type="assocarray" />
         <field id="sap" type="assocarray" />
         <field id="sickle" type="assocarray" />
-        <field id="shortSword" type="assocarray" />
+        <field id="short_sword" type="assocarray" />
         <field id="handCrossbow" type="assocarray" />
         <field id="heavyCrossbow" type="assocarray" />
         <field id="lightCrossbow" type="assocarray" />

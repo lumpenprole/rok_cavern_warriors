@@ -41,7 +41,7 @@ sub setMeleeWeapon()
         weapon = m.top.weapons.melee
     end if
     ?"WEAPON SET TO ";weapon.weaponName
-    m.top.meleeWeapon = weapon.weaponName
+    m.meleeWeapon = weapon.weaponName
     m.top.attackBonus = weapon.bonus
     m.top.damageDice = [weapon.dice_amount, weapon.dice]
 end sub

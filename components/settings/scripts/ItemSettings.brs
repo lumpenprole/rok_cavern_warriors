@@ -26,7 +26,7 @@ sub processItems()
     m.top.lightPick = {itemType: "light", name: "Pick, light", cost: 4, damage_dice_num: 1, damage_dice_type: 4, range: 0}
     m.top.sap = {itemType: "light", name: "Sap", cost: 1, damage_dice_num: 1, damage_dice_type: 6, range: 0}
     m.top.sickle = {itemType: "light", name: "Sickle", cost: 6, damage_dice_num: 1, damage_dice_type: 6, range: 0}
-    m.top.shortSword = {itemType: "light", name: "Sword, short", cost: 10, damage_dice_num: 1, damage_dice_type: 6, range: 0}
+    m.top.short_sword = {itemType: "light", name: "Sword, short", cost: 10, damage_dice_num: 1, damage_dice_type: 6, range: 0}
     m.top.handCrossbow = {itemType: "ranged", name: "Crossbow, hand", cost: 100, damage_dice_num: 1, damage_dice_type: 4, range: 30}
     m.top.heavyCrossbow = {itemType: "ranged", name: "Crossbow, heavy", cost: 50, damage_dice_num: 1, damage_dice_type: 10, range: 120}
     m.top.lightCrossbow = {itemType: "ranged", name: "Crossbow, light", cost: 35, damage_dice_num: 1, damage_dice_type: 8, range: 80}

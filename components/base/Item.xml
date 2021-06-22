@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_Item" extends="Group">
+	<interface>
+		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+		<field id="eventFired" type="node" onChange="eventHandler"/>
+		<field id="title" type="string" value="none"/>
+		<field id="itemType" type="stringArray" onChange="onTypeSet"/>
+        <field id="location" type="intArray" value="[0,0]"/>
+        <field id="seen" type="bool" value="false" onChange="onSeenSet" alwaysNotify="true"/>
+	</interface>
+	<!-- general scripts -->
+	<script type="text/brightscript"  uri="pkg:/components/base/scripts/Item.brs"/>
+	<children>
+		<Group id="tile_holder"/>
+	</children>
+</component>
