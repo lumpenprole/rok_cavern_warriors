@@ -3,7 +3,7 @@ sub init()
     m.roomHolder = m.top.findNode("room_holder")
     m.playerHolder = m.top.findNode("player_holder")
     m.monsterHolder = m.top.findNode("monster_holder")
-    m.bonesHolder = m.top.findNode("bones_holder")
+    m.itemHolder = m.top.findNode("item_holder")
     m.monsters = []
     m.playerHasDied = false
     m.aimSquare = m.top.findNode("aim_square")
@@ -12,18 +12,23 @@ sub init()
     m.rangedHolder = m.top.findNode("ranged_weapon_holder")
     m.rangedAttackAnim = m.top.findNode("ranged_attack_animation")
     m.rangedAttackVector = m.top.findNode("ranged_vector")
+    m.mobHolder = m.top.findNode("mob_holder")
+    m.itemHolder = m.top.findNode("item_holder")
     m.lastRangedAttack = invalid
     m.aimingTiles = []
 end sub
 
 sub setupLevel()
     settings = m.top.settings
-    appSettings = m.global.settings
+    m.appSettings = m.global.settings
+    m.tileSize = m.appSettings.tile_size
 
     m.modalOn = false
     m.aiming = false
 
     grid = m.global.grid
+    m.itemHolder.width = grid[0][0] * m.tileSize
+    m.itemHolder.height = grid[0][1] * m.tileSize
 
     'creator = LevelCreator()
     'levelHolder = creator.create(settings, grid)
@@ -43,9 +48,8 @@ sub setupLevel()
 end sub
 
 sub onPlayerSet()
-    tileSize = m.global.settings.tile_size
     m.player = m.playerHolder.findNode("current_player")
-    m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
+    m.playerHolder.translation = [m.upstairs[0] * m.tileSize, m.upstairs[1] * m.tileSize]
     m.player.location = m.upstairs
 
     addMonsters()
@@ -53,13 +57,12 @@ sub onPlayerSet()
 end sub
 
 sub onPlayerStairs()
-    tileSize = m.global.settings.tile_size
     m.player = m.playerHolder.findNode("current_player")
     if m.top.playerStairs = "down" then
-        m.playerHolder.translation = [m.upstairs[0] * tileSize, m.upstairs[1] * tileSize]
+        m.playerHolder.translation = [m.upstairs[0] * m.tileSize, m.upstairs[1] * m.tileSize]
         m.player.location = m.upstairs
     else if m.top.playerStairs = "up"
-        m.playerHolder.translation = [m.downstairs[0] * tileSize, m.downstairs[1] * tileSize]
+        m.playerHolder.translation = [m.downstairs[0] * m.tileSize, m.downstairs[1] * m.tileSize]
         m.player.location = m.downstairs
     end if
 end sub
@@ -151,8 +154,7 @@ sub addMonsters()
         mRoom = m.rooms[rnd(m.rooms.count()) - 1]
         monster.location = placeRandomlyInRoom(mRoom)
         m.top.appendChild(monster)
-        tileSize = m.global.settings.tile_size
-        monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
+        monster.translation = [monster.location[0] * m.tileSize, monster.location[1] * m.tileSize]
         monster.seen = m.global.settings.level_visible
     end for
     'This is set here so that monsters will be made visible if appropriate
@@ -165,9 +167,8 @@ sub addItems()
     sword.itemType = ["weapon", "short_sword"]
     mRoom = m.rooms[rnd(m.rooms.count()) - 1]
     sword.location = placeRandomlyInRoom(mRoom)
-    m.top.appendChild(sword)
-    tileSize = m.global.settings.tile_size
-    sword.translation = [sword.location[0] * tileSize, sword.location[1] * tileSize]
+    m.itemHolder.appendChild(sword)
+    sword.translation = [sword.location[0] * m.tileSize, sword.location[1] * m.tileSize]
     sword.seen = m.global.settings.level_visible
 end sub
 
@@ -196,8 +197,7 @@ sub moveMonsters()
             if canOccupy(newLoc)
                 if collisionCheck(monster, newLoc) <> true
                     monster.location = newLoc
-                    tileSize = m.global.settings.tile_size
-                    monster.translation = [monster.location[0] * tileSize, monster.location[1] * tileSize]
+                    monster.translation = [monster.location[0] * m.tileSize, monster.location[1] * m.tileSize]
                 end if
             else if canOccupy([monsterLoc[0], newLoc[1]])
                 monster.location = [monsterLoc[0], newLoc[1]]
@@ -275,11 +275,10 @@ sub handleRangedAttack(weaponType, weapon)
         ?"CASTING ";spell.name
     end if
 
-    tileSize = m.global.settings.tile_size
     ploc = m.player.location
-    m.aimSquare.width = tileSize
-    m.aimSquare.height = tileSize
-    m.aimSquare.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
+    m.aimSquare.width = m.tileSize
+    m.aimSquare.height = m.tileSize
+    m.aimSquare.translation = [ploc[0] * m.tileSize, ploc[1] * m.tileSize]
     m.aimSquare.opacity = 1
     if m.lastRangedAttack = invalid
         m.aimingLocation = ploc
@@ -293,7 +292,6 @@ end sub
 
 sub aim(direction as string)
     cloc = m.aimingLocation
-    tileSize = m.global.settings.tile_size
     checkLoc = []
     if direction = "left"
         checkLoc = [cloc[0] - 1, cloc[1]]
@@ -306,16 +304,15 @@ sub aim(direction as string)
     end if
    
     if canAim(checkLoc[0], checkLoc[1])
-        m.aimSquare.translation = [checkLoc[0] * tileSize, checkLoc[1] * tileSize]
+        m.aimSquare.translation = [checkLoc[0] * m.tileSize, checkLoc[1] * m.tileSize]
         m.aimingLocation = checkLoc
     end if
 
 end sub 
 
 sub aimTo(location)
-    tileSize = m.global.settings.tile_size
     if canAim(location[0], location[1])
-        m.aimSquare.translation = [location[0] * tileSize, location[1] * tileSize]
+        m.aimSquare.translation = [location[0] * m.tileSize, location[1] * m.tileSize]
         m.aimingLocation = location
     end if
 end sub
@@ -328,16 +325,15 @@ sub fireRangedWeapon()
         tilePath = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.spells[m.player.rangedWeapon]
     end if
 
-    tileSize = m.global.settings.tile_size
     tile = CreateObject("roSGNode", "Poster")
     tile.id = "RangedTile"
-    tile.width = tileSize
-    tile.height = tileSize
+    tile.width = m.tileSize
+    tile.height = m.tileSize
     tile.uri = tilePath
     ploc = m.player.location
     tile.visible = true
     m.rangedHolder.appendChild(tile)
-    m.rangedHolder.translation = [ploc[0] * tileSize, ploc[1] * tileSize]
+    m.rangedHolder.translation = [ploc[0] * m.tileSize, ploc[1] * m.tileSize]
     m.rangedHolder.opacity = 1
 
      
@@ -429,14 +425,13 @@ sub monsterDead(monster)
 end sub
 
 sub setBones(bonesLoc)
-    tileSize = m.global.settings.tile_size
     x = bonesLoc[0]
     y = bonesLoc[1]
     bonesTile = CreateObject("roSGNode", "Poster")
-    bonesTile.width = tileSize
-    bonesTile.height = tileSize
+    bonesTile.width = m.tileSize
+    bonesTile.height = m.tileSize
     bonesTile.uri = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.effects.bones
-    bonesTile.translation = [x * tileSize, y * tileSize]
+    bonesTile.translation = [x * m.tileSize, y * m.tileSize]
     bonesTile.id = "bones_" + x.toStr() + "_" + y.toStr()
     m.bonesHolder.appendChild(bonesTile)
 end sub
@@ -463,7 +458,6 @@ end function
 
 
 sub draw()
-    tileSize = m.global.settings.tile_size
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
@@ -475,50 +469,50 @@ sub draw()
                 if tileData.tileType = "floor"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
-                    tile.width = tileSize
-                    tile.height = tileSize
+                    tile.width = m.tileSize
+                    tile.height = m.tileSize
                     tile.uri = getFloorTile()
-                    tile.translation = [tileSize * x, tileSize * y]
+                    tile.translation = [m.tileSize * x, m.tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if tileData.tileType = "wall"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
-                    tile.width = tileSize
-                    tile.height = tileSize
+                    tile.width = m.tileSize
+                    tile.height = m.tileSize
                     tile.uri = getWallTile()
-                    tile.translation = [tileSize * x, tileSize * y]
+                    tile.translation = [m.tileSize * x, m.tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if tileData.tileType = "upstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
-                    tile.width = tileSize
-                    tile.height = tileSize
+                    tile.width = m.tileSize
+                    tile.height = m.tileSize
                     tile.uri = getTilePath("stairsup")
-                    tile.translation = [tileSize * x, tileSize * y]
+                    tile.translation = [m.tileSize * x, m.tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if tileData.tileType = "downstairs"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
-                    tile.width = tileSize
-                    tile.height = tileSize
+                    tile.width = m.tileSize
+                    tile.height = m.tileSize
                     tile.uri = getTilePath("stairsdown")
-                    tile.translation = [tileSize * x, tileSize * y]
+                    tile.translation = [m.tileSize * x, m.tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
                 else if tileData.tileType = "door"
                     name = "tile_" + x.toStr() + "_" + y.toStr()
                     tile = CreateObject("roSGNode", "Poster")
-                    tile.width = tileSize
-                    tile.height = tileSize
+                    tile.width = m.tileSize
+                    tile.height = m.tileSize
                     tile.uri = getTilePath("dooropen")
-                    tile.translation = [tileSize * x, tileSize * y]
+                    tile.translation = [m.tileSize * x, m.tileSize * y]
                     tile.id = name
                     tile.visible = m.global.settings.level_visible
                     m.roomHolder.appendChild(tile)
@@ -573,8 +567,7 @@ sub makeVisible(location, sightDistance)
 end sub
 
 sub setTile(tile, holder)
-    tileSize = m.global.settings.tile_size
-    holder.translation = [tile.location[0] * tileSize, tile.location[1] * tileSize]
+    holder.translation = [tile.location[0] * m.tileSize, tile.location[1] * m.tileSize]
 end sub
 
 function canOccupy(tileLoc, checkMonster = true)
@@ -828,11 +821,10 @@ end sub
 
 sub fireRangedAttackAnimation(attacker as Object, defender as Object)
     clearAimingTiles()
-    tileSize = m.global.settings.tile_size
-    aX = attacker[0] * tileSize
-    aY = attacker[1] * tileSize
-    dX = defender[0] * tileSize
-    dY = defender[1] * tileSize
+    aX = attacker[0] * m.tileSize
+    aY = attacker[1] * m.tileSize
+    dX = defender[0] * m.tileSize
+    dY = defender[1] * m.tileSize
     
     ud = "none"
     lr = "none"
