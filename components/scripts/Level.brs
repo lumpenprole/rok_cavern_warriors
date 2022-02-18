@@ -433,7 +433,7 @@ sub setBones(bonesLoc)
     bonesTile.uri = "pkg:/locale/default/tiles/" + m.global.settings.tileset + "/" + m.global.settings.tilemap.effects.bones
     bonesTile.translation = [x * m.tileSize, y * m.tileSize]
     bonesTile.id = "bones_" + x.toStr() + "_" + y.toStr()
-    m.bonesHolder.appendChild(bonesTile)
+    m.itemHolder.appendChild(bonesTile)
 end sub
 
 
@@ -841,7 +841,7 @@ sub fireRangedAttackAnimation(attacker as Object, defender as Object)
         ud = "up"
     end if
 
-    m.rangedHolder.scaleRotateCenter = [tilesize/2, tilesize/2]
+    m.rangedHolder.scaleRotateCenter = [m.tilesize/2, m.tilesize/2]
     if lr = "none"
         if ud = "up"
             m.rangedHolder.rotation = 5.49
