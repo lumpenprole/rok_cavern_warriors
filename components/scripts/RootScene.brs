@@ -134,6 +134,8 @@ sub startGame(data as dynamic)
     m.global.addField("grid", "array", false) 'Setting always notify to false, settings are read only
     m.global.grid = createGrid(m.screenSize, m.global.settings.tile_size, statusBarSize)
     subscribe("handleGameModalOnOff", level0.id)
+    subscribe("pickupModalOnOff", level0.id)
+    subscribe("pickupItem", level0.id)
     
     bottom = m.screenSize[0] - statusBarSize
     m.statusBarHolder.translation = [0, bottom]
@@ -165,6 +167,14 @@ sub startGame(data as dynamic)
     subscribe("modalKeyEvent", m.gameModal.id)
     m.modalHolder.appendChild(m.gameModal)
 
+    m.pickupModal = CreateObject("roSGNode", "rcw_PickupModal")
+    m.pickupModal.visible = false
+    m.pickupModal.translation = [600, 100]
+    m.pickupModal.id = "pickupModal"
+    subscribe("pickupModalOnOff", m.pickupModal.id)
+    subscribe("pickupKeyEvent", m.pickupModal.id)
+    m.modalHolder.appendChild(m.pickupModal)
+
     m.levelHolder.appendChild(level0)
     level0.settings = m.levelSettings 
 
@@ -172,6 +182,7 @@ sub startGame(data as dynamic)
     player.id = "current_player"
     player.class = data.class
     player.race = data.race
+    subscribe("pickupItem", player.id)
 
     currentHolder = level0.findNode("player_holder")
     currentHolder.appendChild(player)
@@ -196,8 +207,10 @@ sub goDownstairs()
         nextLevel.id = "level" + nextLevelNum.toStr()
         m.levelHolder.appendChild(nextLevel)
         subscribe("handleGameModalOnOff", nextLevel.id)
+        subscribe("pickupModalOnOff", nextLevel.id)
         unsubscribe("endTurn", currentLevel.id)
         subscribe("endTurn", nextLevel.id)
+        subscribe("pickupItem", nextLevel.id)
         currentHolder = nextLevel.findNode("player_holder")
         currentHolder.appendChild(player)
         nextLevel.playerSet = true

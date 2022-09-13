@@ -21,7 +21,7 @@ sub handleData()
     sack = invData.sack
     for s = 0 to sack.count() - 1
         for each sackKey in sack[s]
-            ?"sack ";key;": ";sack[s][sackKey]
+            ?"sack ";sackkey;": ";sack[s][sackKey]
             txt = txt + sackKey + ": " + sack[s][sackKey] + chr(10)
         end for
     end for

@@ -5,6 +5,7 @@ sub init()
     m.monsterHolder = m.top.findNode("monster_holder")
     m.itemHolder = m.top.findNode("item_holder")
     m.monsters = []
+    m.levelItems = {}
     m.playerHasDied = false
     m.aimSquare = m.top.findNode("aim_square")
     m.aimSquare.opacity = 0
@@ -13,7 +14,6 @@ sub init()
     m.rangedAttackAnim = m.top.findNode("ranged_attack_animation")
     m.rangedAttackVector = m.top.findNode("ranged_vector")
     m.mobHolder = m.top.findNode("mob_holder")
-    m.itemHolder = m.top.findNode("item_holder")
     m.lastRangedAttack = invalid
     m.aimingTiles = []
 end sub
@@ -24,6 +24,7 @@ sub setupLevel()
     m.tileSize = m.appSettings.tile_size
 
     m.modalOn = false
+    m.pickupModalOn = false
     m.aiming = false
 
     grid = m.global.grid
@@ -69,10 +70,16 @@ end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
-    if m.modalOn
+    ?"PICKUP MODAL ON: "; m.pickupModalOn
+    if m.modalOn = true 
         fireEvent("modalKeyEvent", {key: key, press: press, player: m.player})
-    else
-        if press then
+    else if m.pickupModalOn = true 
+        ?"****************************"
+        ?"****************************"
+        ?"****************************"
+        fireEvent("pickupKeyEvent", {key: key, press: press, player: m.player})
+    else 
+        if press 
             if key = "OK" then
                 if not m.playerHasDied then
                     if m.aiming then
@@ -115,11 +122,11 @@ sub playerMove(direction as String)
     checkLoc = []
     if direction = "left" then
         checkLoc = [ploc[0] - 1, ploc[1]]
-    else if direction = "right"
+    else if direction = "right" then
         checkLoc = [ploc[0] + 1, ploc[1]]
-    else if direction = "down"
+    else if direction = "down" then
         checkLoc = [ploc[0], ploc[1] + 1]
-    else if direction = "up"
+    else if direction = "up" then
         checkLoc = [ploc[0], ploc[1] - 1]
     end if
 
@@ -165,9 +172,12 @@ sub addItems()
     'TODO: Actually make this work. This is just placing a sword on every level so I can test items
     sword = CreateObject("roSGNode", "rcw_Item")
     sword.itemType = ["weapon", "short_sword"]
+    sword.title = "Short Sword"
     mRoom = m.rooms[rnd(m.rooms.count()) - 1]
     sword.location = placeRandomlyInRoom(mRoom)
+    sword.id = "TEMPORARY SWORD"
     m.itemHolder.appendChild(sword)
+    m.levelItems[createLocationString(sword.location)] = [sword]
     sword.translation = [sword.location[0] * m.tileSize, sword.location[1] * m.tileSize]
     sword.seen = m.global.settings.level_visible
 end sub
@@ -461,7 +471,7 @@ sub draw()
     for x = 0 to m.levelArr.count() - 1
         for y = 0 to m.levelArr[x].count() - 1
             gridSquare = m.levelArr[x][y]
-            tileData = parseTileData(m.levelArr[x][y])
+            tileData = parseTileData([x, y])
             'TODO Make this room aware, so that it draws a single rectangle for each room. Maybe.
             if(tileData <> invalid)
                 'TODO: need to move tile creation into a separate function
@@ -572,7 +582,7 @@ end sub
 
 function canOccupy(tileLoc, checkMonster = true)
     openTile = false
-    tile = parseTileData(m.levelArr[tileLoc[0], tileLoc[1]])
+    tile = parseTileData(tileLoc)
 
     if tile.tileType = "floor" or tile.tileType = "upstairs" or tile.tileType = "downstairs"
         openTile = true
@@ -745,13 +755,27 @@ end function
 
 sub checkActOnTile()
     ploc = m.player.location
-    tile = parseTileData(m.levelArr[pLoc[0], pLoc[1]])
+    tile = parseTileData(pLoc)
+    tile.location = [ploc[0], ploc[1]]
     if tile.tileType = "downstairs"
         fireEvent("goDownstairs", {})
     else if tile.tileType = "upstairs"
         fireEvent("goUpstairs", {})
+    else if checkItemsOnTile(tile)
+        'handle items
+        items = m.levelItems[createLocationString(tile.location)]
+        fireEvent("pickupModalOnOff", {"items": items})
     end if
 end sub
+
+function checkItemsOnTile(tile) as boolean
+    hasItems = false
+    locStr = createLocationString(tile.location)
+    if m.levelItems.doesExist(locStr) and m.levelItems[locStr].count() > 0
+        hasItems = true
+    end if
+    return hasItems
+end function
 
 function getFloorTile() as String
     if m.top.levelDepth < 1
@@ -886,9 +910,11 @@ sub deleteRangedAnimation(msg)
     end if
 end sub
 
-function parseTileData(tileLoc as String) as Object
+function parseTileData(tileLoc as object) as object
     tile = {}
-    arr = tileLoc.split(":")
+    tile.location = tileLoc
+    tileString = m.levelArr[tileLoc[0], tileLoc[1]]
+    arr = tileString.split(":")
     tile.tileType = arr[0]
 
     tile.open = false
@@ -955,9 +981,7 @@ function getPlayerData() as Object
         offHand: m.player.offHand
         ranged: m.player.rangedWeapon
         armor: m.player.armorArray
-        sack:[
-            {TBD: "tbd"}
-            ]
+        sack: m.player.sack
         }
     return pObj
 end function 
@@ -966,13 +990,45 @@ sub onEventCallback(data as Object)
     ev = m.top.eventCallBack
     et = ev.evType
 
+    ?"__**__ LEVEL EVENT: "; et
+
     if et = "handleGameModalOnOff"
-        if m.modalOn
+        if m.modalOn = true
             m.modalOn = false
         else 
             m.modalOn = true
         end if
+    else if et = "pickupModalOnOff"
+        if m.pickupModalOn = true
+            ?"__**__ TURNING OFF!"
+            m.pickupModalOn = false
+        else
+            ?"__**__ TURNING ON!"
+            m.pickupModalOn = true
+        end if
+    else if et = "pickupItem"
+        handlePickupItem(ev.data.item)
     else if et = "endTurn"
         handleTurnEnd(ev.data)
     end if
+end sub
+
+function createLocationString(locArray as Object) as String
+    retStr = locArray[0].toStr() + ":" + locArray[1].toStr()
+    return retStr
+end function
+
+sub handlePickupItem(pickedUpItem as object)
+    location = pickedUpItem.location
+    locationString = createLocationString(location)
+    'TODO: Handle situation where there are multiple items and you only take one
+    for x = 0 to m.itemHolder.getChildCount() - 1
+        thisItem = m.itemHolder.getChild(x)
+        if thisItem.id = pickedUpItem.id
+            removeItem = thisItem
+            exit for
+        end if
+    end for
+    m.itemHolder.removeChild(removeItem)
+    m.levelItems.delete(locationString)
 end sub

@@ -9,6 +9,7 @@ sub init()
     m.healingTimeout = 4
     m.currentHealingClock = 0
     m.healingBonus = 0
+    m.top.sack = []
 end sub
 
 sub onRaceSet()
@@ -30,6 +31,7 @@ sub postSetup()
         m.top.attackBonus = getStatBonus(m.strength)
         m.top.spellBonus = getStatBonus(m.mind)
         m.top.missleBonus = getStatBonus(m.dexterity)
+        'TEST SACK ITEM
         setTile()
     end if
 end sub
@@ -194,5 +196,27 @@ sub handleAddExperience()
     ?"NEXT LEVEL IS: ";nextLevel
     if m.top.experience > nextLevel
         levelUp()
+    end if
+end sub
+
+sub handleAddItemsToSack(evData as object)
+    item = evData.item
+    thisSack = m.top.sack
+    thisSack.push(item)
+    'TODO: SORT SACK
+    m.top.sack = thisSack
+    ?"**************************"
+    ?"**************************"
+    ?"SACK: "; m.top.sack
+    ?"**************************"
+    ?"**************************"
+end sub
+
+sub onEventCallback()
+    ev = m.top.eventCallBack
+    et = ev.evType
+
+    if et = "pickupItem"
+        handleAddItemsToSack(ev.data)
     end if
 end sub

@@ -6,6 +6,7 @@
         <field id="timeIncrement" type="int" value="0" onChange="handleTimeIncrement" alwaysNotify="true"/>
         <field id="addExperience" type="int" value="0" onChange="handleAddExperience" alwaysNotify="true"/>
         <field id="armorArray" type="assocarray"/>
+        <field id="sack" type="array" />
 	</interface>
 
 	<!-- general scripts -->
