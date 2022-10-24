@@ -31,5 +31,5 @@
 	    <field id="sorcerer_starting_equipment" type="assocarray" />
         <field id="wizard_starting_equipment" type="assocarray" />
     </interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/ClassSettings.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/settings/ClassSettings.brs"/>
 </component>

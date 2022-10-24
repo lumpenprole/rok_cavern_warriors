@@ -7,5 +7,5 @@
 	    <field id="dwarf_bonus" type="intarray" />
 	    <field id="halfling_bonus" type="intarray" />
     </interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/RaceSettings.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/settings/RaceSettings.brs"/>
 </component>

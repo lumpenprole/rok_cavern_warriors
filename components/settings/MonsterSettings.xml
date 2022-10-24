@@ -85,5 +85,5 @@
         <!-- holder by level -->
         <field id="monsterLevels" type="array" />
     </interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/MonsterSettings.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/settings/MonsterSettings.brs"/>
 </component>

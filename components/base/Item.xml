@@ -9,7 +9,7 @@
         <field id="seen" type="bool" value="false" onChange="onSeenSet" alwaysNotify="true"/>
 	</interface>
 	<!-- general scripts -->
-	<script type="text/brightscript"  uri="pkg:/components/base/scripts/Item.brs"/>
+	<script type="text/brightscript"  uri="pkg:/components/base/Item.brs"/>
 	<children>
 		<Group id="tile_holder"/>
 	</children>

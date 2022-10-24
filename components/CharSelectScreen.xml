@@ -5,7 +5,7 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/scripts/CharSelect.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/CharSelectScreen.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>

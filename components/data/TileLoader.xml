@@ -5,5 +5,5 @@
         <field id="tileset_folder_name" type="string"/>
         <field id="tileset_obj" type="assocarray"/>
     </interface>
-    <script type="text/brightscript" uri="pkg:/components/data/scripts/TileLoader.brs"/>
+    <script type="text/brightscript" uri="pkg:/components/data/TileLoader.brs"/>
 </component>

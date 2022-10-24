@@ -6,7 +6,7 @@
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
 	</interface>
 
-    <script type="text/brightscript"  uri="pkg:/components/modals/scripts/PickupModal.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/modals/PickupModal.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>

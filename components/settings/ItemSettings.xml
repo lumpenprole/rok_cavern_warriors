@@ -68,5 +68,5 @@
         <field id="halfPlate" type="assocarray" />
         <field id="fullPlate" type="assocarray" />
     </interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/ItemSettings.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/settings/ItemSettings.brs"/>
 </component>

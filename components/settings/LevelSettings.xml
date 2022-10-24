@@ -14,7 +14,7 @@
         <field id="roomPadding" type="integer" value="3"/>
 
 	</interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/scripts/LevelSettings.brs"/>
+    <script type="text/brightscript"  uri="pkg:/components/settings/LevelSettings.brs"/>
 </component>
 
 
