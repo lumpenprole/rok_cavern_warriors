@@ -71,15 +71,13 @@ end sub
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
     ?"PICKUP MODAL ON: "; m.pickupModalOn
-    if m.modalOn = true 
-        fireEvent("modalKeyEvent", {key: key, press: press, player: m.player})
-    else if m.pickupModalOn = true 
-        ?"****************************"
-        ?"****************************"
-        ?"****************************"
-        fireEvent("pickupKeyEvent", {key: key, press: press, player: m.player})
-    else 
-        if press 
+    if press
+        if m.modalOn = true 
+            fireEvent("modalKeyEvent", {key: key, press: press, player: m.player})
+        else if m.pickupModalOn = true 
+            fireEvent("pickupKeyEvent", {key: key, press: press, player: m.player})
+            m.pickupModalOn = false
+        else 
             if key = "OK" then
                 if not m.playerHasDied then
                     if m.aiming then
@@ -279,10 +277,10 @@ sub fight(attacker as Object, defender as Object)
 end sub
 
 sub handleRangedAttack(weaponType, weapon)
-    ?"FIRE ";weapon;" WHICH IS A ";weaponType
+    '?"FIRE ";weapon;" WHICH IS A ";weaponType
     if weaponType = "spell"
         spell = m.global.settings.spells.lookup(weapon)
-        ?"CASTING ";spell.name
+        '?"CASTING ";spell.name
     end if
 
     ploc = m.player.location
@@ -350,7 +348,7 @@ sub fireRangedWeapon()
     'TODO: allow monsters to fire ranged weapons
     attacker = m.player
     monsterAttack = false
-    ?"Firing ranged animation. attacker: "; attacker.location; ", aiming location: "; m.aimingLocation
+    '?"Firing ranged animation. attacker: "; attacker.location; ", aiming location: "; m.aimingLocation
     fireRangedAttackAnimation(attacker.location, m.aimingLocation)
     
     'TODO: Spell use needs to advance turn
