@@ -8,8 +8,6 @@ function BSP_LevelCreator()
 end function
 
 function BSP_create(settings as Dynamic, grid as Object) as Object
-    returnObj = {rooms:[],levelArr:[]}
-
     levelArr = []
     for x = 0 to grid[0][0] - 1
         levelArr[x] = []
@@ -18,9 +16,7 @@ function BSP_create(settings as Dynamic, grid as Object) as Object
         end for
     end for
 
-    returnObj = BSP_walkTree(levelArr, settings)
-
-    return returnObj
+    return BSP_walkTree(levelArr, settings)
 end function
 
 function BSP_walkTree(levelArr as Object, settings as Object) as Object
@@ -240,9 +236,9 @@ function BSP_pathFind(startLoc, endLoc, levelArr) as Object
 end function
 
 sub BSP_addCorridorFloor(x, y, levelArr) as Object
-    tileType = levelArr[x, y].split(":")[0]
+    tileType = levelArr[x][y].split(":")[0]
     if tileType <> "upstairs" and tileType <> "downstairs"
-        levelArr[x, y] = "floor:none"
+        levelArr[x][y] = "floor:none"
     end if
     return levelArr
 end sub

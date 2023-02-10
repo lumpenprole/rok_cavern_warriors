@@ -49,10 +49,10 @@ sub setup()
     m.global.settings.items = createObject("roSGNode", "ItemSettingsNode")
     m.global.settings.addField("spells", "node", false) 
     m.global.settings.spells = createObject("roSGNode", "SpellSettingsNode")
-    m.tilesetParser = createObject("roSGNode", "rcw_TileLoader")
+    m.tilesetParser = createObject("roSGNode", "TileLoader")
     m.tilesetParser.tileset_folder_name = m.global.settings.tileset
     m.tilesetParser.observeField("tileset_obj", "tilesetParsed")
-    m.tilesetParser.control = "RUN"
+    m.tilesetParser.callFunc("getTileset")
 end sub
 
 sub tilesetParsed(msg as object)

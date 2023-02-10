@@ -117,18 +117,22 @@ end function
 sub playerMove(direction as String)
 
     ploc = m.player.location
+    xloc = m.player.location[0]
+    yloc = m.player.location[1]
+
     checkLoc = []
     if direction = "left" then
-        checkLoc = [ploc[0] - 1, ploc[1]]
+        'checkLoc = [ploc[0] - 1, ploc[1]]
+        checkLoc = [xloc - 1, yloc]
     else if direction = "right" then
-        checkLoc = [ploc[0] + 1, ploc[1]]
+        checkLoc = [xloc + 1, yloc]
     else if direction = "down" then
-        checkLoc = [ploc[0], ploc[1] + 1]
+        checkLoc = [xloc, yloc + 1]
     else if direction = "up" then
-        checkLoc = [ploc[0], ploc[1] - 1]
+        checkLoc = [xloc, yloc - 1]
     end if
 
-    if m.levelArr[checkLoc[0], checkLoc[1]] <> invalid then
+    if m.levelArr[xloc][yloc] <> invalid then
         if collisionCheck(m.player, checkLoc) <> true then
             if canOccupy(checkLoc) then
                 m.player.location = checkLoc
@@ -911,7 +915,7 @@ end sub
 function parseTileData(tileLoc as object) as object
     tile = {}
     tile.location = tileLoc
-    tileString = m.levelArr[tileLoc[0], tileLoc[1]]
+    tileString = m.levelArr[tileLoc[0]][tileLoc[1]]
     arr = tileString.split(":")
     tile.tileType = arr[0]
 
@@ -933,7 +937,7 @@ function parseTileData(tileLoc as object) as object
 end function
 
 sub setTileData(tileLoc, param, bool)
-    tileArr = m.levelArr[tileLoc[0], tileLoc[1]].split(":")
+    tileArr = m.levelArr[tileLoc[0]][tileLoc[1]].split(":")
     tType = tileArr[0]
     data = tileArr[1].split(",")
     if bool
@@ -955,7 +959,7 @@ sub setTileData(tileLoc, param, bool)
             end if
         end for
     end if
-    m.levelArr[tileLoc[0], tileLoc[1]] = tType + ":" + data.join(",")
+    m.levelArr[tileLoc[0]][tileLoc[1]] = tType + ":" + data.join(",")
 end sub
 
 sub handleTurnEnd(evData)

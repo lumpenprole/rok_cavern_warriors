@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- utility to load tiles -->
-<component name="rcw_TileLoader" extends="Task">
+<component name="TileLoader" extends="Task">
     <interface>
         <field id="tileset_folder_name" type="string"/>
         <field id="tileset_obj" type="assocarray"/>
+        <function name="getTileset" />
     </interface>
     <script type="text/brightscript" uri="pkg:/components/data/TileLoader.brs"/>
 </component>

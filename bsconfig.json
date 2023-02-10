@@ -1,0 +1,14 @@
+{
+	"deploy": true,
+	"host": "172.31.110.55",
+	"username": "rokudev",
+	"password": "aaaa",
+        "files": [
+	    "source/**/*.*",
+	    "components/**/*.*",
+	    "images/**/*.*",
+	    "locale/**/*.*",
+	    "manifest"
+	],
+	"ignoreErrorCode": [1001]
+}

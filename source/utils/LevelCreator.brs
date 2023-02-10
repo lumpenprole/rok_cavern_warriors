@@ -161,12 +161,13 @@ function createCorridoors(holder as Object) as Object
         end for
         connections = rnd(2)
         startRoom = rooms[x]
-        startCenter = getRoomCenter(startRoom)
+        'TODO: change this file to a brighterscript object and inject this function so I don't have to ignore it
+        startCenter = getRoomCenter(startRoom) 'bs:disable-line:1001
 
         for z = 0 to connections
             if connectArray.count() > 0
                 endRoom = connectArray[rnd(connectArray.count() - 1)]
-                endCenter = getRoomCenter(endRoom)
+                endCenter = getRoomCenter(endRoom) 'bs:disable-line:1001
                 levelArr = pathFind(startCenter, endCenter, levelArr)
                 connectArray.delete(z)
             end if
@@ -210,9 +211,9 @@ function pathFind(startLoc, endLoc, levelArr) as Object
 end function
 
 sub addCorridorFloor(x, y, levelArr) as Object
-    tileType = levelArr[x, y].split(":")[0]
+    tileType = levelArr[x][y].split(":")[0]
     if tileType <> "upstairs"
-        levelArr[x, y] = "floor:none"
+        levelArr[x][y] = "floor:none"
     end if
     return levelArr
 end sub
