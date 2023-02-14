@@ -1,3 +1,5 @@
+import "pkg:/components/data/TileLoader.bs"
+
 sub init()
     ?"RootScene: Init()"
     m.top.id = "RootScene"
@@ -49,15 +51,9 @@ sub setup()
     m.global.settings.items = createObject("roSGNode", "ItemSettingsNode")
     m.global.settings.addField("spells", "node", false) 
     m.global.settings.spells = createObject("roSGNode", "SpellSettingsNode")
-    m.tilesetParser = createObject("roSGNode", "TileLoader")
-    m.tilesetParser.tileset_folder_name = m.global.settings.tileset
-    m.tilesetParser.observeField("tileset_obj", "tilesetParsed")
-    m.tilesetParser.callFunc("getTileset")
-end sub
-
-sub tilesetParsed(msg as object)
+    m.tilesetParser = new TileLoader()
     m.global.settings.addField("tilemap", "assocarray", false)
-    m.global.settings.tilemap = msg.getData().tileset
+    m.global.settings.tilemap = m.tilesetParser.getTileset(m.global.settings.tileset).tileset
     setupGame()
 end sub
 

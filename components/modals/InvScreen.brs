@@ -20,10 +20,8 @@ sub handleData()
 
     sack = invData.sack
     for s = 0 to sack.count() - 1
-        for each sackKey in sack[s]
-            ?"sack ";sackkey;": ";sack[s][sackKey]
-            txt = txt + sackKey + ": " + sack[s][sackKey] + chr(10)
-        end for
+        ?"sack ";s;": ";sack[s].title
+        txt += strI(s) + ": " + sack[s].title + chr(10)
     end for
 
     ?"DATA IN TEXT FORM: ";txt

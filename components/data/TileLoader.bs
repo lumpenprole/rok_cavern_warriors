@@ -1,0 +1,12 @@
+class TileLoader
+    public tileset_obj as object
+
+    public function getTileset(tilesetFolder as string)
+        folderName = tilesetFolder
+        path = "pkg:/locale/default/tiles/" + folderName + "/tileset.json"
+        ?"PATH: "; path
+        response = parseJson(readAsciiFile(path))
+        'm.tileset_obj = response
+        return response
+    end function
+end class
