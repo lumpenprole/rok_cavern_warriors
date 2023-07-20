@@ -5,7 +5,7 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/RootScene.bs"/>
+    <script type="text/brightscript" />
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
 
     <children>

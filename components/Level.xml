@@ -14,7 +14,7 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/Level.brs"/>
+    <script type="text/brightscript" />
     <script type="text/brightscript"  uri="pkg:/source/utils/LevelCreator.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/BSP_LevelCreator.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>

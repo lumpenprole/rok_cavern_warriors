@@ -5,8 +5,8 @@
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
 	</interface>
 
-    <script type="text/brightscript"  uri="pkg:/components/modals/GameModal.brs"/>
-    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+    <script type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/utils/Events.brs"/>
 
     <children>
         <Rectangle width="600" height="800" color="0x6959FFFF" />

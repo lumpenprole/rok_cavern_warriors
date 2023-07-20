@@ -10,7 +10,7 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/base/Player.brs"/>
+    <script type="text/brightscript" />
 
     <children>
  	</children>

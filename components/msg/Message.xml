@@ -5,8 +5,8 @@
 		<field id="messageAction" type="string" onChange="handleAction"/>
 	</interface>
 
-    <script type="text/brightscript"  uri="pkg:/components/msg/Message.brs"/>
-    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+    <script type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/utils/Events.brs"/>
     <children>
         <group id="message_holder" />
     </children>

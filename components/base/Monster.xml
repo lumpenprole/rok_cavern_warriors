@@ -10,7 +10,7 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/base/Monster.brs"/>
+    <script type="text/brightscript" />
 
     <children>
  	</children>

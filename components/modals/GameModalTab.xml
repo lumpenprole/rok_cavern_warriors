@@ -5,7 +5,7 @@
         <field id="labelTxt" type="string" onChange="handleLabel" />
 	</interface>
 
-    <script type="text/brightscript"  uri="pkg:/components/modals/GameModalTab.brs"/>
+    <script type="text/brightscript" />
 
     <children>
         <Rectangle width="200" height="50" color="0x69FFFFFF" id="bg"/>

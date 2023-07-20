@@ -5,8 +5,8 @@
 	</interface>
 
 	<!-- general scripts -->
-    <script type="text/brightscript"  uri="pkg:/components/CharSelectScreen.brs"/>
-    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+    <script type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/utils/Events.brs"/>
 
     <children>
         <LayoutGroup id="labels_row_one" layoutDirection="horiz" itemSpacings="[500]" translation="[50, 80]">

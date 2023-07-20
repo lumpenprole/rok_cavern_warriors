@@ -4,5 +4,5 @@
         <!-- spell settings -->
         <field id="magic_missle" type="assocarray" />
     </interface> 
-    <script type="text/brightscript"  uri="pkg:/components/settings/SpellSettings.brs"/>
+    <script type="text/brightscript" />
 </component>
