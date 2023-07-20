@@ -1,20 +1,20 @@
 'first function run on startup.
-function Main(args as Dynamic) as void
+sub Main(args as Dynamic) 
     showHomeScreen()
-end function
+end sub
 
 'The function that brings the content to the screen.
 sub showHomeScreen()
-    screen = CreateObject("roSGScreen")
-    m.port = CreateObject("roMessagePort")
+    m.screen = CreateObject("roSGScreen")
+    m._port = CreateObject("roMessagePort")
     rokuAppInfo = CreateObject("roAppInfo")
     appVersion = rokuAppInfo.getVersion() 'For debugging.
 
-    screen.setMessagePort(m.port)
-    m.scene = screen.CreateScene("rcw_RootScene")
-    screen.show()
+    m.screen.setMessagePort(m._port)
+    m.scene = m.screen.CreateScene("rcw_RootScene")
+    m.screen.show()
     while(true)
-        msg = wait(100, m.port)
+        msg = wait(100, m._port)
         msgType = type(msg)
         if msgType = "roSGScreenEvent"
             if msg.isScreenClosed() then return

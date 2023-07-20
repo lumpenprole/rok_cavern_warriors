@@ -1,0 +1,13 @@
+{
+  "name": "brighterscript-template",
+  "version": "1.0.0",
+  "description": "Roku's best roguelike (excluding Nethack)",
+  "scripts": {
+    "build": "bsc --createPackage=false",
+    "watch": "npm run build -- --watch",
+    "package": "bsc --create-package"
+  },
+  "devDependencies": {
+    "brighterscript": "^0.60.4"
+  }
+}

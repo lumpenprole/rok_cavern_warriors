@@ -1,8 +1,8 @@
 {
-	"deploy": true,
+    "rootDir": "./",
+	"username": "rokudev",
 	"_host": "172.31.110.55",
 	"host": "192.168.0.42",
-	"username": "rokudev",
 	"password": "aaaa",
         "files": [
 	    "source/**/*.*",
@@ -11,5 +11,9 @@
 	    "locale/**/*.*",
 	    "manifest"
 	],
-	"ignoreErrorCode": [1001]
+    "stagingFolderPath": "out",
+    "retainStagingFolder": true,
+    //this flag tells BrighterScript that for every xml file, try to import a .bs file with the same name and location
+    "autoImportComponentScript": true,
+    "sourceMap": true
 }
