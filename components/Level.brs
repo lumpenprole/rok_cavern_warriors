@@ -409,6 +409,10 @@ sub fireRangedWeapon()
             else
                 monsterDead(defender)
             end if
+        else
+            if not monsterAttack 'if monster is hit, they should become aware of player. 
+                defender.seenPlayer = true
+            end if
         end if
     else
         if monsterAttack

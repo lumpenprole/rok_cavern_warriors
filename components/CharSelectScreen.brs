@@ -8,6 +8,14 @@ sub init()
     m.playRow = m.top.findNode("play_row")
     m.playButton = m.top.findNode("play_button")
 
+    deviceInfo = CreateObject("roDeviceInfo")
+    screenRes = deviceInfo.getUIResolution()
+
+    m.screenSize = [screenRes.height, screenRes.width] 
+
+    m.selectedValues.width = m.screenSize[1]
+    m.selectedValues.horizAlign = "center"
+
     m.race = "None"
     m.class = "None"
     m.raceSelector.observeField("itemSelected", "updateRace")

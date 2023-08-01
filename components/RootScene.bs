@@ -4,8 +4,10 @@ sub init()
     ?"RootScene: Init()"
     m.top.id = "RootScene"
     m.messageActive = false
+    deviceInfo = CreateObject("roDeviceInfo")
+    screenRes = deviceInfo.getUIResolution()
 
-    m.screenSize = [1080, 1920] 'Probably needs to be figured on the fly
+    m.screenSize = [screenRes.height, screenRes.width] 
 
     setup()
 end sub
