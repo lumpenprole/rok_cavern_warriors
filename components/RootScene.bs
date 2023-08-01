@@ -150,6 +150,7 @@ sub startGame(data as dynamic)
     statusFont.uri = "pkg:/locale/default/fonts/Roboto-Black.ttf"
     statusFont.size = 36
     m.statusBar.font = statusFont
+    m.statusBar.horizAlign = "center"
     m.statusBarHolder.appendChild(m.statusBar)
 
     charSelect = m.top.findNode("charSelect") 'I probably don't need to build a nav stack. 
@@ -256,7 +257,7 @@ end sub
 sub updateStatus()
     currentPlayerHolder = m.levelHolder.getChild(m.currentLevel).findNode("player_holder")
     player = currentPlayerHolder.findNode("current_player")
-    m.statusBar.text = "Level" + player.level.toStr() + " " + player.race + " " + player.class + "  HP:" + player.hitPoints.toStr()
+    m.statusBar.text = "Level " + player.level.toStr() + " " + player.race + " " + player.class + "  HP:" + player.hitPoints.toStr()
 end sub
 
 sub systemMessage(evData)

@@ -9,31 +9,39 @@
     <script type="text/brightscript" uri="pkg:/source/utils/Events.brs"/>
 
     <children>
-        <LayoutGroup id="labels_row_one" layoutDirection="horiz" itemSpacings="[500]" translation="[50, 80]">
-            <Label color="0x669900FF" text="Race Select" horizAlign="center" />
-            <Label color="0x669900FF" text="Class Select" horizAlign="center" />
+        <LayoutGroup id="character_select_page" layoutDirection="vert" itemSpacings="[50]" >
+            <LayoutGroup id="current_selections_row" layoutDirection="horiz" horizAlignment="center" itemSpacings="[500]">
+                <Label id="selectedValues" color="0x3483ebFF" horizAlign="center"/>
+            </LayoutGroup>
+            <LayoutGroup id="labels_row" layoutDirection="horiz" itemSpacings="[500]" translation="[50, 80]">
+                <Label color="0x669900FF" text="Race Select" horizAlign="center" />
+                <Label color="0x669900FF" text="Class Select" horizAlign="center" />
+            </LayoutGroup>
+            <LayoutGroup id="selectors_row" layoutDirection="horiz" itemSpacings="[100,100]" translation="[50, 120]">
+                <LabelList id="raceSelector">
+                    <ContentNode id="raceSelectorContent" role="content">
+                        <ContentNode title="Human" description="human" />
+                        <ContentNode title="Elf" description="elf" />
+                        <ContentNode title="Dwarf" description="dwarf" />
+                        <ContentNode title="Halfling" description="halfling" />
+                    </ContentNode>
+                </LabelList>
+
+                <LabelList id="classSelector">
+                    <ContentNode id="classSelectorContent" role="content">
+                        <ContentNode title="Fighter"  description="fighter" />
+                        <ContentNode title="Cleric"  description="cleric" />
+                        <ContentNode title="Rogue"  description="rogue" />
+                        <ContentNode title="Wizard"  description="wizard" />
+                    </ContentNode>
+                </LabelList>
+
+            </LayoutGroup>
+
+            <LayoutGroup id="play_row" layoutDirection="horiz" horizAlignment="center" itemSpacings="[100,100]" translation="[50, 120]">
+                <Button id="play_button" text="PLAY" textColor="#FFFFFFFF" focusedTextColor="#c8f556FF" />
+            </LayoutGroup>
         </LayoutGroup>
-        <LayoutGroup id="selectors_row_one" layoutDirection="horiz" itemSpacings="[100,100]" translation="[50, 120]">
-            <LabelList id="raceSelector">
-                <ContentNode id="raceSelectorContent" role="content" >
-                    <ContentNode title="Human" description="human" />
-                    <ContentNode title="Elf" description="elf" />
-                    <ContentNode title="Dwarf" description="dwarf" />
-                    <ContentNode title="Halfling" description="halfling" />
-                </ContentNode>
-            </LabelList>
-
-            <LabelList id="classSelector">
-                <ContentNode id="classSelectorContent" role="content" >
-                    <ContentNode title="Fighter"  description="fighter" />
-                    <ContentNode title="Cleric"  description="cleric" />
-                    <ContentNode title="Rogue"  description="rogue" />
-                    <ContentNode title="Wizard"  description="wizard" />
-                </ContentNode>
-            </LabelList>
-
-        </LayoutGroup>
-
  	</children>
 </component>
 

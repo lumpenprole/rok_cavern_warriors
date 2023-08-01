@@ -4,14 +4,14 @@
 	"_host": "172.31.110.55",
 	"host": "192.168.0.42",
 	"password": "aaaa",
-        "files": [
+	"files": [
 	    "source/**/*.*",
 	    "components/**/*.*",
 	    "images/**/*.*",
 	    "locale/**/*.*",
 	    "manifest"
 	],
-    "stagingDir": "out",
+    "stagingDir": "out/roku-deploy-staging",
     "retainStagingDir": true,
     //this flag tells BrighterScript that for every xml file, try to import a .bs file with the same name and location
     "autoImportComponentScript": true,
