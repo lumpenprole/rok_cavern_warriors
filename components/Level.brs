@@ -421,7 +421,6 @@ sub fireRangedWeapon()
             handleTurnEnd({turnType: "player"})
         end if
     end if
-    'moveMonsters() I think I need to make a turn system. 
 end sub
 
 sub monsterDead(monster)
@@ -820,14 +819,22 @@ end function
 
 function placeRandomlyInRoom(room as Object) as Object
     'room is an array describing [startX, startY, height, width]
-    sX = room[0]
-    sY = room[1]
-    w = sX + (room[3])
-    h = sY + (room[2])
+    lookingForSpot = true
 
-    newX = getRandomRange(sX + 1, w - 1)
-    newY = getRandomRange(sY + 1, h - 1)
-    
+    while lookingForSpot
+        sX = room[0]
+        sY = room[1]
+        w = sX + (room[3])
+        h = sY + (room[2])
+
+        newX = getRandomRange(sX + 1, w - 1)
+        newY = getRandomRange(sY + 1, h - 1)
+
+        if canOccupy([newX, newY])
+            lookingForSpot = false
+        end if
+    end while
+
     return [newX, newY]
 end function
 
