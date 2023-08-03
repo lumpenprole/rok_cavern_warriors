@@ -14,7 +14,6 @@
         <field id="roomPadding" type="integer" value="3"/>
 
 	</interface> 
-    <script type="text/brightscript" />
 </component>
 
 

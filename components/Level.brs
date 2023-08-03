@@ -28,8 +28,6 @@ sub setupLevel()
     m.aiming = false
 
     grid = m.global.grid
-    m.itemHolder.width = grid[0][0] * m.tileSize
-    m.itemHolder.height = grid[0][1] * m.tileSize
 
     'creator = LevelCreator()
     'levelHolder = creator.create(settings, grid)
