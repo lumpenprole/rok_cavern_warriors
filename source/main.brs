@@ -13,12 +13,20 @@ sub showHomeScreen()
     m.screen.setMessagePort(m._port)
     m.scene = m.screen.CreateScene("rcw_RootScene")
     m.screen.show()
+    m.scene.observeField("exitApp", m._port)
     while(true)
         msg = wait(100, m._port)
         msgType = type(msg)
-        if msgType = "roSGScreenEvent"
+        if msgType <> "Invalid"
+        end if
+        if msgType = "roSGScreenEvent" then
             if msg.isScreenClosed() then return
-        endif
+        else if msgType = "roSGNodeEvent" then
+            field = msg.getField()
+            if field = "exitApp" then
+                exit while
+            end if
+        end if
     end while
 end sub
 

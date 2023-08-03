@@ -108,6 +108,9 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                         handleRangedAttack(m.player.rangedWeaponType, m.player.rangedWeapon)
                     end if
                 end if
+            else if key = "back"
+                fireEvent("handleYesNoModalOnOff", {messageText: "Really exit game?"})
+                handled = true
             end if
         end if
     end if

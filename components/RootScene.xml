@@ -2,6 +2,7 @@
 <component name="rcw_RootScene" extends="Scene">
 	<interface>
 		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+        <field id="exitApp" type="boolean" value="false" />
 	</interface>
 
 	<!-- general scripts -->

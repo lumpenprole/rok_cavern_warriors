@@ -44,6 +44,15 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 m.raceSelector.setFocus(true)
                 m.race = "None"
             end if
+        else if key = "back"
+            if m.playRow.isInFocusChain()
+                m.classSelector.setFocus(true)
+                m.class = "None"
+            else if m.classSelector.hasFocus()
+                m.raceSelector.setFocus(true)
+                m.race = "None"
+            end if
+            handled = true
         end if
     end if
     return handled
