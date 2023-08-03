@@ -109,7 +109,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                     end if
                 end if
             else if key = "back"
-                fireEvent("handleYesNoModalOnOff", {messageText: "Really exit game?"})
+                fireEvent("requestExit")
                 handled = true
             end if
         end if

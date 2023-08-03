@@ -45,6 +45,7 @@ sub setup()
     subscribe("systemMessage", m.top.id)
     subscribe("removeMessage", m.top.id)
     subscribe("returnFocusToLevel", m.top.id)
+    subscribe("requestExit", m.top.id)
     subscribe("exitApp", m.top.id)
 
     m.global.addField("settings", "node", false) 'Setting always notify to false, settings are read only
@@ -176,12 +177,11 @@ sub startGame(data as dynamic)
     subscribe("pickupKeyEvent", m.pickupModal.id)
     m.modalHolder.appendChild(m.pickupModal)
 
-    m.yesNoModal = CreateObject("roSGNode", "rcw_YesNoModal")
-    m.yesNoModal.visible = false
-    m.yesNoModal.translation = [600, 100]
-    m.yesNoModal.id = "yesNoModal"
-    subscribe("handleYesNoModalOnOff", m.yesNoModal.id)
-    m.modalHolder.appendChild(m.yesNoModal)
+    m.stdDialog = CreateObject("roSGNode", "StandardMessageDialog")
+    m.stdDialog.visible = false
+    m.stdDialog.translation = [600, 100]
+    m.stdDialog.id = "stdDialog"
+    m.modalHolder.appendChild(m.stdDialog)
 
     m.levelHolder.appendChild(level0)
     level0.settings = m.levelSettings 
@@ -283,6 +283,29 @@ sub removeMessage()
     m.messageActive = false
 end sub
 
+sub spawnExitDialog()
+    m.stdDialog.title = "EXIT GAME"
+    m.stdDialog.message = ["Do you really want to exit game?"]
+    m.stdDialog.buttons = ["OK", "CANCEL"]
+    m.stdDialog.observeField("buttonSelected", "handleExitDialogButtons")
+    m.stdDialog.visible = true
+    m.stdDialog.setFocus(true)
+end sub
+
+sub handleExitDialogButtons()
+    btnSelected = m.stdDialog.buttonSelected
+    ?"BUTTON PRESSED: "; btnSelected
+
+    if btnSelected = 0
+        m.top.exitApp = true
+    else if btnSelected = 1
+        m.stdDialog.visible = false
+        currentLvl = m.levelHolder.getChild(m.currentLevel)
+        currentLvl.setFocus(true)
+    end if
+
+end sub
+
 sub onEventCallback()
     ev = m.top.eventCallback
 
@@ -298,10 +321,7 @@ sub onEventCallback()
         systemMessage(ev.data)
     else if ev.evType = "removeMessage"
         removeMessage()
-    else if ev.evType = "returnFocusToLevel"
-        currentLvl = m.levelHolder.getChild(m.currentLevel)
-        currentLvl.setFocus(true)
-    else if ev.evType = "exitApp"
-        m.top.exitApp = true
+    else if ev.evType = "requestExit"
+        spawnExitDialog()
     end if
 end sub
