@@ -162,12 +162,12 @@ function createCorridoors(holder as Object) as Object
         connections = rnd(2)
         startRoom = rooms[x]
         'TODO: change this file to a brighterscript object and inject this function so I don't have to ignore it
-        startCenter = getRoomCenter(startRoom) 'bs:disable-line:1001
+        startCenter = getRoomCenter(startRoom) 'bs:disable-line:1001 1140
 
         for z = 0 to connections
             if connectArray.count() > 0
                 endRoom = connectArray[rnd(connectArray.count() - 1)]
-                endCenter = getRoomCenter(endRoom) 'bs:disable-line:1001
+                endCenter = getRoomCenter(endRoom) 'bs:disable-line:1001 1140
                 levelArr = pathFind(startCenter, endCenter, levelArr)
                 connectArray.delete(z)
             end if

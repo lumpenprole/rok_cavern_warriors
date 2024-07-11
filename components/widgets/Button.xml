@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_Button" extends="rcw_EventGroup">
+	<interface>
+        <field id="buttonText" type="string" onChange="handleButtonText" alwaysNotify="true"/>
+        <field id="textColor" type="string" onChange="handleTextColor" alwaysNotify="true"/>
+        <field id="focusedTextColor" type="string" onChange="handleFocusedTextColor" alwaysNotify="true"/>
+        <field id="selectedTextColor" type="string" onChange="handleSelectedTextColor" alwaysNotify="true"/>
+        <field id="unfocusedBgColor" type="string" onChange="handleUnfocusedBgColor" alwaysNotify="true"/>
+        <field id="focusedBgColor" type="string" onChange="handleFocusedBgColor" alwaysNotify="true"/>
+        <field id="buttonSelected" type="boolean" value="false" alwaysNotify="true"/>
+        <field id="width" type="int" onChange="handleWidthChange"/>
+	</interface>
+
+    <children>
+        <!-- TODO: Change this to a graphic-->
+        <Rectangle width="120" height="70" id="button_background" color="0x808080FF" />
+        <Label id="button_label" width="120" height="70" text="none" horizAlign="center" vertAlign="center" font="font:SmallBoldSystemFont" color="0xFFFFFFFF" />
+ 	</children>
+</component>

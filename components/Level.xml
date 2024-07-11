@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="rcw_Level" extends="Group">
-    <!-- I don't think this needs to extend a base page or anything -->
+<component name="rcw_Level" extends="rcw_EventGroup">
 	<interface>
         <field id="levelDepth" type="int" value="-1"/>
-
-        <field id="eventFired" type="node" onChange="eventHandler"/>
-		<field id="eventCallback" type="node" onChange="onEventCallback"/>
 		<field id="settings" type="node" onChange="setupLevel"/>
 		<field id="startPoint" type="intarray" />
 		<field id="playerSet" type="bool" value="false" onChange="onPlayerSet" />
@@ -17,7 +13,6 @@
     <script type="text/brightscript" />
     <script type="text/brightscript"  uri="pkg:/source/utils/LevelCreator.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/BSP_LevelCreator.brs"/>
-    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Grid.brs"/>
     <script type="text/brightscript"  uri="pkg:/source/utils/Math.brs"/>
     <!-- testing scripts -->

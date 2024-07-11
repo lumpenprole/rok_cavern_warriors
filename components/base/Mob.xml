@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<component name="rcw_Mob" extends="Group">
-    <!-- I don't think this needs to extend a base page or anything -->
+<component name="rcw_Mob" extends="rcw_EventGroup">
 	<interface>
-        <field id="eventCallback" type="node" onChange="onEventCallback"/>
-        <field id="eventFired" type="node" onChange="eventHandler"/>
 		<field id="class" type="string" value="none" onChange="onClassSet"/>
         <field id="race" type="string" value="none" onChange="onRaceSet"/>
         <field id="level" type="int" value="1"/>
@@ -23,10 +20,6 @@
         <field id="damageTaken" type="int" value="0" onChange="onDamageTaken" alwaysNotify="true"/>
         <field id="fireCombatAnim" type="string" onChange="handleCombatAnim" alwaysNotify="true"/>
 	</interface>
-
-	<!-- general scripts -->
-    <script type="text/brightscript" />
-    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
 
     <children>
         <Group id="mob_holder">

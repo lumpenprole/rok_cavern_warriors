@@ -2,7 +2,7 @@
     "rootDir": "./",
 	"username": "rokudev",
 	"_host": "172.31.110.55",
-	"host": "192.168.0.42",
+	"host": "192.168.50.162",
 	"password": "aaaa",
 	"files": [
 	    "source/**/*.*",

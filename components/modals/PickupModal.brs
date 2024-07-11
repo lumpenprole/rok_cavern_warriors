@@ -60,3 +60,7 @@ sub pickupItem(indexNum)
         handlePickupModalOnOff({})
     end if
 end sub
+
+sub handleData(thisData)
+    stop
+end sub

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="rcw_EventGroup" extends="Group">
+	<interface>
+		<field id="eventCallback" type="node" onChange="onEventCallback"/>
+	</interface>
+	<!-- general scripts -->
+	<script type="text/brightscript" />
+    <script type="text/brightscript"  uri="pkg:/source/utils/Events.brs"/>
+</component>

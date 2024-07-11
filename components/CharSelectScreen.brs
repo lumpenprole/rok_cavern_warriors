@@ -4,7 +4,7 @@ sub init()
     m.classSelector = m.top.findNode("classSelector")
     m.classes = m.top.findNode("classSelectorContent")
     m.selectedValues = m.top.findNode("selectedValues")
-    m.selectorsRow = m.top.findNode("selectors_row")
+    m.selectionHolder = m.top.findNode("selectionHolder")
     m.playRow = m.top.findNode("play_row")
     m.playButton = m.top.findNode("play_button")
 
@@ -16,6 +16,9 @@ sub init()
     m.selectedValues.width = m.screenSize[1]
     m.selectedValues.horizAlign = "center"
 
+    ?"PLAY BUTTON WIDTH: "; m.playButton.width
+    ?"PLAY BUTTON TRANSLATION: "; m.playButton.translation
+
     m.race = "None"
     m.class = "None"
     m.raceSelector.observeField("itemSelected", "updateRace")
@@ -24,7 +27,16 @@ sub init()
     
     m.raceSelector.setFocus(true)
     setSelectionLabel()
+    alignElements()
 end sub
+
+function alignElements()
+    selRect = m.selectionHolder.boundingRect()
+    playRect = m.playButton.boundingRect()
+    middle = m.screenSize[1] / 2
+    m.selectionHolder.translation = [middle - selRect.width / 2, selRect.y]
+    m.playButton.translation = [middle - playRect.width / 2, selRect.x + selRect.height + playRect.height + 10]
+end function
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
     handled = false
@@ -40,12 +52,12 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 m.race = "None"
             end if
         else if key = "up"
-            if m.playRow.isInFocusChain()
+            if m.playButton.isInFocusChain()
                 m.raceSelector.setFocus(true)
                 m.race = "None"
             end if
         else if key = "back"
-            if m.playRow.isInFocusChain()
+            if m.playButton.isInFocusChain()
                 m.classSelector.setFocus(true)
                 m.class = "None"
             else if m.classSelector.hasFocus()

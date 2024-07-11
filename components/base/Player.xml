@@ -9,9 +9,6 @@
         <field id="sack" type="array" />
 	</interface>
 
-	<!-- general scripts -->
-    <script type="text/brightscript" />
-
     <children>
  	</children>
 </component>
