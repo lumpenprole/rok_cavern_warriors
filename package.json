@@ -9,6 +9,6 @@
     "package": "bsc --create-package"
   },
   "devDependencies": {
-    "brighterscript": "^0.65.2"
+    "brighterscript": "^0.67.3"
   }
 }
