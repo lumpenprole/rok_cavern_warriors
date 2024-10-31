@@ -1,29 +1,37 @@
 sub init()
     ?"Inventory Screen"
     m.top.id = "InvScreen"
+    m.textBox = m.top.findNode("INVENTORY")
+    m.wornItemsList = m.top.findNode("worn_items_list")
 end sub
 
 sub handleData()
-    textBox = m.top.findNode("INVENTORY")
-    txt = ""
+    wornItems = CreateObject("roSGNode", "WornItemsNode")
     invData = m.top.screenData.playerData.inv
     armor = invData.armor
-    txt = txt + "Main Hand: " + invData.mainHand + chr(10)
-    txt = txt + "Off Hand: " + invData.offHand + chr(10)
-    txt = txt + "Armor: " + chr(10)
-    txt = txt + chr(9) + "Head: " + armor.head + chr(10) 
-    txt = txt + chr(9) + "Torso: " + armor.torso + chr(10)
-    txt = txt + chr(9) + "Legs: " + armor.legs + chr(10)
-    txt = txt + chr(9) + "Gloves: " + armor.gloves + chr(10)
-    txt = txt + chr(9) + "Boots: " + armor.boots + chr(10)
-    txt = txt + chr(10) + "SACK: " + chr(10)
+    titleHolder = []
+    titleHolder.push("Main Hand: " + invData.mainHand)
+    titleHolder.push("Off Hand: " + invData.offHand)
+    titleHolder.push("Head: " + armor.head )
+    titleHolder.push("Torso: " + armor.torso)
+    titleHolder.push("Legs: " + armor.legs)
+    titleHolder.push("Gloves: " + armor.gloves)
+    titleHolder.push("Boots: " + armor.boots)
+    ?"TITLEHOLDER YEAH: "; titleHolder
+    wornItems.data = titleHolder
+    m.wornItemsList.content = wornItems
 
     sack = invData.sack
     for s = 0 to sack.count() - 1
         ?"sack ";s;": ";sack[s].title
-        txt += strI(s) + ": " + sack[s].title + chr(10)
     end for
+end sub
 
-    ?"DATA IN TEXT FORM: ";txt
-    textBox.text = txt
+sub handleModalKeyPress()
+    key = m.top.keyPress
+    if key = "down" then
+        if not m.wornItemsList.isInFocusChain()
+            m.wornItemsList.setFocus(true)
+        end if
+    end if
 end sub

@@ -2,13 +2,18 @@
 <component name="rcw_InvScreen" extends="Group">
 	<interface>
 		<field id="screenData" type="assocarray" onChange="handleData"/>
+		<field id="keyPress" type="string" onChange="handleModalKeyPress"/>
 	</interface>
 
     <script type="text/brightscript" />
 
     <children>
         <Rectangle width="600" height="750" color="0x6959FFFF" >
-            <Label id="INVENTORY" width="600" height="700" wrap="true" />
+            <LayoutGroup id="items_layout" layoutDirection="vert" >
+                <Label id="screen_title" width="600" text="INVENTORY" />
+                <Label id="worn_list_title" width="600" text="Worn:"/>
+                <LabelList id="worn_items_list" itemSize="[600, 50]" />
+            </LayoutGroup>
         </Rectangle>
  	</children>
 </component>

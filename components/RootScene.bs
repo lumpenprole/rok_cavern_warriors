@@ -57,7 +57,7 @@ sub setup()
     m.global.settings.addField("spells", "node", false) 
     m.global.settings.spells = createObject("roSGNode", "SpellSettingsNode")
     m.tilesetParser = new TileLoader()
-    m.global.settings.addField("tilemap", "assocarray", false)
+    'm.global.settings.addField("tilemap", "assocarray", false)
     m.global.settings.tilemap = m.tilesetParser.getTileset(m.global.settings.tileset).tileset
     setupGame()
 end sub

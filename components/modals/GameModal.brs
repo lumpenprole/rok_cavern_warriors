@@ -5,6 +5,7 @@ sub init()
     m.data = {}
     'TODO: Set the size of this from the root and make it relative
     setupTabs()
+    m.visiblePage = ""
 end sub
 
 sub onEventCallback()
@@ -59,7 +60,10 @@ sub navigation(direction as string)
 end sub
 
 sub focusCurrentPage()
-    'This will pass the key off to the current page
+    'This will pass the key off to the current page **bad idea**
+    'I'm going to have to rework this so that all the keys are handled by the sub page until you leave
+    'probably by setting a state and checking it here and in the sub page
+    m.visiblePage.keyPress="down"
 end sub
 
 sub changeTab(direction as string)
@@ -89,6 +93,7 @@ sub selectPage(pageNum as integer)
             thisPage.visible = true
             thisPage.screenData = m.data
             tb.selected = true
+            m.visiblePage = thisPage
         else
             thisPage.visible = false
             tb.selected = false

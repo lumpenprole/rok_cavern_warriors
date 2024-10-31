@@ -1,0 +1,9 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "build",
+            "command": "bsc"
+        }
+    ]
+}

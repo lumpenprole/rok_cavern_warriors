@@ -11,6 +11,7 @@
         <field id="room_min_height" type="integer" value="4" />
         <field id="room_max_width" type="integer" value="16" />
         <field id="room_max_height" type="integer" value="6" />
+        <field id="tilemap" type="assocarray" />
 	</interface> 
 </component>
 
